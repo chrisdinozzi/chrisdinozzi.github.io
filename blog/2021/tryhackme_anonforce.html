@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" href="/style.css">
-        <title>about - christopher di-nozzi</title>
+        <title>christopher di-nozzi</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta
@@ -40,7 +40,7 @@ PORT STATE SERVICE VERSION <br />
 Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux\_kernel
 </code></p>
 
-<h3>User Flag</h3>
+<h2>User Flag</h2>
 
 <p>Lets give the FTP server a shot. I tried connecting to it using user anonymous and password anonymous, and it worked a treat!  </p>
 
@@ -59,7 +59,7 @@ ftp&gt;
 
 <p>From here, I moved into the home directory and found the home folder of the user “melodias”. Moving into that directory, I found the user flag! I use the “get” command to download it and opened it up on my local machine! Easy peasy! One flag down, one to go!</p>
 
-<h3>Root Flag</h3>
+<h2>Root Flag</h2>
 
 <p>Now for the root flag. After snooping around for a bit I noticed a folder in the root directory called “notread”.</p>
 
@@ -133,7 +133,7 @@ hashcat -a 0 -m 1800 root.hash /usr/share/wordlists/rockyou.txt
 ssh root@IP cat root.txt
 </code></p>
 
-<h3>Conclusion</h3>
+<h2>Conclusion</h2>
 
 <p>Overall this room was quite straightforward! The only challenge I had was with the PGP/GPG keys as I’ve never used them before! If you’re familiar with them I think you’d breeze through this room no problem!</p>
 </div>
