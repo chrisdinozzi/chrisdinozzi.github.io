@@ -1,3 +1,92 @@
-* {
-    background-color: red;
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+:root{
+    --background-color:#3d405b;
+    --primary-color:#81b29a;
+    --secondary-color:#f4f1de;
+}
+
+html{
+    background-color:var(--background-color);
+    font-family: 'Roboto', sans-serif;
+    color:var(--secondary-color);
+    line-height: 1.5;
+	margin: 32px auto;
+    font-size: clamp(1rem, 2vw, 1.125rem);
+}
+
+body{
+    margin:0% 10% 0% 10%;
+    padding: 5% 5% 5% 5%;
+    padding: 16px;
+    max-width: 72ch;
+    margin: 0 auto;
+    text-align:left;
+}
+
+a{
+    color:#f2cc8f;
+}
+
+nav{
+    overflow:auto;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+}
+
+nav a{
+    text-decoration: none;
+    padding:2px 4px 2px 4px;
+}
+
+a:hover{
+    background-color: var(--primary-color);
+    color:var(--background-color)
+}
+
+h1{
+    text-align: center;
+}
+
+h1 a{
+    color:var(--secondary-color);
+    text-decoration: none;
+}
+
+h2{
+    background-color: #81b29a;
+}
+
+h2,h3{
+    text-align: left;
+}
+
+h3{
+    text-decoration: underline;
+}
+
+p{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+ol,
+ul {
+	overflow-x: auto;
+	white-space: nowrap;
+    text-align:left;
+    padding-bottom: 32px;
+}
+
+
+#header{
+    
+}
+
+footer{
+    display:block;
 }
