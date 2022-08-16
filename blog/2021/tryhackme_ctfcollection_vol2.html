@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/style.css">
+        <title>christopher di-nozzi</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="A page generated using ssg. Probably a blog post.">
+    </head>
+    <div id="header">
+   <h1> <a href="/">christopher di-nozzi</a></h1>
+    <nav>
+        <a href="/about">about</a>
+        <span>|</span>
+        <a href="/projects">projects</a>
+        <span>|</span>
+        <a href="/blog">blog</a>
+    </nav>
+    <hr>
+    </div>
+    <div id="main">
+<h1>TryHackMe Walkthrough - CTF Collection Vol.2</h1>
+
+<h3>Egg-cellent room!</h3>
+
+<p>25/01/2021</p>
+
+<p>Time for a bit more of a challenge with our first medium room walkthrough! Before doing this room, I'd suggest you get comfortable with Burp or ZAP as I won't go into much detail about how to use them. You can check the room out <a href="https://tryhackme.com/room/ctfcollectionvol1">here</a> created by <a href="https://tryhackme.com/p/DesKel">DesKel</a>.</p>
+
+<h2>Easter 1</h2>
+
+<p>A good place to start is /robots.txt. If we head over there, we'll see a string of hex. Decode it and you've got flag 1!</p>
+
+<h2>Easter 2</h2>
+
+<p>There's also a resource in /robots.txt but it's all gibberish! Visiting it produces nothing either! Maybe we can decode it? If we decode it from base64->url decode->remove spaces->from base 64 again->remove spaces again-> from base64 again we have a more normal looking string. If we visit that page we'll get our flag in the source code! You can also find it by selecting all the text on the page using "ctrl+a".</p>
+
+<h2>Easter 3</h2>
+
+<p>This one was a freebie! I found it in the source code of /login!</p>
+
+<h2>Easter 4</h2>
+
+<p>Save a request sent to the login page via ZAP or Burp. I saved the request as "login.raw". Then use that in an sqlmap attack to enumerate databases.</p>
+
+<p><code>
+sqlmap -r login.raw --dbs
+</code></p>
+
+<p>Then dump the "THM_f0und_m3" database.</p>
+
+<p><code>
+sqlmap -r login.raw -D THM\_f0und\_m3 --dump
+</code></p>
+
+<p>Note: This might take some time.</p>
+
+<h2>Easter 5</h2>
+
+<p>This one is directly connected to Easter 4. When you dumped the "THM_f0und_m3" database, another table should have been dumped called "user". This has an md5 hash that stores the login password for Deskel. Crack the hash and login at /login to get the flag.</p>
+
+<h2>Easter 6</h2>
+
+<p>You can find this flag in the response header of the landing page. Check it out using a tool like ZAP.</p>
+
+<h2>Easter 7</h2>
+
+<p>Using inspect element, I modified the cookie value of "invite" to "1". After refreshing the page I could find the flag on the page.</p>
+
+<h2>Easter 8</h2>
+
+<p>Using ZAP, I resent a request to "index.php" and modified the "User-Agent" to:</p>
+
+<p><code>
+Mozilla/5.0 (iPhone; CPU iPhone OS 13\_1\_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1
+</code></p>
+
+<p>I could then find the flag in the response!</p>
+
+<h2>Easter 9</h2>
+
+<p>This flag could be found in the source code of /ready, just be sure to view it before the page redirects!</p>
+
+<h2>Easter 10</h2>
+
+<p>Intercept a request to /freesub and modify the referrer to "tryhackme.com."</p>
+
+<h2>Easter 11</h2>
+
+<p>Find the drop down menu about half way down the page between the man looking at the food and the big red button. We're gonna tamper with the request to change the "dinner" variable to "egg" because this guy loves eggs! The POST variables will look like:</p>
+
+<p><code>
+dinner=egg&amp;submit=submit
+</code></p>
+
+<p>Then we can find the flag in the response!</p>
+
+<h2>Easter 12</h2>
+
+<p>Fake JS file, "jquery-9.1.2.js" has a function called "ahem" which we can call from the console by running "ahem()". You should be able to access the console via inspect element.</p>
+
+<h2>Easter 13</h2>
+
+<p>Press the button!</p>
+
+<h2>Task 14</h2>
+
+<p>There was a base64 encoded image in the source code of the page. By putting it in <a href="https://gchq.github.io/CyberChef/">CyberChef</a> we can convert it into an actual image and get the flag!</p>
+
+<h2>Easter 15</h2>
+
+<p>Go to /game1 and decode characters. Cheat sheet below.</p>
+
+<p>a=89 <br />
+b=90 <br />
+c=91 <br />
+d=92 <br />
+e=93 <br />
+f=94 <br />
+g=95 <br />
+h=41 <br />
+i=42 <br />
+j=43 <br />
+k=75 <br />
+l=76 <br />
+m=77 <br />
+n=78 <br />
+o=79 <br />
+p=80 <br />
+q=81 <br />
+r=10 <br />
+s=11 <br />
+t=12 <br />
+u=13 <br />
+v=14 <br />
+w=15 <br />
+x=16 <br />
+y=17 <br />
+z=18  </p>
+
+<p>A=99 <br />
+B=100 <br />
+C=101 <br />
+D=102 <br />
+E=103 <br />
+F=104 <br />
+G=51 <br />
+H=52 <br />
+I=53 <br />
+J=54 <br />
+K=55 <br />
+L=56 <br />
+M=57 <br />
+N=58 <br />
+O=126 <br />
+P=127 <br />
+Q=128 <br />
+R=129 <br />
+S=130 <br />
+T=131 <br />
+U=136 <br />
+V=137 <br />
+W=138 <br />
+X=139 <br />
+Y=140 <br />
+Z=141  </p>
+
+<p>1=23 <br />
+2=24 <br />
+3=25 <br />
+4=26 <br />
+5=10 <br />
+6=11 <br />
+7=12 <br />
+8=13 <br />
+9=14 <br />
+0=22  </p>
+
+<h2>Easter 16</h2>
+
+<p>Using ZAP, I could modify a request to submit all 3 buttons at the same time! This responded with the flag! The payload will look like:</p>
+
+<p><code>
+button1=button1&amp;button2=button2&amp;button3=button3&amp;submit=submit
+</code></p>
+
+<h2>Easter 17</h2>
+
+<p>I tried to use cyberchef for this but had some issues, so I used <a href="https://www.rapidtables.com/">RapidTables</a> instead. <br />
+Bin->Dec->Hex->ASCII</p>
+
+<h2>Easter 18</h2>
+
+<p>Add to the request header:</p>
+
+<p><code>
+egg:Yes
+</code></p>
+
+<p>You'll have to scroll down the response a bit to find the flag.</p>
+
+<h2>Easter 19</h2>
+
+<p>Run a dirb scan, you should find a directory called /small with the flag inside!</p>
+
+<h2>Easter 20</h2>
+
+<p>Send POST request to landing page with the creds found at the bottom at the page. We can do this with curl by running:</p>
+
+<p><code>
+curl -X POST -F 'username=DesKel' -F 'password=heIsDumb' http://10.10.192.159
+</code></p>
+
+<p>The flag will be in the response!</p>
+
+<h2>Conclusion</h2>
+
+<p>A real mix of challenges which I really enjoyed! Some came easy, others not so much! I hope this guide is useful in cracking some of the trickier challenges!</p>
+</div>
+    <hr>
+    <footer>
+        <nav>
+            <a href="https://twitter.com/chris_dinozzi">twitter</a>
+            <span>|</span>
+            <a href="https://unsplash.com/@chrisdinozzi">photos</a>
+            <span>|</span>
+            <a href="https://github.com/chrisdinozzi">github</a>
+        </nav>
+    </footer>
+</html>

