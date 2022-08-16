@@ -175,22 +175,24 @@ ls
 
 <p>No flag :( But there is "root.py"! Let's open it up!</p>
 
-<p>```
-cat root.py  </p>
+<p><code>
+cat root.py
+</code></p>
 
-<p>from cryptography.fernet import Fernet <br />
+<p><code>
+from cryptography.fernet import Fernet <br />
 import pyfiglet <br />
 key=input("Enter the key: ") <br />
 f=Fernet(key) <br />
-encrypted_mess= 'gAAAAABfdb52eejIlEaE9ttPY8ckMMfHTIw5lamAWMy8yEdGPhnm9_H_yQikhR-bPy09-NVQn8lF_PDXyTo-T7CpmrFfoVRWzlm0OffAsUM7KIO_xbIQkQojwf_unpPAAKyJQDHNvQaJ' <br />
-dcrypt_mess=f.decrypt(encrypted_mess) <br />
-mess=dcrypt_mess.decode() <br />
-display1=pyfiglet.figlet_format("You Are Now The Owner Of ") <br />
-display2=pyfiglet.figlet_format("Chocolate Factory ") <br />
+encrypted\_mess= 'gAAAAABfdb52eejIlEaE9ttPY8ckMMfHTIw5lamAWMy8yEdGPhnm9\_H\_yQikhR-bPy09-NVQn8lF\_PDXyTo-T7CpmrFfoVRWzlm0OffAsUM7KIO\_xbIQkQojwf\_unpPAAKyJQDHNvQaJ' <br />
+dcrypt\_mess=f.decrypt(encrypted\_mess) <br />
+mess=dcrypt\_mess.decode() <br />
+display1=pyfiglet.figlet\_format("You Are Now The Owner Of ") <br />
+display2=pyfiglet.figlet\_format("Chocolate Factory ") <br />
 print(display1) <br />
 print(display2) <br />
-print(mess) <br />
-```</p>
+print(mess)
+</code></p>
 
 <p>Looks like we have an encrpyted string and need a key to crack it! When trying to run the python script I ran into some issues so lets use <a href="https://asecuritysite.com/encryption/ferdecode">this website</a> instead. We can put the contents of the "encrypted_mess" variable into the "token" field, now we just need a key! Let's try our key from answer 1! Make sure to only include the section from "-" to "="! There's our key! Done!</p>
 

