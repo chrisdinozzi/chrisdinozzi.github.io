@@ -4,6 +4,8 @@
     --background-color:#3d405b;
     --primary-color:#81b29a;
     --secondary-color:#f4f1de;
+    --accent-color: #E07A5F;
+    --link-color:#F2CC8F;
 }
 
 html{
@@ -25,7 +27,7 @@ body{
 }
 
 a{
-    color:#f2cc8f;
+    color:var(--link-color);
 }
 
 nav{

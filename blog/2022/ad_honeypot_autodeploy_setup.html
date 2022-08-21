@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/style.css">
+        <title>how to setup AD Honeypot Autodeploy - christopher di-nozzi</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="How to setup AD Honeypot Autodeploy, an AD and RDP honeypot.">
+    </head>
+    <div id="header">
+   <h1> <a href="/">christopher di-nozzi</a></h1>
+    <nav>
+        <a href="/about">about</a>
+        <span>|</span>
+        <a href="/projects">projects</a>
+        <span>|</span>
+        <a href="/blog">blog</a>
+    </nav>
+    <hr>
+    </div>
+    <div id="main">
+<h1>How to setup AD Honeypot Autodeploy</h1>
+
+<h3>An except from my dissertation around deploying AD Honeypot Autodeploy</h3>
+
+<p>21/08/2022</p>
+
+<p>This software required 12GB of memory, 8CPU cores and 100GB of storage which were provided via the virtual machine. The software was installed on Ubuntu 20.04.3 Desktop and virtualisation was enabled for the virtual machine prior to booting. To install the software, the following steps were taken. An important prerequisite was to download a copy of a Windows 10 ISO file as the software could not do that automatically like the other ISO files it uses.</p>
+
+<h2>Packer</h2>
+
+<p>1. Other required software was first installed using the following command:</p>
+
+<p><code>sudo apt install git vim p7zip-full curl qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils xsltproc pwgen whois python3.8-venv</code></p>
+
+<p>2. Then the software was installed from the GitHub repository using the following command:</p>
+
+<p><code>git clone</code> <a href="https://github.com/tothi/ad-honeypot-autodeploy.git"><em>https://github.com/tothi/ad-honeypot-autodeploy.git</em></a></p>
+
+<p>3. Change into the newly installed directory and run the 'init-passwords.sh' script. All passwords were set to '!Password123' to meet password requirements.</p>
+
+<p><code>cd ad-honeypot-autodeploy &amp;&amp; ./init-passwords.sh</code></p>
+
+<p>4. Move into the 'packer' directory and run the 'get-virtio.sh' script.</p>
+
+<p><code>cd packer &amp;&amp; ./get-virtio.sh</code></p>
+
+<p>5. Copy of the previously downloaded Windows 10 ISO file into the ISO directory and rename it to 'Win10_21H2_EnglishInternational_x64.iso'
+6. Download GeoList2-City.mmb and place it in the resource's directory, (MaxMind, 2022).
+7. Run the below commands to install packer.
+  - <code>curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -</code>
+  - <code>sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb\_release -cs) main"</code>
+  - <code>sudo apt-get update &amp;&amp; sudo apt-get install packer</code>
+8. Run the 'packer-build-all.sh' script.</p>
+
+<p><code>./packer-build-all.sh</code></p>
+
+<h2>Terraform</h2>
+
+<p>1. Install terraform using this command:
+  - <code>sudo apt install terraform</code></p>
+
+<p>2. Edit the qemu.conf file to fix an issue faced during this research by following these steps.
+  - <code>sudo vim /etc/libvirt/qemu.conf</code>
+  - Uncomment 'security_driver = 'none''</p>
+
+<p>3. Change into the terraform directory
+  - <code>cd ../terraform</code></p>
+
+<p>4. Initiate and apply the terraform build. This may take sometime.
+  - <code>terraform init</code>
+  - <code>terraform apply</code></p>
+
+<h2>Ansible</h2>
+
+<p>1. Change into the Ansible directory</p>
+
+<p><code>
+cd ../ansible
+</code></p>
+
+<p>2. Run the following commands:</p>
+
+<p><code>
+python3 -m venv venv
+</code></p>
+
+<p><code>
+. ./venv/bin/activate
+</code></p>
+
+<p><code>
+pip3 install -r requirements.txt
+</code></p>
+
+<p><code>
+pip wheel install ansible pywinrm faker
+</code></p>
+
+<p>3. Finally deploy the ansible configuration. This step may take a while.</p>
+
+<p><code>
+ansible-playbook -i hosts setup-domain.yml -v
+</code></p>
+
+<p>The honeypot is now ready to be used. To make it accessible to the attacker's machine, the following commands were run:</p>
+
+<p><code>
+sudo iptables -t nat -A PREROUTING -p tcp --dport 3389 -j DNAT --to-destination 192.168.3.112:3389
+</code>
+<code>
+sudo iptables -A FORWARD -p tcp --dport 3389 -j ACCEPT
+</code>
+<code>
+sudo iptables -t nat -A POSTROUTING -j MASQUERADE
+</code></p>
+</div>
+    <hr>
+    <footer>
+        <nav>
+            <a href="https://twitter.com/chris_dinozzi">twitter</a>
+            <span>|</span>
+            <a href="https://unsplash.com/@chrisdinozzi">photos</a>
+            <span>|</span>
+            <a href="https://github.com/chrisdinozzi">github</a>
+        </nav>
+    </footer>
+</html>
