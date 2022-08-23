@@ -2,12 +2,12 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" href="/style.css">
-        <title>how to setup AD Honeypot Autodeploy - christopher di-nozzi</title>
+        <title>christopher di-nozzi</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta
             name="description"
-            content="How to setup AD Honeypot Autodeploy, an AD and RDP honeypot.">
+            content="A page generated using ssg. Probably a blog post.">
     </head>
     <div id="header">
    <h1> <a href="/">christopher di-nozzi</a></h1>
@@ -50,9 +50,9 @@
 <p>5. Copy of the previously downloaded Windows 10 ISO file into the ISO directory and rename it to 'Win10_21H2_EnglishInternational_x64.iso'
 6. Download GeoList2-City.mmb and place it in the resource's directory, (MaxMind, 2022).
 7. Run the below commands to install packer.
-  - <code>curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -</code>
-  - <code>sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb\_release -cs) main"</code>
-  - <code>sudo apt-get update &amp;&amp; sudo apt-get install packer</code>
+  -\ <code>curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -</code>
+  -\ <code>sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb\_release -cs) main"</code>
+  -\ <code>sudo apt-get update &amp;&amp; sudo apt-get install packer</code>
 8. Run the 'packer-build-all.sh' script.</p>
 
 <p><code>./packer-build-all.sh</code></p>
@@ -60,18 +60,21 @@
 <h2>Terraform</h2>
 
 <p>1. Install terraform using this command:
-  - <code>sudo apt install terraform</code></p>
+  -\ <code>sudo apt install terraform</code></p>
 
-<p>2. Edit the qemu.conf file to fix an issue faced during this research by following these steps.
-  - <code>sudo vim /etc/libvirt/qemu.conf</code>
-  - Uncomment 'security_driver = 'none''</p>
+<p>2. Edit the qemu.conf file to fix an issue faced during this research by following these steps.</p>
 
-<p>3. Change into the terraform directory
-  - <code>cd ../terraform</code></p>
+<p><code>sudo vim /etc/libvirt/qemu.conf</code>
+Uncomment 'security_driver = 'none''</p>
 
-<p>4. Initiate and apply the terraform build. This may take sometime.
-  - <code>terraform init</code>
-  - <code>terraform apply</code></p>
+<p>3. Change into the terraform directory</p>
+
+<p><code>cd ../terraform</code></p>
+
+<p>4. Initiate and apply the terraform build. This may take sometime.</p>
+
+<p><code>terraform init</code>
+<code>terraform apply</code></p>
 
 <h2>Ansible</h2>
 
