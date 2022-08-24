@@ -86,6 +86,7 @@ code{
     /*word-wrap: break-word;*/
     background-color:#262839;
     padding: 8px;
+    overflow-y:hidden;
     overflow-x:scroll;
 }
 
