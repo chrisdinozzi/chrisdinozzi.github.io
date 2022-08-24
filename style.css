@@ -79,7 +79,13 @@ p{
 img{
     margin:auto;
     display:block;
-    width:80%;
+    width:90%;
+}
+
+code{
+    word-wrap: break-word;
+    background-color:#262839;
+    padding: 8px;
 }
 
 ol,
