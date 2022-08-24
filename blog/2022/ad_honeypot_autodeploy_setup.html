@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta
             name="description"
-            content="A page generated using ssg. Probably a blog post.">
+            content="How to deploy ad honeypot autodeploy, a honeypot script by tothi">
     </head>
     <div id="header">
    <h1> <a href="/">christopher di-nozzi</a></h1>
@@ -28,6 +28,10 @@
 <p>21/08/2022</p>
 
 <p>This software required 12GB of memory, 8CPU cores and 100GB of storage which were provided via the virtual machine. The software was installed on Ubuntu 20.04.3 Desktop and virtualisation was enabled for the virtual machine prior to booting. To install the software, the following steps were taken. An important prerequisite was to download a copy of a Windows 10 ISO file as the software could not do that automatically like the other ISO files it uses.</p>
+
+<h2>DISCLAIMER</h2>
+
+<p>Is this best practice for setting up a honeypot? No. I would NOT recommend running this script outside of a secure, virtualized environment. In this form, it is also detectable as a honeypot, as I outlined in my dissertation. I am not responsible for you using this guide to deploy an insecure honeypot and getting yourself into trouble.</p>
 
 <h2>Packer</h2>
 

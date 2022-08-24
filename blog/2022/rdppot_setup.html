@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta
             name="description"
-            content="A page generated using ssg. Probably a blog post.">
+            content="How to deploy rdppot, a honeypot script by kryptoslogic.">
     </head>
     <div id="header">
    <h1> <a href="/">christopher di-nozzi</a></h1>
@@ -28,6 +28,12 @@
 <p>23/08/2022</p>
 
 <p><a href="https://github.com/kryptoslogic/rdppot">rdppot</a>, by <a href="https://github.com/kryptoslogic">Kryptos Logic</a>, is an open source RDP honeypot that deploys a pool of Windows XP honeypots from a base image. This article will outline how I setup this script for my dissertation. I hope it will be of use to anyone trying to get this setup.</p>
+
+<p>An important prerequisite of this script is a Windows XP Pro .iso file. I will not provide a link for this, it is up to you to obtain this.</p>
+
+<h2>DISCLAIMER</h2>
+
+<p>Is this best practice for setting up a honeypot? No. I would NOT recommend running this script outside of a secure, virtualized environment. In this form, it is also detectable as a honeypot, as I outlined in my dissertation. I am not responsible for you using this guide to deploy an insecure honeypot and getting yourself into trouble.</p>
 
 <p>1. Install prerequisite software required</p>
 
@@ -65,7 +71,7 @@
 
 <p>11. Create a password for the admin account </p>
 
-<p>12. Enable RDP</p>
+<p>12. Enable RDP by following <a href="https://www.itprotoday.com/windows-78/how-do-i-enable-remote-desktop-windows-xp#:~:text=Right%2Dclick%20My,main%20dialog%20box.">these</a> steps.</p>
 
 <p>13. Enable auto login to allow the VMs to start up properly on their own. Follow <a href="https://www.itprotoday.com/cloud-computing/how-can-i-enable-autologon-windows-xp">this</a> article to help.</p>
 
