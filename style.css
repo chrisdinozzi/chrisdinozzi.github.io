@@ -76,6 +76,12 @@ p{
     margin-inline-end: 0px;
 }
 
+img{
+    margin:auto;
+    display:block;
+    width:80%;
+}
+
 ol,
 ul {
 	overflow-x: auto;
