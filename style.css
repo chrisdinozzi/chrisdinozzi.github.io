@@ -83,9 +83,10 @@ img{
 }
 
 code{
-    word-wrap: break-word;
+    /*word-wrap: break-word;*/
     background-color:#262839;
     padding: 8px;
+    overflow-x:scroll;
 }
 
 ol,
