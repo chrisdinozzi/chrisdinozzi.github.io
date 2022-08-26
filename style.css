@@ -89,6 +89,9 @@ code{
     display:block;
     overflow-y:hidden;
     overflow-x:scroll;
+
+    font-size: inherit;
+    
 }
 
 ol,
