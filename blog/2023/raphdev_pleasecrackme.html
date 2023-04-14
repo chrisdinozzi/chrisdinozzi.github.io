@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/style.css">
+        <title>christopher di-nozzi</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="How to deploy rdppot, a honeypot script by kryptoslogic.">
+    </head>
+    <div id="header">
+   <h1> <a href="/">christopher di-nozzi</a></h1>
+    <nav>
+        <a href="/about">about</a>
+        <span>|</span>
+        <a href="/projects">projects</a>
+        <span>|</span>
+        <a href="/blog">blog</a>
+    </nav>
+    <hr>
+    </div>
+    <div id="main">
+<h1>RaphDev's PleaseCrackMe Walkthrough and KeyGen</h1>
+
+<h3>Simple explanation and key generator.</h3>
+
+<p>14/05/2023</p>
+
+<p><a href="https://crackmes.one/crackme/612e85d833c5d41acedffa4f">PleaseCrackMe</a>, by <a href="https://crackmes.one/user/RaphDev">RaphDev</a>, is a begginner friendly reverse engineering challenge that generates the solution using two inputs from the user. Therefore, I thought this would be an easy way for me to cut my teeth at writing a key generator for a crackme challenge. To solve this challenge I used <a href="https://ghidra-sre.org/">ghidra</a> to decompile the binary and examine the code. </p>
+
+<p>I started by opening the binary in Ghidra. After analysing it I navigated to the main function and started renaming variables.</p>
+<p><img src="../res/renamed variables.png"></p>
+<p>The code prompts the user for 2 inputs: a username (line 18+19) and a number between 1 and 9 (line 20+21). The program then loops (lines 28-34) through the usersname and adds the users number to the number values of the character (line 32). Therefore, if the user entered 'john' as their name and '5' as their number, the program would add 5 to the number value of each character. </p>
+<p>john = 106 111 104 110</p>
+<p>+5</p>
+<p>111 116 109 115</p>
+<p>This value is then stored as a string and used as the desired password, so the password for the above example would be: <b>otms</b></p>
+<p>Pretty simple!</p>
+<p>I then wrote a <a href="RaphDevs_PleaseCrackMe_KeyGen.py">keygen</a> that simply takes the usersname name and number, adds them together, and spits out the password they need to enter to get access to the program.</p>
+<code>
+    def keygen(username,number):<br>
+&emsp;        password=""<br>
+&emsp;        for c in username:<br>
+&emsp;&emsp;            password = password+chr(ord(c)+int(number)) <br>       
+&emsp;        return password<br>
+<br>
+    username = input("Enter username: ")<br>
+    print ("Username is: "+username)<br>
+    number = input("Enter number: ")<br>
+    print("Number is: " +number)<br>
+    print("Password is: "+keygen(username,number))<br>
+</code>
+
+<p>Overall, a simple but fun challenge to start getting in crackmes with.</p>
+</div>
+    <hr>
+    <footer>
+        <nav>
+            <a href="https://twitter.com/chris_dinozzi">twitter</a>
+            <span>|</span>
+            <a href="https://unsplash.com/@chrisdinozzi">photos</a>
+            <span>|</span>
+            <a href="https://github.com/chrisdinozzi">github</a>
+        </nav>
+    </footer>
+</html>
