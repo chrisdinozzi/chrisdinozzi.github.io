@@ -39,23 +39,23 @@
         BleKeyboard BLE("ESP32 Remote","chrisdinozzi",100);<br>
         <br>
         void setup(){<br>
-            BLE.begin();<br>
+        &emsp; BLE.begin();<br>
         }<br>
         <br>
         void loop(){<br>
-            if (digitalRead(RIGHT_BTN) == LOW){<br>
-                BLE.write(KEY_RIGHT_ARROW);<br>
-                while (digitalRead(RIGHT_BTN) == LOW){<br>
-                    delay(1);<br>
-            }<br>
+         &emsp; if (digitalRead(RIGHT_BTN) == LOW){<br>
+         &emsp;&emsp; BLE.write(KEY_RIGHT_ARROW);<br>
+         &emsp;&emsp; while (digitalRead(RIGHT_BTN) == LOW){<br>
+         &emsp;&emsp;&emsp; delay(1);<br>
+         &emsp; }<br>
         }<br>
         <br>
-            if (digitalRead(LEFT_BTN) == HIGH){<br>
-                BLE.write(KEY_LEFT_ARROW);<br>
-                while (digitalRead(LEFT_BTN) == HIGH){<br>
-                    delay(1);<br>
-                }<br>
-            }<br>
+         &emsp; if (digitalRead(LEFT_BTN) == HIGH){<br>
+         &emsp;&emsp; BLE.write(KEY_LEFT_ARROW);<br>
+         &emsp;&emsp; while (digitalRead(LEFT_BTN) == HIGH){<br>
+         &emsp;&emsp;&emsp; delay(1);<br>
+          &emsp;&emsp; }<br>
+          &emsp; }<br>
         }<br>
     </code>
     <p>We start by declaring a new BleKeyboard object that I've called "BLE". The three parameters it takes are device name (what name it has when you connect to it), manufacturer, and battery percentage. Then, in the setup function we run "BLE.begin()" to start the communication. Once this function has been run, the BLE will start running and you will be able to connect to the device.</p>
