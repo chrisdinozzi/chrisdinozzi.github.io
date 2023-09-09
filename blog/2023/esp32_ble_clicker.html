@@ -59,6 +59,7 @@
         }
     </code>
     <p>We start by declaring a new BleKeyboard object that I've called "BLE". The three parameters it takes are device name (what name it has when you connect to it), manufacturer, and battery percentage. Then, in the setup function we run "BLE.begin()" to start the communication. Once this function has been run, the BLE will start running and you will be able to connect to the device.</p>
+    <p><img src="../res/bluetooth_menu.png"></p>
     <p>Next, we begin cycling through the "loop()" function. If the button D2 is pressed, it will go high and send a right arrow key press. We then go into a while loop that we will get stuck in as long as the button is held down. This is to prevent the same key being sent multiple times and advancing further than expected. We do exactly the same thing for the D0 button but it goes low rather than high and uses the left arrow key.</p>
     <p>And that's it. You can compile and upload the coe to the board, connect the device, and click away to your hearts content.</p>
     <p>I decided to spice it up a little more by making use of the display to help the user know which key did what and provide some feedback upon click.</p>
