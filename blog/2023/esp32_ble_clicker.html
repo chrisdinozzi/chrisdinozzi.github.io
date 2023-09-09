@@ -31,10 +31,35 @@
     <p>One of the features of the ESP32-S3 chip is Bluetooth Low Energy (BLE). BLE differentiates itself from traditional bluetooth with its lower power use (shocking!) and lower data rate. This makes BLE the protocol of choice for IoT devices but also things like keyboards that don't transfer that much data at once and can benefit from the lower power use. To get my feet wet with this new device I decided to make a clicker using BLE - a device you can connect to your computer and use to advance your slide show while you give a great presentation.</p>
     <p>It's a simple enough idea, and using the <a href="https://github.com/T-vK/ESP32-BLE-Keyboard">BleKeyboard</a> library by T-vK makes the entire thing very trivial. I installed the library using the Arduino IDE and then wrote some very simple code to get it up and running.</p>
     <code>
-        INSERT CODE
+        #include <BleKeyboard.h>
+
+        const int RIGHT_BTN = 0;
+        const int LEFT_BTN = 2;
+
+        BleKeyboard BLE("ESP32 Remote","chrisdinozzi",100);
+
+        void setup(){
+            BLE.begin();
+        }
+
+        void loop(){
+            if (digitalRead(RIGHT_BTN) == LOW){
+                BLE.write(KEY_RIGHT_ARROW);
+                while (digitalRead(RIGHT_BTN) == LOW){
+                    delay(1);
+            }
+        }
+
+            if (digitalRead(LEFT_BTN) == HIGH){
+                BLE.write(KEY_LEFT_ARROW);
+                while (digitalRead(LEFT_BTN) == HIGH){
+                    delay(1);
+                }
+            }
+        }
     </code>
     <p>We start by declaring a new BleKeyboard object that I've called "BLE". The three parameters it takes are device name (what name it has when you connect to it), manufacturer, and battery percentage. Then, in the setup function we run "BLE.begin()" to start the communication. Once this function has been run, the BLE will start running and you will be able to connect to the device.</p>
-    <p>Next, we begin cycling through the "loop()" function. If the top button (named RIGHT_BTN) is pressed, it will go high and send a right arrow key press. We then go into a while loop that we will get stuck in as long as the button is held down. This is to prevent the same key being sent multiple times and advancing further than expected. We do exactly the same thing for the bottom button (LEFT_BTN) but with the left arrow key instead.</p>
+    <p>Next, we begin cycling through the "loop()" function. If the button D2 is pressed, it will go high and send a right arrow key press. We then go into a while loop that we will get stuck in as long as the button is held down. This is to prevent the same key being sent multiple times and advancing further than expected. We do exactly the same thing for the D0 button but it goes low rather than high and uses the left arrow key.</p>
     <p>And that's it. You can compile and upload the coe to the board, connect the device, and click away to your hearts content.</p>
     <p>I decided to spice it up a little more by making use of the display to help the user know which key did what and provide some feedback upon click.</p>
     <code>
