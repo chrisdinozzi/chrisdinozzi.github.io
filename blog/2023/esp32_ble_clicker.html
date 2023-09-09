@@ -28,6 +28,19 @@
     <p>I really want to buy a <a href="https://flipperzero.one/">Flipper Zero</a>. If you are unaware, a Flipper Zero is a compact hacking tool that gives you access to an array of attacks at your fingertips - from Bad USB to NFC to Infrared, it can do a lot. The thing that really peaked my interest, however, was the additional <a href="https://www.joom.com/geek/en/products/631b4ab0a74fe601db26998a">ESP32 board</a> you could purchase to extend the functionality of the device into the realm of wireless fidelity.</p>
     <p>However, once I put the Flipper Zero and WiFi dev board into my basket and went to check out, the price compelled me to close the tab and reevaluate my needs. Instead, I decided to take the slightly more DIY approach to delving into the realm of ESP32 and the joy it can bring.</p>
     <p>I picked up an ESP32-S3 device from Adafruits. It's a compact little thing with a built in 240x135 TFT display, 3 programmable buttons, a battery monitoring chip, NeoPixel LED, and a whole load more. This was appealing as an alternative to the Flipper Zero since it already had the display, inputs, and battery functionality built into the same board as the ESP32 chip.</p>
+    <p>One of the features of the ESP32-S3 chip is Bluetooth Low Energy (BLE). BLE differentiates itself from traditional bluetooth with its lower power use (shocking!) and lower data rate. This makes BLE the protocol of choice for IoT devices but also things like keyboards that don't transfer that much data at once and can benefit from the lower power use. To get my feet wet with this new device I decided to make a clicker using BLE - a device you can connect to your computer and use to advance your slide show while you give a great presentation.</p>
+    <p>It's a simple enough idea, and using the <a href="https://github.com/T-vK/ESP32-BLE-Keyboard">BleKeyboard</a> library by T-vK makes the entire thing very trivial. I installed the library using the Arduino IDE and then wrote some very simple code to get it up and running.</p>
+    <code>
+        INSERT CODE
+    </code>
+    <p>We start by declaring a new BleKeyboard object that I've called "BLE". The three parameters it takes are device name (what name it has when you connect to it), manufacturor, and battery percentage. Then, in the setup function we run "BLE.begin()" to start the communication. Once this function has been run, the BLE will start running and you will be able to connect to the device.</p>
+    <p>Next, we begin cycling through the "loop()" function. If the top button (named RIGHT_BTN) is pressed, it will go high and send a right arrow key press. We then go into a while loop that we will get stuck in as long as the button is held down. This is to prevent the same key being sent multiple times and advancing further than expected. We do exactly the same thing for the bottom button (LEFT_BTN) but with the left arror key instead.</p>
+    <p>And that's it. You can compile and upload the coe to the board, connect the device, and click away to your hearts content.</p>
+    <p>I decided to spice it up a little more by making use of the display to help the user know which key did what and provide some feedback upon click.</p>
+    <code>
+        INSERT CODE
+    </code>
+    <p>The big downside of this whole thing is the size of the BleKeyboard.h library. It's quite bulky. A future proect would be getting more into the weeds and writing my own code to interface with the ESP32 a little more directly, hopefully being able to reduce the size of the code as well.</p>
 </div>
 <hr>
 <footer>
