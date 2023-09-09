@@ -32,7 +32,7 @@
     <h2>Headless Solution</h2>
     <p>It's a simple enough idea, and using the <a href="https://github.com/T-vK/ESP32-BLE-Keyboard">BleKeyboard</a> library by T-vK makes the entire thing very trivial. I installed the library using the Arduino IDE and then wrote some very simple code to get it up and running.</p>
     <code>
-        #include <BleKeyboard.h><br>
+        #include &lt;BleKeyboard.h&gt;<br>
         <br>
         const int RIGHT_BTN = 0;<br>
         const int LEFT_BTN = 2;<br>
@@ -66,8 +66,8 @@
     <h2>With Display</h2>
     <p>I decided to spice it up a little more by making use of the display to help the user know which key did what and provide some feedback upon click.</p>
     <code>
-#include <BleKeyboard.h><br>
-    #include <Adafruit_ST7789.h><br>
+#include &lt;BleKeyboard.h&gt;<br>
+    #include &lt;Adafruit_ST7789.h&gt;<br>
         <br>
         const int RIGHT_BTN = 0;<br>
         const int LEFT_BTN = 2;<br>
