@@ -31,32 +31,32 @@
     <p>One of the features of the ESP32-S3 chip is Bluetooth Low Energy (BLE). BLE differentiates itself from traditional bluetooth with its lower power use (shocking!) and lower data rate. This makes BLE the protocol of choice for IoT devices but also things like keyboards that don't transfer that much data at once and can benefit from the lower power use. To get my feet wet with this new device I decided to make a clicker using BLE - a device you can connect to your computer and use to advance your slide show while you give a great presentation.</p>
     <p>It's a simple enough idea, and using the <a href="https://github.com/T-vK/ESP32-BLE-Keyboard">BleKeyboard</a> library by T-vK makes the entire thing very trivial. I installed the library using the Arduino IDE and then wrote some very simple code to get it up and running.</p>
     <code>
-        #include <BleKeyboard.h>
-
-        const int RIGHT_BTN = 0;
-        const int LEFT_BTN = 2;
-
-        BleKeyboard BLE("ESP32 Remote","chrisdinozzi",100);
-
-        void setup(){
-            BLE.begin();
-        }
-
-        void loop(){
-            if (digitalRead(RIGHT_BTN) == LOW){
-                BLE.write(KEY_RIGHT_ARROW);
-                while (digitalRead(RIGHT_BTN) == LOW){
-                    delay(1);
-            }
-        }
-
-            if (digitalRead(LEFT_BTN) == HIGH){
-                BLE.write(KEY_LEFT_ARROW);
-                while (digitalRead(LEFT_BTN) == HIGH){
-                    delay(1);
-                }
-            }
-        }
+        #include <BleKeyboard.h><br>
+        <br>
+        const int RIGHT_BTN = 0;<br>
+        const int LEFT_BTN = 2;<br>
+        <br>
+        BleKeyboard BLE("ESP32 Remote","chrisdinozzi",100);<br>
+        <br>
+        void setup(){<br>
+            BLE.begin();<br>
+        }<br>
+        <br>
+        void loop(){<br>
+            if (digitalRead(RIGHT_BTN) == LOW){<br>
+                BLE.write(KEY_RIGHT_ARROW);<br>
+                while (digitalRead(RIGHT_BTN) == LOW){<br>
+                    delay(1);<br>
+            }<br>
+        }<br>
+        <br>
+            if (digitalRead(LEFT_BTN) == HIGH){<br>
+                BLE.write(KEY_LEFT_ARROW);<br>
+                while (digitalRead(LEFT_BTN) == HIGH){<br>
+                    delay(1);<br>
+                }<br>
+            }<br>
+        }<br>
     </code>
     <p>We start by declaring a new BleKeyboard object that I've called "BLE". The three parameters it takes are device name (what name it has when you connect to it), manufacturer, and battery percentage. Then, in the setup function we run "BLE.begin()" to start the communication. Once this function has been run, the BLE will start running and you will be able to connect to the device.</p>
     <p><img src="../res/bluetooth_menu.png"></p>
