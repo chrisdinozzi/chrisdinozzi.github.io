@@ -1,129 +1,155 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-		<!--	created with www.mysitemapgenerator.com	-->
-		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-	<loc>https://chrisdinozzi.xyz/</loc>
-	<lastmod>2022-08-30T17:57:05+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/about</loc>
-	<lastmod>2022-08-30T17:57:05+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects</loc>
-	<lastmod>2022-08-30T17:57:05+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/blog</loc>
-	<lastmod>2022-08-30T17:57:05+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/about/</loc>
-	<lastmod>2022-08-30T17:57:05+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/</loc>
-	<lastmod>2022-08-30T17:57:06+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/papers/cmp314.pdf</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/papers/cmp319.pdf</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/papers/cmp320.pdf</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/papers/cmp400_proposal.pdf</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/papers/cmp400_poster.pdf</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/papers/cmp403.pdf</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/papers/cmp408_poster.pdf</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/papers/cmp408_report.pdf</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/papers/cmp416_mobile.pdf</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/projects/papers/cmp416_network.pdf</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/blog/</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/blog/2022/ad_honeypot_autodeploy_setup.html</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/blog/2022/rdppot_setup.html</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_anonforce.html</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_thompson.html</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_coldbox.html</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_ctfcollection_vol1.html</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_chocolate_factory.html</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_ctfcollection_vol2.html</loc>
-	<lastmod>2022-08-30T17:57:07+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!--  created with sitemap generator https://octopus.do  -->
+
+    <url>
+        <loc>https://chrisdinozzi.xyz</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>1</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/about</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects/papers/cmp319.pdf</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects/papers/cmp320.pdf</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects/papers/cmp314.pdf</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects/papers/cmp400_proposal.pdf</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects/papers/cmp400_poster.pdf</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects/papers/cmp408_poster.pdf</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects/papers/cmp408_report.pdf</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects/papers/cmp416_mobile.pdf</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects/papers/cmp416_network.pdf</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/projects/papers/cmp403.pdf</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_anonforce.html</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_thompson.html</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_coldbox.html</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_ctfcollection_vol1.html</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_ctfcollection_vol2.html</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2021/tryhackme_chocolate_factory.html</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2022/ad_honeypot_autodeploy_setup.html</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2022/rdppot_setup.html</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2023/raphdev_pleasecrackme.html</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2023/esp32_ble_clicker.html</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://chrisdinozzi.xyz/blog/2023/RaphDevs_PleaseCrackMe_KeyGen.py</loc>
+        <lastmod>2023-09-09</lastmod>
+        <changefreq>always</changefreq>
+        <priority>0.5</priority>
+    </url>
 </urlset>
