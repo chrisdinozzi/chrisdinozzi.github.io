@@ -29,6 +29,7 @@
     <p>However, once I put the Flipper Zero and WiFi dev board into my basket and went to check out, the price compelled me to close the tab and reevaluate my needs. Instead, I decided to take the slightly more DIY approach to delving into the realm of ESP32 and the joy it can bring.</p>
     <p>I picked up an <a href="https://learn.adafruit.com/esp32-s3-reverse-tft-feather/overview">ESP32-S3 device from Adafruits</a>. It's a compact little thing with a built in 240x135 TFT display, 3 programmable buttons, a battery monitoring chip, NeoPixel LED, and a whole load more. This was appealing as an alternative to the Flipper Zero since it already had the display, inputs, and battery functionality built into the same board as the ESP32 chip.</p>
     <p>One of the features of the ESP32-S3 chip is Bluetooth Low Energy (BLE). BLE differentiates itself from traditional bluetooth with its lower power use (shocking!) and lower data rate. This makes BLE the protocol of choice for IoT devices but also things like keyboards that don't transfer that much data at once and can benefit from the lower power use. To get my feet wet with this new device I decided to make a clicker using BLE - a device you can connect to your computer and use to advance your slide show while you give a great presentation.</p>
+    <h2>Headless Solution</h2>
     <p>It's a simple enough idea, and using the <a href="https://github.com/T-vK/ESP32-BLE-Keyboard">BleKeyboard</a> library by T-vK makes the entire thing very trivial. I installed the library using the Arduino IDE and then wrote some very simple code to get it up and running.</p>
     <code>
         #include <BleKeyboard.h><br>
@@ -62,6 +63,7 @@
     <p><img src="../res/bluetooth_menu.png"></p>
     <p>Next, we begin cycling through the "loop()" function. If the button D2 is pressed, it will go high and send a right arrow key press. We then go into a while loop that we will get stuck in as long as the button is held down. This is to prevent the same key being sent multiple times and advancing further than expected. We do exactly the same thing for the D0 button but it goes low rather than high and uses the left arrow key.</p>
     <p>And that's it. You can compile and upload the coe to the board, connect the device, and click away to your hearts content.</p>
+    <h2>With Display</h2>
     <p>I decided to spice it up a little more by making use of the display to help the user know which key did what and provide some feedback upon click.</p>
     <code>
 #include <BleKeyboard.h><br>
@@ -115,6 +117,7 @@
         }
 
     </code>
+    <h2>Conclusion</h2>
     <p>The big downside of this whole thing is the size of the BleKeyboard.h library. It's quite bulky. You can see it uses up about 60% of the devices storage.</p>
     <p><img src="../res/ble_lib_mem.png"></p>
     <p>A future project would be getting more into the weeds and writing my own code to interface with the ESP32 a little more directly, hopefully being able to reduce the size of the code as well.</p>
