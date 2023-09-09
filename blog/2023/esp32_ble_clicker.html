@@ -54,8 +54,8 @@
          &emsp;&emsp; BLE.write(KEY_LEFT_ARROW);<br>
          &emsp;&emsp; while (digitalRead(LEFT_BTN) == HIGH){<br>
          &emsp;&emsp;&emsp; delay(1);<br>
-          &emsp;&emsp; }<br>
-          &emsp; }<br>
+         &emsp;&emsp; }<br>
+         &emsp; }<br>
         }<br>
     </code>
     <p>We start by declaring a new BleKeyboard object that I've called "BLE". The three parameters it takes are device name (what name it has when you connect to it), manufacturer, and battery percentage. Then, in the setup function we run "BLE.begin()" to start the communication. Once this function has been run, the BLE will start running and you will be able to connect to the device.</p>
@@ -64,7 +64,56 @@
     <p>And that's it. You can compile and upload the coe to the board, connect the device, and click away to your hearts content.</p>
     <p>I decided to spice it up a little more by making use of the display to help the user know which key did what and provide some feedback upon click.</p>
     <code>
-        INSERT CODE
+#include <BleKeyboard.h><br>
+    #include <Adafruit_ST7789.h><br>
+        <br>
+        const int RIGHT_BTN = 0;<br>
+        const int LEFT_BTN = 2;<br>
+        <br>
+        BleKeyboard BLE("ESP32 Remote","chrisdinozzi",100);<br>
+        Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);<br>
+        <br>
+        void setup(){<br>
+        &emsp;// turn on backlite<br>
+        &emsp;pinMode(TFT_BACKLITE, OUTPUT);<br>
+        &emsp;digitalWrite(TFT_BACKLITE, HIGH);<br>
+        <br>
+        &emsp;// turn on the TFT / I2C power supply<br>
+        &emsp;pinMode(TFT_I2C_POWER, OUTPUT);<br>
+        &emsp;digitalWrite(TFT_I2C_POWER, HIGH);<br>
+        <br>
+        &emsp;// initialize TFT<br>
+        &emsp;tft.init(135, 240); // Init ST7789 240x135<br>
+        &emsp;tft.setRotation(3);<br>
+        &emsp;tft.setTextSize(2);<br>
+        &emsp;tft.fillScreen(ST77XX_BLACK);<br>
+        &emsp;tft.setCursor(0, 15);<br>
+        &emsp;tft.println("Right");<br>
+        &emsp;tft.setCursor(0, 105);<br>
+        &emsp;tft.println("Left");<br>
+        &emsp;BLE.begin();<br>
+        }<br>
+        <br>
+        void loop(){<br>
+        &emsp;if (digitalRead(RIGHT_BTN) == LOW){<br>
+        &emsp; BLE.write(KEY_RIGHT_ARROW);<br>
+        &emsp; tft.invertDisplay(false);<br>
+        &emsp; while (digitalRead(RIGHT_BTN) == LOW){<br>
+        &emsp;&emsp;delay(1);<br>
+        &emsp; }<br>
+        &emsp; tft.invertDisplay(true);<br>
+        &emsp;}<br>
+        <br>
+        &emsp;if (digitalRead(LEFT_BTN) == HIGH){<br>
+        &emsp; BLE.write(KEY_LEFT_ARROW);<br>
+        &emsp; tft.invertDisplay(false);<br>
+        &emsp; while (digitalRead(LEFT_BTN) == HIGH){<br>
+        &emsp;&emsp;delay(1);<br>
+        &emsp; }<br>
+        &emsp; tft.invertDisplay(true);<br>
+        &emsp;}<br>
+        }
+
     </code>
     <p>The big downside of this whole thing is the size of the BleKeyboard.h library. It's quite bulky. You can see it uses up about 60% of the devices storage.</p>
     <p><img src="../res/ble_lib_mem.png"></p>
