@@ -40,7 +40,46 @@
     <h2>Monitoring the Battery</h2>
     <p>"But how much charge do I have left?" Good question. Thanks to the battery monitoring chip on the board (MAX17048) it's trivial to query the amount of power left. The MAX17048 library can be installed via the Arduino IDE. I wrote a small program to query the status and display the results on the TFT display. Find my code below:</p>
     <code>
-        
+        #include "Adafruit_MAX1704X.h"<br>
+#include <Adafruit_ST7789.h><br>
+#include <Adafruit_GFX.h><br>
+<br>
+Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);<br>
+Adafruit_MAX17048 batt;<br>
+<br>
+void setup() {<br>
+&emsp;// turn on backlite<br>
+&emsp;pinMode(TFT_BACKLITE, OUTPUT);<br>
+&emsp;digitalWrite(TFT_BACKLITE, HIGH);<br>
+<br>
+&emsp;// turn on the TFT / I2C power supply<br>
+&emsp;pinMode(TFT_I2C_POWER, OUTPUT);<br>
+&emsp;digitalWrite(TFT_I2C_POWER, HIGH);<br>
+<br>
+&emsp;// initialize TFT<br>
+&emsp;tft.init(135, 240); // Init ST7789 240x135<br>
+&emsp;tft.setRotation(3);<br>
+&emsp;tft.setTextSize(2);<br>
+&emsp;tft.fillScreen(ST77XX_BLACK);<br>
+<br>
+&emsp;batt.begin();<br>
+}<br>
+<br>
+void loop() {<br>
+&emsp;&emsp;tft.fillScreen(0);<br>
+&emsp;&emsp;tft.print("Battery: ");<br>
+&emsp;&emsp;tft.print(batt.cellPercent());<br>
+&emsp;&emsp;tft.println("%");<br>
+&emsp;&emsp;tft.print("Voltage: ");<br>
+&emsp;&emsp;tft.print(batt.cellVoltage());<br>
+&emsp;&emsp;tft.println("V");<br>
+&emsp;&emsp;tft.print("Charge Rate: ");<br>
+&emsp;&emsp;tft.print(batt.chargeRate());<br>
+&emsp;&emsp;tft.println("%/h");<br>
+&emsp;&emsp;tft.setCursor(0,0);<br>
+&emsp;&emsp;delay(2000);<br>
+}<br>
+
     </code>
 
 
