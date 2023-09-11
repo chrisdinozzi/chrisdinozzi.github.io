@@ -30,19 +30,20 @@
     <p>1. Buy battery.</p>
     <p>2. Plug in battery.</p>
     <p>3. Destroy circuit board. (optional)</p>
-    <p>You only have to execute step 3 if you get your wires crossed, which I came ver close to doing.</p>
-    <p>I purchased <a href="https://www.amazon.co.uk/dp/B08FD39Y5R?psc=1&ref=ppx_yo2ov_dt_b_product_details">this</a> battery from Amazon - 1100Mah was more than enough capacity while getting the battery itself quite small. It arrived a couple of days later. I was excited to plug it in and free myself from the tether of USB power.</p>
+    <p>You only have to execute step 3 if you get your wires crossed, which I came very close to doing, so heed this warning.</p>
+    <p>I purchased <a href="https://www.amazon.co.uk/dp/B08FD39Y5R?psc=1&ref=ppx_yo2ov_dt_b_product_details">this</a> battery from Amazon - 1100mAh was more than enough capacity while keeping the battery itself quite small. It arrived a couple of days later. I was excited to plug it in and free myself from the tether of USB power.</p>
     <p>But wait, something is a miss. The polarity was the wrong way around.</p>
     <p>If I had plugged it in like that, it probably would have zapped the board. Luckily, this is an easy fix.</p>
+    
     <h2>Changing the battery polarity</h2>
-    <p>On the white connector at the end of the cables, simple lift the tabs over each wire and pull the wire out, then plug them back in the other way around. Now the positive side of the battery will plug into the positive part of the board and vice versa. Easy peasy. I could now plug the battery in and start using it. The battery can be charged over USB C and then will be automatically drained when not plugged into a power source - it really could not be easier.</p>
+    <p>On the white connector at the end of the cables, simple lift the tabs over each wire and pull the wire out, then plug them back in the other way around. Now the positive side of the battery will plug into the positive part of the board and vice versa. Easy as that. I could now plug the battery in and start using it. The battery can be charged over USB C and then will be automatically drained when not plugged into a power source - it really could not be easier.</p>
 
     <h2>Monitoring the Battery</h2>
     <p>"But how much charge do I have left?" Good question. Thanks to the battery monitoring chip on the board (MAX17048) it's trivial to query the amount of power left. The MAX17048 library can be installed via the Arduino IDE. I wrote a small program to query the status and display the results on the TFT display. Find my code below:</p>
     <code>
         #include "Adafruit_MAX1704X.h"<br>
-#include <Adafruit_ST7789.h><br>
-#include <Adafruit_GFX.h><br>
+#include &lt;Adafruit_ST7789.h&gt;<br>
+#include &lt;Adafruit_GFX.h&gt;<br>
 <br>
 Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);<br>
 Adafruit_MAX17048 batt;<br>
@@ -81,7 +82,7 @@ void loop() {<br>
 }<br>
 
     </code>
-
+<p>And that's it. I can now charge and use my board without being attached to my laptop.</p>
 
 </div>
 <hr>
