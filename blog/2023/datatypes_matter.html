@@ -54,12 +54,12 @@ Here is what it looked like when I sent a value to an analogue component that wo
   <code>
     import struct,sys;
 value_to_convert = float(sys.argv[1])
-hex_value = struct.unpack('<I',struct.pack('<f',value_to_convert))[0]
+hex_value = struct.unpack('&lt;I',struct.pack('&lt;f',value_to_convert))[0]
 int_value = int(hex_value)
 print(int_value)
 </code>
 <h2>Conclusion</h2>
-  <p>All this to say that datatypes matter. I know myself to be spoiled by modern programming languages that make converting data types so trivial but this experience has highlighted to me the importance of paying attention to the little details of a program and the knock on effects those could have down the line.</p>
+  <p>All this to say that data types matter. I know myself to be spoiled by modern programming languages that make converting data types so trivial but this experience has highlighted to me the importance of paying attention to the little details of a program and the knock on effects those could have down the line.</p>
   
 </div>
 <hr>
