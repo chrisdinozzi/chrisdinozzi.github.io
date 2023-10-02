@@ -52,11 +52,11 @@ Here is what it looked like when I sent a value to an analogue component that wo
   <p><img src="../res/binary_to_decimal.png" alt="Converting binary back into decimal." title="" /></p>
   <p>I created a python script tool that would take in a float, convert it to binary and then read it back as an integer. This way I could put in the magic number and get out a value that would actually trigger the alarm. </p>
   <code>
-    import struct,sys;
-value_to_convert = float(sys.argv[1])
-hex_value = struct.unpack('&lt;I',struct.pack('&lt;f',value_to_convert))[0]
-int_value = int(hex_value)
-print(int_value)
+    import struct,sys;<br>
+value_to_convert = float(sys.argv[1])<br>
+hex_value = struct.unpack('&lt;I',struct.pack('&lt;f',value_to_convert))[0]<br>
+int_value = int(hex_value)<br>
+print(int_value)<br>
 </code>
 <h2>Conclusion</h2>
   <p>All this to say that data types matter. I know myself to be spoiled by modern programming languages that make converting data types so trivial but this experience has highlighted to me the importance of paying attention to the little details of a program and the knock on effects those could have down the line.</p>
