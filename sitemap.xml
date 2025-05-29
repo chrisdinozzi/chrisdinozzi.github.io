@@ -1,143 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
-		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
-	<loc>https://cdino.net/</loc>
-	<lastmod>2025-05-26T16:29:46+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://cdino.net/</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>1.00</priority>
 </url>
 <url>
-	<loc>https://cdino.net/about/</loc>
-	<lastmod>2025-05-26T16:29:46+01:00</lastmod>
-	<priority>0.8</priority>
+  <loc>https://cdino.net/about/</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.8</priority>
+  <loc>https://cdino.net/projects/</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/papers/cmp314.pdf</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/papers/cmp319.pdf</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/projects/csr-generator/index.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/papers/cmp320.pdf</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/projects/papers/cmp314.pdf</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/papers/cmp400_proposal.pdf</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/projects/papers/cmp319.pdf</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/papers/cmp400_poster.pdf</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/projects/papers/cmp320.pdf</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/papers/cmp403.pdf</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/projects/papers/cmp400_proposal.pdf</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/papers/cmp408_poster.pdf</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/projects/papers/cmp400_poster.pdf</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/papers/cmp408_report.pdf</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/projects/papers/cmp403.pdf</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/papers/cmp416_mobile.pdf</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/projects/papers/cmp408_poster.pdf</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/projects/papers/cmp416_network.pdf</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/projects/papers/cmp408_report.pdf</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.8</priority>
+  <loc>https://cdino.net/projects/papers/cmp416_mobile.pdf</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2024/vde-2024-033.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/projects/papers/cmp416_network.pdf</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2023/raphdev_pleasecrackme.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2025/proxmox-https.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2023/esp32_ble_clicker.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2024/vde-2024-033.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2023/esp32_battery.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2023/raphdev_pleasecrackme.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2023/datatypes_matter.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2023/esp32_ble_clicker.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2023/huntress_babel_writeup.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2023/esp32_battery.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2022/ad_honeypot_autodeploy_setup.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2023/datatypes_matter.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2022/rdppot_setup.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2023/huntress_babel_writeup.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2021/tryhackme_anonforce.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2022/ad_honeypot_autodeploy_setup.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2021/tryhackme_thompson.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2022/rdppot_setup.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2021/tryhackme_coldbox.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2021/tryhackme_anonforce.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2021/tryhackme_ctfcollection_vol1.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2021/tryhackme_thompson.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2021/tryhackme_chocolate_factory.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2021/tryhackme_coldbox.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://cdino.net/blog/2021/tryhackme_ctfcollection_vol2.html</loc>
-	<lastmod>2025-05-26T16:29:48+01:00</lastmod>
-	<priority>0.6</priority>
+  <loc>https://cdino.net/blog/2021/tryhackme_ctfcollection_vol1.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
+<url>
+  <loc>https://cdino.net/blog/2021/tryhackme_chocolate_factory.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://cdino.net/blog/2021/tryhackme_ctfcollection_vol2.html</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://cdino.net/projects/csr-generator/</loc>
+  <lastmod>2025-05-29T16:06:18+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
+
 </urlset>
