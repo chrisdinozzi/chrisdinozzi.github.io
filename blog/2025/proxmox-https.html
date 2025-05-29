@@ -56,7 +56,7 @@
   <h2>Generate CSR</h2>
   <p>Next, we generate a Certificate Signing Request (CSR) to have it signed by our CA.</p>
   <p>If you’re comfortable with command-line tools, you can use OpenSSL or the likes. If you prefer an easier method, use a site like 
-    <a href="https://csrgenerator.com/" target="_blank">csrgenerator.com</a> — this is what I did!
+    <a href="https://csrgenerator.com/" target="_blank">csrgenerator.com</a> — this is what I did! (or you can use <a href="https://cdino.net/projects/csr-generator/" target="_blank">my CSR generator</a> - it's a bit slower but runs entirely in your browser!)
   </p>
   <img src="../res/csr_gen.png">
   <p><strong>Important:</strong> Be sure to include <strong>Subject Alternative Names (SANs)</strong> in your CSR. Many articles overlook this, but Firefox gave me errors when I omitted it. Including SANs fixed the issue. Maybe this was just a <a href="https://support.mozilla.org/en-US/questions/1379667" target="_blank">firefox thing.</a></p>
