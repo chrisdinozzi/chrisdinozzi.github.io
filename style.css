@@ -84,7 +84,8 @@ img{
 
 code{
     /*word-wrap: break-word;*/
-    /* background-color:#c2c1b7; */
+    background-color:#c2c1b7;
+    color: #1d1c19;
     padding: 5px;
     display:block;
     overflow-y:hidden;
