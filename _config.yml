@@ -1,0 +1,8 @@
+title: christopher di-nozzi
+url: https://cdino.net
+permalink: /blog/:year/:slug/
+markdown: kramdown
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-feed
