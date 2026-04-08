@@ -84,14 +84,12 @@ img{
 
 code{
     /*word-wrap: break-word;*/
-    background-color:#c2c1b7;
-    padding: 8px;
+    /* background-color:#c2c1b7; */
+    padding: 5px;
     display:block;
     overflow-y:hidden;
     overflow-x:scroll;
-
     font-size: inherit;
-    
 }
 
 ol,
