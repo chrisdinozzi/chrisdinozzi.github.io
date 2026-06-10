@@ -27,7 +27,7 @@ These are all thoughts I've had in the past (and during the build!) that stopped
 1. Learning
 
     Through this experience, I learnt a lot about automation equipment, hardware, 24VDC circuits, and PLC programming. It certainly hasn't made me an expert but now I'm much more confident to speak on the topics.
-Textbooks and simulations are great for learning, but getting hands on and building things will give you a whole new insight.
+    Textbooks and simulations are great for learning, but getting hands on and building things will give you a whole new insight.
 
 2. Appreciation
 
