@@ -13,7 +13,7 @@ If you're like me and work in OT security, or you just want to get your hands di
 
 I am not an automation engineer. I have got plenty wrong along the way and I will point those mistakes out as they come up, because the mistakes are usually more useful than the successes.
 
-![The completed OT lab on a plywood board, showing the Siemens S7-1200 PLC, power supply, ethernet switch, buttons and fan](../blog/res/ot-lab-complete-rig.jpg)
+![The completed OT lab on a plywood board, showing the Siemens S7-1200 PLC, power supply, ethernet switch, buttons and fan](https://cdino.net/blog/res/ot-lab-complete-rig.jpg)
 
 ## Why build an OT lab?
 *But you could just simulate it...*
