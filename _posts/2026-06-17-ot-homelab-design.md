@@ -8,6 +8,7 @@ description: "The design of my OT Security homelab including hardware, networkin
 ## Goals
 
 ## The Hardware
+![A simple diagram of the hardwire and wiring](../blog/res/ot-lab-hardware_wiring.png)
 
 ## The Network
 
