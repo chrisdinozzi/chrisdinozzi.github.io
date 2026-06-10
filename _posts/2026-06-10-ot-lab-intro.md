@@ -26,19 +26,19 @@ These are all thoughts I've had in the past (and during the build!) that stopped
 
 1. Learning
 
-Through this experience, I learnt a lot about automation equipment, hardware, 24VDC circuits, and PLC programming. It certainly hasn't made me an expert but now I'm much more confident to speak on the topics.
+    Through this experience, I learnt a lot about automation equipment, hardware, 24VDC circuits, and PLC programming. It certainly hasn't made me an expert but now I'm much more confident to speak on the topics.
 Textbooks and simulations are great for learning, but getting hands on and building things will give you a whole new insight.
 
 2. Appreciation
 
-On the topic of learning, this process has taught me how *little* I know about automation engineering. It's a vast, complex field of study that I can't hope to ever truly know as well as the people who do it day-in and day-out. 
-I think it's important to understand this, as there is a stereotype of security people thinking they know it all and just telling engineers to *patch the system, it's not that hard*.
-Having an appreciation for the challenges engineers face will only help you when speaking with them, and finding middle ground between operational uptime and cyber security.
+    On the topic of learning, this process has taught me how *little* I know about automation engineering. It's a vast, complex field of study that I can't hope to ever truly know as well as the people who do it day-in and day-out. 
+    I think it's important to understand this, as there is a stereotype of security people thinking they know it all and just telling engineers to *patch the system, it's not that hard*.
+    Having an appreciation for the challenges engineers face will only help you when speaking with them, and finding middle ground between operational uptime and cyber security.   
 
 3. Playground
 
-Building a lab like this gives you a great test bed to further your knowledge about industrial protocols (Modbus/OPC-UA), systems (UNS, SCADA, Historians), and design principles (Network Segmentation, Access Control).
-Being able to quickly spin up a new system, connect it to real hardware, and start playing, gives you an advantage over many other professionals.
+    Building a lab like this gives you a great test bed to further your knowledge about industrial protocols (Modbus/OPC-UA), systems (UNS, SCADA, Historians), and design principles (Network Segmentation, Access Control).
+    Being able to quickly spin up a new system, connect it to real hardware, and start playing, gives you an advantage over many other professionals.
 
 ## Who is this for?
 If you work in OT security and have never had your hands on the hardware, this is for you. If you come from IT and want to understand what makes OT different, this is for you too. And if you just want to build a PLC lab on your kitchen table, the build posts should get you most of the way there.
