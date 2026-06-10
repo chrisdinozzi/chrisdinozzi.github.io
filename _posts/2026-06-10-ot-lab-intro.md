@@ -17,7 +17,9 @@ I am not an automation engineer. I have got plenty wrong along the way and I wil
 
 ## Why build an OT lab?
 *But you could just simulate it...*
+
 *It's not really my job to build labs, I just assess them...*
+
 *That looks scary and I can't do it...*
 
 These are all thoughts I've had in the past (and during the build!) that stopped me from taking the leap. There's a few good reasons to build your own lab:
