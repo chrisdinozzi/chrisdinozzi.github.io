@@ -59,11 +59,11 @@ This table encompasses nearly all of the parts of my build. All the links are fo
 ### Diagram
 Below is a simple drawing of my hardware set up with wiring. It's not the prettiest thing but it should give you a rough idea of how everything is wired up.
 
-![A simple diagram of the hardware and wiring](/blog/res/ot-lab-hardware_wiring.png)
+![A simple diagram of the hardware and wiring](/blog/res/ot-lab-hardware-wiring.png)
 
 This diagram is just for the buttons, since it isn't clear from the pictures or diagrams as to how they're wired. It's a very standard set up.
 
-![A simple diagram of the hardware and wiring](/blog/res/ot-lab-button-wiring.png)
+![A simple diagram of the button wiring](/blog/res/ot-lab-button-wiring.png)
 
 
 ## The Network
@@ -90,7 +90,7 @@ This is to mirror what is commonly found in industrial networks, where the OT ne
 Good question, and you totally could. I might even do that in the future. In reality, it depends on your company, past network design decisions, and business requirements. There's never a 'one-size-fits-all' for network design - it will *always* be at the behest of the business, even if it's unwise.
 
 ### Diagram
-![Network Diagram](/blog/res/ot-lab-network.png)
+![Network Diagram](/blog/res/ot-lab-network-diagram.png)
 
 ## The Systems
 ### Factory/OT
