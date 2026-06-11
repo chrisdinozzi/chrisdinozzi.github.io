@@ -65,9 +65,7 @@ h2,h3{
     text-align: left;
 }
 
-h3{
-    /* text-decoration: underline; */
-}
+
 
 #date-read-time{
     background-color: var(--secondary-color);
