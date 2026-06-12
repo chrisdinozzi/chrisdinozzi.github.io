@@ -1,119 +1,189 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
 
-:root{
-    --background-color:#f5f3e7;
-    --primary-color:#e83f55;
-    --secondary-color:#272f41;
-    --link-color:#e83f55;
+/* ============ palette ============ */
+:root {
+  --bg: #f5f1e3;            /* cream */
+  --ink: #2a3142;           /* navy text */
+  --muted: #8a8573;         /* date/meta */
+  --accent: #b3422f;        /* brick */
+  --accent-hover: #8f3526;  /* brick, darker */
+  --code-bg: #e9e2cd;       /* code chips */
+  --table-head-bg: #2a3142;
+  --table-head-ink: #f5f1e3;
+  --rule: #d8d2c0;          /* thin hr / table borders */
+  color-scheme: light;
 }
 
-html{
-    background-color:var(--background-color);
-    font-family: 'Roboto', sans-serif;
-    color:var(--secondary-color);
-    line-height: 1.5;
-	margin: 32px auto;
-    font-size: clamp(1rem, 2vw, 1.125rem);
+[data-theme="dark"] {
+  --bg: #1c212c;            /* darker than the navy so chips/tables sit on it */
+  --ink: #e8e3d3;           /* cream, slightly dimmed — pure #f5f1e3 glows on dark */
+  --muted: #8d8a7e;
+  --accent: #d4674f;        /* brick lightened for contrast on dark */
+  --accent-hover: #e08068;
+  --code-bg: #2a3142;
+  --table-head-bg: #11141c;
+  --table-head-ink: #e8e3d3;
+  --rule: #3a4152;
+  color-scheme: dark;
 }
 
-body{
-    margin:0% 10% 0% 10%;
-    padding: 5% 5% 5% 5%;
-    padding: 16px;
-    max-width: 102ch;
-    margin: 0 auto;
-    text-align:left;
+/* ============ base ============ */
+html {
+  background-color: var(--bg);   /* was var(-bg) — single dash, silently invalid */
+  background: var(--bg); 
+  font-family: 'Roboto', sans-serif;
+  color: var(--ink);
+  line-height: 1.5;
+  font-size: clamp(1rem, 2vw, 1.125rem);
 }
 
-a{
-    color:var(--link-color);
+body {
+  max-width: 760px;        /* page frame: nav, title, tables get this */
+  margin: 0 auto;
+  padding: 16px;
+  text-align: left;
 }
 
-nav{
-    overflow:auto;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-evenly;
+/* reading measure: prose capped at 70ch, tables/images stay free */
+p, ul, ol, blockquote {
+  max-width: 70ch;
 }
 
-nav a{
-    text-decoration: none;
-    padding:2px 4px 2px 4px;
+/* ============ links ============ */
+a {
+  color: var(--accent);
 }
 
-a:hover{
-    background-color: var(--primary-color);
-    color:var(--background-color)
+a:hover {
+  color: var(--accent-hover);   /* was background/colour swap via dead variables */
 }
 
-h1{
-    text-align: center;
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
-h1 a{
-    color:var(--secondary-color);
-    text-decoration: none;
+/* ============ nav ============ */
+nav {
+  overflow: auto;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
 }
 
-h2{
-    background-color: var(--primary-color);
-    padding-left:6px;
+nav a {
+  text-decoration: none;
+  padding: 2px 4px;
 }
 
-h2,h3{
-    text-align: left;
+/* ============ headings ============ */
+#title {
+  font-size: 5ch;
 }
 
-
-#date-read-time{
-    background-color: var(--secondary-color);
-    color: var(--background-color);
-    padding:5px;
-    width:auto;
+h1 {
+  text-align: left;    /* one strong left edge, top to bottom */
 }
 
-p{
-    display: block;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    padding:0 5px 
+h1 a {
+  color: var(--ink);   /* was dead --secondary-color */
+  text-decoration: none;
 }
 
-img{
-    margin:auto;
-    display:block;
-    width:90%;
+h2 {
+  background: none;
+  color: var(--ink);
+  border-bottom: 3px solid var(--accent);
+  display: inline-block;
+  padding: 0 0 0.15em 0;
+  margin: 2em 0 0.4em;   /* ~2:1 — heading hugs its own section */
 }
 
-code{
-    font-family: "JetBrains Mono", monospace;
-    background-color:var(--secondary-color);
-    color: var(--background-color);
-    padding:1px;
+h2, h3 {
+  text-align: left;
 }
 
-ol,
-ul {
-	/* overflow-x: auto; */
-	/* white-space: nowrap; */
-    text-align:left;
-    padding-bottom: 0px;
+/* hover anchors — pairs with the # links inside h2s */
+h2 .anchor {
+  opacity: 0;
+  transition: opacity 0.15s;
+  text-decoration: none;
+  margin-left: 0.35em;
 }
 
-footer{
-    display:block;
+h2:hover .anchor,
+h2 .anchor:focus-visible {
+  opacity: 1;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  h2 .anchor { transition: none; }
+}
+
+/* ============ post header ============ */
+.post-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.post-meta-row h3 {
+  margin: 0;
+}
+
+#date-read-time {
+  color: var(--muted);
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.post-rule {
+  border: none;
+  border-bottom: 4px solid var(--accent);
+}
+
+@media (max-width: 480px) {
+  .post-meta-row { flex-direction: column; gap: 0.25rem; }
+}
+
+/* ============ content ============ */
+p {
+  margin-block: 1em;
+  padding: 0 5px;
+}
+
+img {
+  margin: auto;
+  display: block;
+  width: 90%;
+}
+
+code {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--code-bg);
+  color: var(--ink);
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+
+/* ============ tables ============ */
 table, th, td {
-    border: 1px solid;
-    border-collapse: collapse;
-    padding:10px;
+  border: 1px solid var(--rule);   /* was border: 1px solid — no colour set */
+  border-collapse: collapse;
+  padding: 10px;
 }
 
-th{
-    background-color: var(--secondary-color);
-    color: var(--background-color);
+th {
+  background-color: var(--table-head-bg);   /* was dead --secondary-color */
+  color: var(--table-head-ink);
+  border-color: var(--table-head-bg);
+}
+
+/* ============ footer ============ */
+footer {
+  display: block;
 }
