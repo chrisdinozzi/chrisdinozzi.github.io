@@ -21,7 +21,7 @@
 })();
 
 // h2/h3 anchors
-document.querySelectorAll('h2[id], h3[id]').forEach(function (h) {
+document.querySelectorAll('.post-content h2[id], .post-content h3[id]').forEach(function (h) {
   var a = document.createElement('a');
   a.className = 'anchor';
   a.href = '#' + h.id;
