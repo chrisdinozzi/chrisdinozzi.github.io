@@ -4,20 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-   <script src="script.js"></script> 
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (e) {}
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
   <link rel="stylesheet" href="/style.css">
   <link rel="alternate" type="application/atom+xml" title="cdino.net" href="/feed.xml">
   <script defer src="https://cloud.umami.is/script.js" data-website-id="f2d4d146-1a06-4363-b4cf-f8604e8e8b1b"></script>
   {% seo %}
 </head>
 <body>
-    <p>
-    <a href="/">cdino.net</a>
-    |
-    <a href="/projects">projects</a>
-    |
-    <a href="/blog">blog</a>
-  </p>
+  <nav>
+    <div>
+      <a href="/">cdino.net</a>
+      |
+      <a href="/projects">projects</a>
+      |
+      <a href="/blog">blog</a>
+    </div>
+    <button id="mode-selector" aria-label="Toggle dark mode" aria-pressed="false">
+      <span id="mode-led"></span>
+      <span id="mode-label">RUN</span>
+    </button>
+  </nav>
   <hr>
   {{ content }}
   <hr>
@@ -29,4 +43,5 @@
     <a href="https://github.com/chrisdinozzi">github</a>
   </p>
 </body>
+<script src="/script.js"></script>
 </html>

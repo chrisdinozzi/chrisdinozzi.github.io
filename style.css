@@ -12,6 +12,7 @@
   --table-head-bg: #2a3142;
   --table-head-ink: #f5f1e3;
   --rule: #d8d2c0;          /* thin hr / table borders */
+  --led: #3ba55d;   /* RUN green */
   color-scheme: light;
 }
 
@@ -25,6 +26,7 @@
   --table-head-bg: #11141c;
   --table-head-ink: #e8e3d3;
   --rule: #3a4152;
+  --led: #d98e2b;   /* STOP amber */
   color-scheme: dark;
 }
 
@@ -70,7 +72,7 @@ nav {
   overflow: auto;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 nav a {
@@ -186,4 +188,34 @@ th {
 /* ============ footer ============ */
 footer {
   display: block;
+}
+
+/* ============ theme changer ============ */
+#mode-selector {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: 2px solid var(--ink);
+  border-radius: 7px;
+  padding: 4px 10px;
+  cursor: pointer;
+  color: var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+
+}
+
+#mode-selector:hover { border-color: var(--muted); }
+
+#mode-selector:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+#mode-led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--led);
 }
