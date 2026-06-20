@@ -2,7 +2,7 @@
 layout: post
 title: "I Built a Factory (OT Security Lab)"
 subtitle: "and you can too!"
-date: 2026-06-18
+date: 2029-07-01
 description: "An overview of my OT security lab and an index of all the upcoming blog posts related to it."
 ---
 
@@ -63,6 +63,7 @@ There are 4 main parts to this series that follows a fairly logical flow.
 - **The Rig** - building the actual hardware-on-a-board. This won't be extensive, step-by-step, but will include some of my choices during the build and some helpful tips to avoid the mistakes I made. This will also include configuring and programming the PLC.
 - **UNS** - The architecture and implementation of my UNS system
 - **SCADA and Historian** - The architecture and implementation of my SCADA and Historian systems.
+- **Enterprise IT** - The architecture and implementation of the IT systems
 
 ### Attack
 - **Attacking the PLC** - conducting attacks against HTTP, Modbus, and OPC-UA protocols, looking at existing tools, what they really do, and what the real risks are.
@@ -71,4 +72,5 @@ There are 4 main parts to this series that follows a fairly logical flow.
 ### Defend
 - **Hardening the PLC** - how to reduce the attack surface of your PLC and why it's effective at reducing real risk
 - **Securing the Systems** - hardening our OT systems
+- **Firewall Rules** - putting the firewall to good use
 - **Detection** - what we can't stop, we want to at least know about!
