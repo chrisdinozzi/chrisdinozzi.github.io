@@ -2,7 +2,7 @@
 layout: post
 title: "OT Homelab Build - SCADA and Historian"
 subtitle: "Supervise, Control, Acquire, Remember"
-date: 2026-07-22
+date: 2026-07-29
 description: "Building the SCADA and Historian System system for the OT Homelab."
 ---
 
