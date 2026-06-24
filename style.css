@@ -14,6 +14,14 @@
   --rule: #d8d2c0;          /* thin hr / table borders */
   --led: #3ba55d;   /* RUN green */
   color-scheme: light;
+  /* syntax highlighting */
+  --syn-comment: #7d785f;   /* muted, italic */
+  --syn-keyword: #b3422f;   /* brick — same as --accent */
+  --syn-string:  #4f7a3f;   /* forest */
+  --syn-number:  #9a5b1f;   /* ochre */
+  --syn-name:    #2a6b7c;   /* slate teal — fns, classes, attrs */
+  --syn-const:   #7a4f9a;   /* muted purple — true/false/None */
+  --syn-punct:   #5a6075;
 }
 
 [data-theme="dark"] {
@@ -28,6 +36,14 @@
   --rule: #3a4152;
   --led: #d98e2b;   /* STOP amber */
   color-scheme: dark;
+  /* syntax highlighting */
+  --syn-comment: #7f8a72;
+  --syn-keyword: #d4674f;   /* brick — same as dark --accent */
+  --syn-string:  #8fb56a;   /* sage */
+  --syn-number:  #d99b5b;   /* amber — echoes the STOP LED */
+  --syn-name:    #6bb3c4;   /* teal */
+  --syn-const:   #b88fd4;   /* lilac */
+  --syn-punct:   #9aa0b0;
 }
 
 /* ============ base ============ */
@@ -185,6 +201,62 @@ pre code {
   padding: 0;
   border-radius: 0;
 }
+
+/* ============ syntax highlighting (Rouge) ============ */
+/* comments */
+.highlight .c,  .highlight .cm, .highlight .c1, .highlight .cs,
+.highlight .cd, .highlight .cp, .highlight .cpf, .highlight .ch {
+  color: var(--syn-comment);
+  font-style: italic;
+}
+
+/* keywords + tags + word-operators (and/or/in/is) */
+.highlight .k,  .highlight .kd, .highlight .kn, .highlight .kp,
+.highlight .kr, .highlight .kt, .highlight .kv, .highlight .ow,
+.highlight .nt {
+  color: var(--syn-keyword);
+}
+
+/* constants & builtins: true/false/None, self, builtin fns */
+.highlight .kc, .highlight .nb, .highlight .bp, .highlight .no,
+.highlight .nl {
+  color: var(--syn-const);
+}
+
+/* strings */
+.highlight .s,  .highlight .s1, .highlight .s2, .highlight .sb,
+.highlight .sc, .highlight .sd, .highlight .se, .highlight .sh,
+.highlight .si, .highlight .sx, .highlight .sr, .highlight .ss,
+.highlight .sa, .highlight .dl {
+  color: var(--syn-string);
+}
+
+/* numbers */
+.highlight .m,  .highlight .mi, .highlight .mf, .highlight .mh,
+.highlight .mo, .highlight .mb, .highlight .il {
+  color: var(--syn-number);
+}
+
+/* names: functions, classes, attributes, decorators, namespaces */
+.highlight .nf, .highlight .nc, .highlight .na, .highlight .nd,
+.highlight .ne, .highlight .nn {
+  color: var(--syn-name);
+}
+
+/* punctuation & symbol operators */
+.highlight .p, .highlight .pi, .highlight .o {
+  color: var(--syn-punct);
+}
+
+/* plain variables (nv, vi, vg, vc) fall through to --ink — intentional */
+
+/* generic: diffs, shell prompts, emphasis */
+.highlight .gd  { color: var(--accent); }      /* deleted line  */
+.highlight .gi  { color: var(--syn-string); }  /* inserted line */
+.highlight .gp  { color: var(--syn-comment); } /* shell prompt $ */
+.highlight .ge  { font-style: italic; }
+.highlight .gs  { font-weight: 700; }
+.highlight .err { color: inherit; }            /* don't redbox false "errors" */
 
 blockquote {
 border: var( --accent) 3px dashed;
