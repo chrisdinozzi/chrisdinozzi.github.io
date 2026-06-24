@@ -106,6 +106,15 @@ The flow ends up something like this:
 
 > *Of course, it's the gateway that polls the PLC for the data, the PLC doesn't initiate the connection.*
 
+### Caddy
+
+### SBOM
+|**Service**|**Image**|**Web UI**|**Purpose**|
+|-------|-----|------|-------|
+|NeuronEX|emqx/neuronex:3.7.1|neuronex.factory.home.lab|Gateway|
+|HiveMQ CE|hivemq/hivemq-ce:2026.5|None|MQTT broker / UNS|
+|Caddy|caddy:2-alpine| None	| Reverse proxy / TLS termination|
+
 ## Deployment
 I span up my UNS system (well, the entire OT factory system) using a docker compose file. I've include ignition and caddy in the file. We'll talk about Ignition more in the next article.
 
@@ -120,6 +129,8 @@ The directory structure for my OT systems ended up looking like this:
 └── caddy/
     └── Caddyfile
 ```
+
+All the files can also be found on [my github](https://github.com/chrisdinozzi/caaf/tree/main/factory-systems).
 
 ### docker-compose.yml
 
@@ -281,7 +292,7 @@ services:
 
 ### .env
 Never commit this file to your git repo without first removing the sensitive information.
-``` text
+``` bash
 TZ=Europe/London
 IGNITION_EDITION=maker
 IGNITION_LICENSE_KEY=XXXX-XXXX
