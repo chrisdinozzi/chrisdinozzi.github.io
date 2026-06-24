@@ -109,7 +109,7 @@ All these services can pose their own risks to the system (depending on how well
 The DMZ is where the data actually starts moving around. Everything here runs in Docker on a single Ubuntu Server VM (project name `factory-homelab`), which keeps it tidy and easy to tear down and rebuild when I inevitably break something.
 
 - **HiveMQ CE** - the community edition of the HiveMQ broker. 
-- **NeuronEX** - a gateway that can read OPC-UA from the PLC and send it to HiveMQ as Sparkplug B.
+- **NeuronEX** - a gateway that can read OPC-UA from the PLC and send it to HiveMQ as MQTT.
 - **Ignition** - the SCADA system. I used the [Maker Edition](https://inductiveautomation.com/ignition/maker-edition) which is free!
 - **Caddy** - reverse proxy for serving applications over pretty subdomains, and providing HTTPS.
 
@@ -118,7 +118,7 @@ I wanted Ignition to be able to subscribe directly to the gateway via MQTT, but 
 
 So how does a value actually get from a button on my panel up to a dashboard? Roughly like this:
 
-> A tag changes on the **PLC** (say the fan kicks on). NeuronEX is polling that tag over **OPC-UA**, sees the change, and publishes it to **HiveMQ** as a **Sparkplug B** message. From there anything subscribed to the broker can pick it up.
+> A tag changes on the **PLC** (say the fan kicks on). NeuronEX is polling that tag over **OPC-UA**, sees the change, and publishes it to **HiveMQ** as a **MQTT** message. From there anything subscribed to the broker can pick it up.
 
 That last part - "anything subscribed can pick it up" - is the whole point of a UNS, and it's what the IT segment takes advantage of.
 
