@@ -172,6 +172,25 @@ code {
   border-radius: 3px;
 }
 
+pre {
+  background: var(--code-bg);
+  padding: 1em;
+  border-radius: 6px;
+  overflow-x: auto;     /* long YAML lines scroll instead of wrapping into chips */
+  line-height: 1.45;
+}
+
+pre code {
+  background: none;     /* kill the inline-chip styling inside blocks */
+  padding: 0;
+  border-radius: 0;
+}
+
+blockquote {
+border: var( --accent) 3px dashed;
+border-radius:8px;
+}
+
 /* ============ tables ============ */
 table, th, td {
   border: 1px solid var(--rule);   /* was border: 1px solid — no colour set */
