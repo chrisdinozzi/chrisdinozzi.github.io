@@ -14,7 +14,7 @@ description: "Building the Unified Namespace (UNS) system for the OT Homelab."
 5. Keep it tidy and reasonably secure while doing it
 
 ## What is UNS?
-A Unified Namespace (UNS) is more of an *idea* than a system itself but is often used to refer to the MQTT broker that does the heavy lifting (discussed further down below) and the gateways or servers that convert the data into the correct protocol. The idea is to have one, central, real time, structured data store from which every other system can take data. Rather than connecting up systems individually, everything reads from and writes to the UNS. It has a few clear benefits:
+A Unified Namespace (UNS) is more of an *idea* than a system itself but is often used to refer to the MQTT broker that does the heavy lifting (discussed further down) and the gateways or servers that convert the data into the correct protocol. The idea is to have one, central, real time, structured data store from which every other system can take data. Rather than connecting up systems individually, everything reads from and writes to the UNS. It has a few clear benefits:
 1. **A single source of truth** - everyone is singing from the same hymn sheet, making your data more reliable across all your systems.
 2. **More modularity** - you can more easily switch out a gateway, or PLC, or broker, without having to do massive reconfiguration.
 3. **Much needed structure** - when you're working with different protocols (MQTT, OPC-UA, Modbus), they all present data differently. By unifying everything into a UNS system, everything follows the same naming convention.
@@ -72,7 +72,9 @@ One of the obvious downsides is that you can't read it straight out the box like
 
 > Why are you using JSON instead of Sparkplug B?
 
-Because of the IT systems. Part of the IT system, Telegraf, wouldn't play nice with Sparkplug B, so I fell back to JSON. I will be exploring Sparkplug B more for my own lab in the future.
+For simplicity and compatibility. Using standard MQTT with JSON payloads is much more simple than Sparkplug B, and much more widely supported by different systems. I will explore Sparkplug B for homelabs in later articles.
+
+Now we have some background, lets look at how we actually deploy this.
 
 ## Systems
 ### MQTT Broker (HiveMQ)
@@ -342,6 +344,8 @@ IGNITION_EDITION=maker
 IGNITION_LICENSE_KEY=XXXX-XXXX
 IGNITION_ACTIVATION_TOKEN=your-token-here
 GATEWAY_ADMIN_USERNAME=admin
+
+INFLUXDB3_AUTH_TOKEN=XXXXX...
 ```
 
 ### secrets
@@ -352,48 +356,7 @@ echo "your-admin-password" > ./secrets/ignition_admin_password
 chmod 600 ./secrets/ignition_admin_password
 ```
 
-## Caddyfile
-You'll need to grab the root certificate from caddy and install it on your computer, otherwise you'll get HTTPS errors.
-
-First, grab it out of the container by running:
-``` bash
-docker cp caddy:/data/caddy/pki/authorities/local/root.crt ~/caddy-root.crt
-```
-Then copy it over to your device (run these commands on your own machine, not the server):
-```bash 
-scp your-user@172.16.1.10:~/caddy-root.crt .
-```
-
-And install it:
-### Windows
-``` powershell
-Import-Certificate -FilePath .\caddy-root.crt -CertStoreLocation Cert:\LocalMachine\Root
-```
-
-### Mac
-``` bash
-sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain caddy-root.crt
-```
-
-### Linux
-You can figure it out yourself! 
-
-#### Firefox
-If you're a firefox user (like me), make sure you install the cert in Firefox's own CA. It won't use the system's one.
-
-#### Security Concerns
-> but if someone steals your root.key file they can create certificates that your computer will explicitly trust and they can hack you and steal all your money!!!!!!!
-
-Well yes, they *could*, but equally Tom Clancy could break into your home and install key loggers on all your devices using 0-day exploits, and feed your dog a magic snack that turns him against you.
-
-There is a real risk that, if the root.key file for your Caddy system was compromised, someone could use it to attack you, so therefore, please don't be using any of these guides to deploy real production systems.
-However, for our use case of a homelab, that isn't exposed to the internet, is on our own private network, and only has the root CA installed on our own trusted machines, I wouldn't be too worried. 
-If you want to mitigate the risk, you can:
-1. Not upload your root.key file anywhere.
-2. Don't even take a copy of the root.key file off the server.
-3. Uninstall the root CA when you're done with your lab.
-4. Don't let strangers into your house who might try and exfiltrate the key and use it against you.
-
+### Caddyfile
 Here's the full Caddyfile:
 
 ``` Caddyfile
@@ -458,6 +421,48 @@ http:// {
   redir https://{host}{uri} permanent
 }
 ```
+
+You'll need to grab the root certificate from caddy and install it on your computer, otherwise you'll get HTTPS errors.
+
+First, grab it out of the container by running:
+``` bash
+docker cp caddy:/data/caddy/pki/authorities/local/root.crt ~/caddy-root.crt
+```
+Then copy it over to your device (run these commands on your own machine, not the server):
+```bash 
+scp your-user@172.16.1.10:~/caddy-root.crt .
+```
+
+And install it:
+#### Windows
+``` powershell
+Import-Certificate -FilePath .\caddy-root.crt -CertStoreLocation Cert:\LocalMachine\Root
+```
+
+#### Mac
+``` bash
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain caddy-root.crt
+```
+
+#### Linux
+You can figure it out yourself! 
+
+##### Firefox
+If you're a firefox user (like me), make sure you install the cert in Firefox's own CA. It won't use the system's one.
+
+##### Security Concerns
+> but if someone steals your root.key file they can create certificates that your computer will explicitly trust and they can hack you and steal all your money!!!!!!!
+
+Well yes, they *could*, but equally Tom Clancy could break into your home and install key loggers on all your devices using 0-day exploits, and feed your dog a magic snack that turns him against you.
+
+There is a real risk that, if the root.key file for your Caddy system was compromised, someone could use it to attack you, so therefore, please don't be using any of these guides to deploy real production systems.
+However, for our use case of a homelab, that isn't exposed to the internet, is on our own private network, and only has the root CA installed on our own trusted machines, I wouldn't be too worried. 
+If you want to mitigate the risk, you can:
+1. Not upload your root.key file anywhere.
+2. Don't even take a copy of the root.key file off the server.
+3. Uninstall the root CA when you're done with your lab.
+4. Don't let strangers into your house who might try and exfiltrate the key and use it against you.
+
 
 ### DNS
 I used the DNS service built into OPNsense as my DNS server. You're welcome to run your own dedicated services if you prefer. 
