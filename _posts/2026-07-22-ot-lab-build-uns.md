@@ -2,23 +2,26 @@
 layout: post
 title: "OT Homelab Build - UNS"
 subtitle: "The truth, the whole truth, and nothing but the truth!"
-date: 2026-07-22
+date: 2000-07-22
 description: "Building the Unified Namespace (UNS) system for the OT Homelab."
 ---
 
 ## Goals
 1. Understand what a Unified Namespace actually is
-2. Stand up the UNS itself
+2. Get to grips with the protocols underneath it (OPC-UA and MQTT)
+3. Stand up the UNS stack - broker and gateway - as a reproducible Docker Compose setup
+4. Get real PLC data flowing off the floor and onto the broker
+5. Keep it tidy and reasonably secure while doing it
 
 ## What is UNS?
-A Unified Namespace (UNS) is more of an *idea* than a system itself but is often used to refer to the MQTT broker that does the heavy lifting (discussed further down below) and the gateways or servers that convert the data into the correct protocol. The idea is to have one, central, real time, structured data store from which every other system can take data from. Rather than connecting up systems indivdually, everything reads from and writes to the UNS. It has a few clear benefits:
+A Unified Namespace (UNS) is more of an *idea* than a system itself but is often used to refer to the MQTT broker that does the heavy lifting (discussed further down below) and the gateways or servers that convert the data into the correct protocol. The idea is to have one, central, real time, structured data store from which every other system can take data. Rather than connecting up systems individually, everything reads from and writes to the UNS. It has a few clear benefits:
 1. **A single source of truth** - everyone is singing from the same hymn sheet, making your data more reliable across all your systems.
 2. **More modularity** - you can more easily switch out a gateway, or PLC, or broker, without having to do massive reconfiguration.
 3. **Much needed structure** - when you're working with different protocols (MQTT, OPC-UA, Modbus), they all present data differently. By unifying everything into a UNS system, everything follows the same naming convention.
 
 ### OPC-UA
 It's worth delving into OPC-UA a bit more here, in case you haven't come across it before.
-OPC-UA (Open Platform Communications - Unified Architecture) is a vendor netural protocol for moving data around in industrial networks. 
+OPC-UA (Open Platform Communications - Unified Architecture) is a vendor neutral protocol for moving data around in industrial networks. 
 Unlike a lot of older industrial protocols that were tied to a single vendor's ecosystem, OPC-UA is an open standard, so kit from different manufacturers can all speak it without needing a bespoke driver for every pairing. That alone makes it a sensible backbone for getting data off the floor.
 It works on a client-server model. The PLC runs an OPC-UA server that exposes its data (on TCP port 4840 by default), and anything that wants that data - my SCADA, my gateway - connects to it as a client. Clients can read values, write them back, or subscribe to a tag and be told whenever it changes, rather than having to sit there constantly polling for updates.
 
@@ -27,9 +30,9 @@ The really nice part, especially coming from something like Modbus, is that OPC-
 It also has proper security built in - certificate-based authentication, message signing, and encryption. I'm using none of it, because (as is becoming a theme) I've deliberately left mine wide open so we've got something worth attacking later in the series. In the real world you would absolutely not do that. We'll explore that more in later articles.
 
 ### MQTT
-MQTT is another protocol that's commonly found in insutrial environments, mostly manufacturing. It boasts a lightweight, pub/sub model which makes it perfect for shifting lots of small messages across sites without much fuss.
+MQTT is another protocol that's commonly found in industrial environments, mostly manufacturing. It boasts a lightweight, pub/sub model which makes it perfect for shifting lots of small messages across sites without much fuss.
 
-What trips people up about MQTT (including myself) is that it's the *envelope* and not the *letter*. It handles topics, subscribers, service quality, but it doesn't really care about the payload or how it's formatter. So while MQTT is a good choice for delivering data, you still need to device how you'll structure it inside the payload. 
+What trips people up about MQTT (including myself) is that it's the *envelope* and not the *letter*. It handles topics, subscribers, Quality of Service (QoS), but it doesn't really care about the payload or how it's formatted. So while MQTT is a good choice for delivering data, you still need to decide how you'll structure it inside the payload. 
 
 Two common approaches are MQTT-JSON (no prizes for guessing how this one works!) and Sparkplug B.
 
@@ -59,13 +62,13 @@ JSON is also chattier than Sparkplug B. Not a big deal for your homelab, but is 
 I ended up using JSON. The gateway ingests data from the PLC via OPC-UA and exports it up to IT as JSON.
 
 #### Sparkplug B
-This is the proper good one. It's an opec spec that sits ontop of MQTT and adds in all the prescriptive structure that MQTT, rightfully, avoids. Sparkplug B brings in:
+This is the proper good one. It's an open spec that sits on top of MQTT and adds in all the prescriptive structure that MQTT, rightfully, avoids. Sparkplug B brings in:
 - **Defined topic namespaces** - rather than coming up with your own topic layout, Sparkplug B prescribes you with one: `spBv1.0/{group}/{message type}/{edge node}/{device}`. This means everything that speaks Sparkplug B speaks it the same way.
-- **Birth and Death Certifications** - when an edge node connects, it publishes a *birth* certificate, letting everyone else know who it is and what it knows. It also gives a *death* certificate to the broker, so that if the node falls off the network, the broker can tell everyone else about it.
-- **Binary Payloads** - rater than plain text, messages are encoded, and thus compressed, shrinking their footprint on the wire.
+- **Birth and Death Certificates** - when an edge node connects, it publishes a *birth* certificate, letting everyone else know who it is and what it knows. It also gives a *death* certificate to the broker, so that if the node falls off the network, the broker can tell everyone else about it.
+- **Binary Payloads** - rather than plain text, messages are encoded, and thus compressed, shrinking their footprint on the wire.
 - **Sequence Numbers** - to help subscribers know if they missed a memo.
 
-One of the obvious downsides is that you can't read it straight out the box like you can with JSON, you need some way of decoding the messsage first if you're trying to troubleshoot.
+One of the obvious downsides is that you can't read it straight out the box like you can with JSON, you need some way of decoding the message first if you're trying to troubleshoot.
 
 > Why are you using JSON instead of Sparkplug B?
 
@@ -107,25 +110,30 @@ The flow ends up something like this:
 > *Of course, it's the gateway that polls the PLC for the data, the PLC doesn't initiate the connection.*
 
 ### Caddy
+Caddy isn't an industrial system, but it's very useful and worth a mention here. It's an open source web server and reverse proxy. In this build it's doing two things: serving all the web UIs (NeuronEX, Ignition) over clean *.factory.home.lab subdomains rather than a handful of port numbers, and providing HTTPS via its own internal CA. The internal CA is what lets us use proper TLS on a private network without buying certificates - which is why you need to install the root cert on your machine, as covered below.
 
-### SBOM
+### Systems Summary
+
 |**Service**|**Image**|**Web UI**|**Purpose**|
 |-------|-----|------|-------|
 |NeuronEX|emqx/neuronex:3.7.1|neuronex.factory.home.lab|Gateway|
 |HiveMQ CE|hivemq/hivemq-ce:2026.5|None|MQTT broker / UNS|
+|Ignition|inductiveautomation/ignition:latest|ignition.factory.home.lab|SCADA / HMI|
+|InfluxDB 3 Core|influxdb:3-core|None|Historian|
 |Caddy|caddy:2-alpine| None	| Reverse proxy / TLS termination|
 
 ## Deployment
-I span up my UNS system (well, the entire OT factory system) using a docker compose file. I've include ignition and caddy in the file. We'll talk about Ignition more in the next article.
+I spun up my UNS system (well, the entire OT factory system) using a docker compose file. I've included Ignition and Caddy in the file. We'll talk about Ignition more in the next article.
 
 The directory structure for my OT systems ended up looking like this:
 
 ``` js
 ~/factory-homelab/
 ├── docker-compose.yml
+├── mqtt_config.toml  <-- we'll talk about this in the next article!
 ├── .env
 ├── secrets/
-│   └── ignition_admin_password
+│   └── ignition_admin_password <-- we'll talk about this in the next article!
 └── caddy/
     └── Caddyfile
 ```
@@ -136,10 +144,10 @@ All the files can also be found on [my github](https://github.com/chrisdinozzi/c
 
 ``` yml
 # =============================================================================
-# Factory Homelab - Docker Compose
-# Services: NeuronEX · HiveMQ CE · Ignition · Caddy
+# Factory Homelab — Docker Compose
+# Services: NeuronEX · HiveMQ CE · Ignition · Caddy · InfluxDB3 Core
 # Network: factory-stack (internal bridge)
-# Secrets: admin passwords read from files, never hardcoded
+# Secrets: admin passwords read from files/env, never hardcoded
 # =============================================================================
 
 name: factory-homelab
@@ -155,11 +163,13 @@ volumes:
   ignition-data:
   caddy-data:     # persists TLS certs
   caddy-config:
+  influxdb3-data:
+  influxdb3-plugins:
 
 networks:
   factory-stack:
     driver: bridge
-    internal: false   # must stay false - Ignition needs internet for licence
+    internal: false   # must stay false — Ignition needs internet for licence
 
 services:
 
@@ -192,8 +202,9 @@ services:
     image: emqx/neuronex:3.7.1
     container_name: neuronex
     restart: unless-stopped
+    privileged: true
     ports:
-      - "127.0.0.1:8085:8085"   # loopback - Caddy proxies externally
+      - "127.0.0.1:8085:8085"   # loopback — Caddy proxies externally
     volumes:
       - neuronex-data:/opt/neuronex/data
     networks:
@@ -217,7 +228,7 @@ services:
     environment:
       HIVEMQ_LOG_LEVEL: INFO
     ports:
-      - "1883:1883"               # MQTT - LAN-exposed for S7-1200/Neuron
+      - "1883:1883"               # MQTT — LAN-exposed for S7-1200/Neuron
                                         # NOTE: HiveMQ CE has no web UI
                                         # Control Centre is commercial only
     volumes:
@@ -247,7 +258,10 @@ services:
       - "8043:8043"
     volumes:
       - ignition-data:/usr/local/bin/ignition/data
-
+      - ./modules:/modules   # pre-load third-party .modl files here
+                             # Ignition auto-installs on startup
+                             # Required: MQTT-Engine-signed.modl from
+                             # https://inductiveautomation.com/downloads/ignition
     environment:
       ACCEPT_IGNITION_EULA: "Y"
       GATEWAY_ADMIN_USERNAME: ${GATEWAY_ADMIN_USERNAME:-admin}
@@ -271,6 +285,9 @@ services:
       - ignition_admin_password
     networks:
       - factory-stack
+    depends_on:
+      hivemq:
+        condition: service_healthy
     command: >
       -n homelab-gateway
       -a ignition.factory.home.lab
@@ -288,6 +305,33 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+
+  influxdb3-core:
+    image: influxdb:3-core
+    container_name: influxdb3-core
+    ports:
+      - 8181:8181
+    command:
+      - influxdb3
+      - serve
+      - --node-id=node0
+      - --object-store=file
+      - --data-dir=/var/lib/influxdb3/data
+      - --plugin-dir=/var/lib/influxdb3/plugins  # Optional: only needed for processing engine plugins
+    networks:
+      - factory-stack
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+    volumes:
+      - influxdb3-data:/var/lib/influxdb3/data
+      - influxdb3-plugins:/var/lib/influxdb3/plugins
+
+    environment:
+      INFLUXDB3_AUTH_TOKEN: ${INFLUXDB3_AUTH_TOKEN}
+      INFLUXDB3_LOG_FILTER: "warn"
 ```
 
 ### .env
@@ -315,9 +359,9 @@ First, grab it out of the container by running:
 ``` bash
 docker cp caddy:/data/caddy/pki/authorities/local/root.crt ~/caddy-root.crt
 ```
-Then copy it over to your device (run these commands on you own machine, not the server):
+Then copy it over to your device (run these commands on your own machine, not the server):
 ```bash 
-scp docker@172.16.1.10:~/caddy-root.crt .
+scp your-user@172.16.1.10:~/caddy-root.crt .
 ```
 
 And install it:
@@ -334,13 +378,13 @@ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keyc
 ### Linux
 You can figure it out yourself! 
 
-### Firefox
-If you're a firefox user (like me), make sure you install the cert in firefoxes own CA. It won't use the systems one.
+#### Firefox
+If you're a firefox user (like me), make sure you install the cert in Firefox's own CA. It won't use the system's one.
 
-### Security Concerns
-> but if someone steals your root.key file they can create certificates that your computer will explicitly trust and they can hack you and steal all your money!!!!!!!*
+#### Security Concerns
+> but if someone steals your root.key file they can create certificates that your computer will explicitly trust and they can hack you and steal all your money!!!!!!!
 
-Well yes, they *could*, but equally Tom Clancy could break into your home and install key loggers on all your devices using 0-day exploits, and feed your dog a magic snack that turns him agaisnt you.
+Well yes, they *could*, but equally Tom Clancy could break into your home and install key loggers on all your devices using 0-day exploits, and feed your dog a magic snack that turns him against you.
 
 There is a real risk that, if the root.key file for your Caddy system was compromised, someone could use it to attack you, so therefore, please don't be using any of these guides to deploy real production systems.
 However, for our use case of a homelab, that isn't exposed to the internet, is on our own private network, and only has the root CA installed on our own trusted machines, I wouldn't be too worried. 
@@ -348,7 +392,7 @@ If you want to mitigate the risk, you can:
 1. Not upload your root.key file anywhere.
 2. Don't even take a copy of the root.key file off the server.
 3. Uninstall the root CA when you're done with your lab.
-4. Don't let strangers into your house who might try and exfiltrate the key and use it agaisnt you.
+4. Don't let strangers into your house who might try and exfiltrate the key and use it against you.
 
 Here's the full Caddyfile:
 
@@ -416,7 +460,7 @@ http:// {
 ```
 
 ### DNS
-I used the DNS service built into opnsense as my DNS server. You're welcome to run your own dedicated services if you prefer. 
+I used the DNS service built into OPNsense as my DNS server. You're welcome to run your own dedicated services if you prefer. 
 
 |**Host**|**Domain**|**Type**|**IP Address**|
 |--------|-----------|-------|--------------|
@@ -425,5 +469,5 @@ I used the DNS service built into opnsense as my DNS server. You're welcome to r
 |ignition|factory.home.lab|A (IPv4 address)|172.16.1.10|
 
 
-### Running Docker File
-The docker file can then by run using `docker compose up -d`. You can then monitor the logs by running `docker compose logs -f`.
+### Running the Compose File
+The compose file can then be run using `docker compose up -d`. You can then monitor the logs by running `docker compose logs -f`.

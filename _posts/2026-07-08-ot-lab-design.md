@@ -90,7 +90,7 @@ This is to mirror what is commonly found in industrial networks, where the OT ne
 Good question, and you totally could. I might even do that in the future. In reality, it depends on your company, past network design decisions, and business requirements. There's never a 'one-size-fits-all' for network design - it will *always* be at the behest of the business, even if it's unwise.
 
 ### Diagram
-![Network Diagram](/blog/res/ot-lab-network-diagram.png)
+![Network Diagram](/blog/res/ot-lab-network-diagram.png) UPDATE ME!!!!!!!!!!
 
 ## The Systems
 ### Factory/OT
@@ -111,6 +111,7 @@ The DMZ is where the data actually starts moving around. Everything here runs in
 - **HiveMQ CE** - the community edition of the HiveMQ broker. 
 - **NeuronEX** - a gateway that can read OPC-UA from the PLC and send it to HiveMQ as MQTT.
 - **Ignition** - the SCADA system. I used the [Maker Edition](https://inductiveautomation.com/ignition/maker-edition) which is free!
+- **InfluxDB3 Core** - a very basic historian which will store our data for visulisation, fed by the UNS.
 - **Caddy** - reverse proxy for serving applications over pretty subdomains, and providing HTTPS.
 
 I wanted Ignition to be able to subscribe directly to the gateway via MQTT, but the plugin required to do that does not support maker edition. Therefore, I had to compromise and have the SCADA system connect directly to the PLC over OPC-UA, breaking the UNS best practice.
@@ -128,8 +129,6 @@ The IT network is the cheap seats. These are the read-only consumers - they're a
 
 It's another Ubuntu Server VM running four things in Docker:
 
-- **Telegraf** - subscribes to the broker and scrapes the values it cares about back off the UNS.
-- **InfluxDB** - stores them as time-series data, so I've got history rather than just a live snapshot.
 - **Grafana** - draws the pretty pictures - fan state, the LEDs, operating mode, that sort of thing.
 - **Caddy** - reverse proxy for serving applications over pretty subdomains, and providing HTTPS.
 
