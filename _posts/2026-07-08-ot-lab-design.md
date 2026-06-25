@@ -90,7 +90,7 @@ This is to mirror what is commonly found in industrial networks, where the OT ne
 Good question, and you totally could. I might even do that in the future. In reality, it depends on your company, past network design decisions, and business requirements. There's never a 'one-size-fits-all' for network design - it will *always* be at the behest of the business, even if it's unwise.
 
 ### Diagram
-![Network Diagram](/blog/res/ot-lab-network-diagram.png) UPDATE ME!!!!!!!!!!
+![Network Diagram](/blog/res/ot-lab-network-diagram.png)
 
 ## The Systems
 ### Factory/OT

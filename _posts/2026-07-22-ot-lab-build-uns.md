@@ -2,7 +2,7 @@
 layout: post
 title: "OT Homelab Build - UNS"
 subtitle: "The truth, the whole truth, and nothing but the truth!"
-date: 2000-07-22
+date: 2026-07-22
 description: "Building the Unified Namespace (UNS) system for the OT Homelab."
 ---
 
@@ -72,7 +72,7 @@ One of the obvious downsides is that you can't read it straight out the box like
 
 > Why are you using JSON instead of Sparkplug B?
 
-For simplicity and compatibility. Using standard MQTT with JSON payloads is much more simple than Sparkplug B, and much more widely supported by different systems. I will explore Sparkplug B for homelabs in later articles.
+For simplicity and compatibility. Using standard MQTT with JSON payloads is much more simple than Sparkplug B, and much more widely supported by different systems. My historian doesn't support it out of the box but I will explore Sparkplug B for homelabs in later articles.
 
 Now we have some background, lets look at how we actually deploy this.
 
