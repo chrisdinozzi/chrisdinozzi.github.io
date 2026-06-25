@@ -111,7 +111,7 @@ The DMZ is where the data actually starts moving around. Everything here runs in
 - **HiveMQ CE** - the community edition of the HiveMQ broker. 
 - **NeuronEX** - a gateway that can read OPC-UA from the PLC and send it to HiveMQ as MQTT.
 - **Ignition** - the SCADA system. I used the [Maker Edition](https://inductiveautomation.com/ignition/maker-edition) which is free!
-- **InfluxDB3 Core** - a very basic historian which will store our data for visulisation, fed by the UNS.
+- **InfluxDB 3 Core** - a very basic historian which will store our data for visualisation, fed by the UNS.
 - **Caddy** - reverse proxy for serving applications over pretty subdomains, and providing HTTPS.
 
 I wanted Ignition to be able to subscribe directly to the gateway via MQTT, but the plugin required to do that does not support maker edition. Therefore, I had to compromise and have the SCADA system connect directly to the PLC over OPC-UA, breaking the UNS best practice.
@@ -119,7 +119,7 @@ I wanted Ignition to be able to subscribe directly to the gateway via MQTT, but 
 
 So how does a value actually get from a button on my panel up to a dashboard? Roughly like this:
 
-> A tag changes on the **PLC** (say the fan kicks on). NeuronEX is polling that tag over **OPC-UA**, sees the change, and publishes it to **HiveMQ** as a **MQTT** message. From there anything subscribed to the broker can pick it up.
+> A tag changes on the **PLC** (say the fan kicks on). NeuronEX is polling that tag over **OPC-UA**, sees the change, and publishes it to **HiveMQ** as an **MQTT** message. From there anything subscribed to the broker can pick it up.
 
 That last part - "anything subscribed can pick it up" - is the whole point of a UNS, and it's what the IT segment takes advantage of.
 
@@ -127,7 +127,7 @@ That last part - "anything subscribed can pick it up" - is the whole point of a 
 ### IT
 The IT network is the cheap seats. These are the read-only consumers - they're allowed to watch the plant, but they've no business touching it. That's the entire reason this stack lives up in IT rather than down in the DMZ or OT: it only ever pulls data, never pushes it.
 
-It's another Ubuntu Server VM running four things in Docker:
+It's another Ubuntu Server VM running two things in Docker:
 
 - **Grafana** - draws the pretty pictures - fan state, the LEDs, operating mode, that sort of thing.
 - **Caddy** - reverse proxy for serving applications over pretty subdomains, and providing HTTPS.
