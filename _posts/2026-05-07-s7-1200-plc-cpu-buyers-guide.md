@@ -6,6 +6,8 @@ date: 2026-05-07
 description: "A guide to help people new to automation, OT, ICS, IACS, etc purchase an S7-1200 PLC CPU for a home lab."
 ---
 
+
+
 I spent longer than I'd like to admit scrolling through eBay listings trying to work out which Siemens S7-1200 to buy. There are numerous variants and trip hazards that, as someone who’s not an automation engineer, caught me out a lot.
 
 Now that I’ve picked up my own 1212C DC/DC/DC from eBay, this guide is what I wish I'd had when I began my search.

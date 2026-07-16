@@ -2,9 +2,24 @@
 layout: post
 title: "OT Homelab Build - The Rig"
 subtitle: "This is where the fun begins!"
-date: 2026-07-15
+date: 2099-07-15
 description: "A look at building the OT Homelab itself"
 ---
+
+- [Goals](#goals)
+- [The Rig](#the-rig)
+  - [First Boot](#first-boot)
+  - [Mounting the Hardware](#mounting-the-hardware)
+  - [Making it Pretty](#making-it-pretty)
+- [PLC Programming](#plc-programming)
+  - [Modbus](#modbus)
+  - [OPC-UA](#opc-ua)
+  - [PLC Tags](#plc-tags)
+  - [Monitoring DB](#monitoring-db)
+  - [Final Ladder Logic](#final-ladder-logic)
+- [Lessons Learned](#lessons-learned)
+- [Final Thoughts](#final-thoughts)
+
 
 ## Goals
 I wanted to build a "full" factory system on one piece of 500x500mm plywood. Of course, I can't fit an *entire* factory onto a plank of wood, but a PSU, PLC, Switch, some I/O, some terminals, and a few cable runs would be enough to get me most of the way there.

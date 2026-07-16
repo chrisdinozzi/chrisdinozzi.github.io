@@ -2,9 +2,19 @@
 layout: post
 title: "I Built a Factory (OT Security Lab)"
 subtitle: "and you can too!"
-date: 2026-07-01
+date: 2099-07-01
 description: "An overview of my OT security lab and an index of all the upcoming blog posts related to it."
 ---
+
+- [Why build an OT lab?](#why-build-an-ot-lab)
+- [Who is this for?](#who-is-this-for)
+- [The Lab](#the-lab)
+- [The Series](#the-series)
+  - [Design](#design)
+  - [Build](#build)
+  - [Attack](#attack)
+  - [Defend](#defend)
+
 
 I built a factory in my home. It makes air. Well, it doesn't make air, it just blows it around. It's not really a factory either, it's a bit of plywood with a bunch of devices screwed onto it. But, it's been a great learning experience, and has given me a wonderful playground to conduct security assessments, attacks, and system tests and designs.
 
@@ -66,11 +76,13 @@ There are 4 main parts to this series that follows a fairly logical flow.
 - **Enterprise IT** - The architecture and implementation of the IT systems
 
 ### Attack
-- **Attacking the PLC** - conducting attacks against HTTP, Modbus, and OPC-UA protocols, looking at existing tools, what they really do, and what the real risks are.
+- **OPC-UA Scanner** - lets make a simple tool to scan OPC-UA servers!
+- **Attacking the PLC (OPC-UA and Modbus)** - conducting attacks against HTTP, Modbus, and OPC-UA protocols, looking at existing tools, what they really do, and what the real risks are.
 - **Modbus MITM** - a dedicated article diving deep into Modbus MITM attacks.
 
+
 ### Defend
-- **Hardening the PLC** - how to reduce the attack surface of your PLC and why it's effective at reducing real risk
+- **Hardening the PLC (OPC-UA and Modbus)** - how to reduce the attack surface of your PLC and why it's effective at reducing real risk
 - **Securing the Systems** - hardening our OT systems
 - **Firewall Rules** - putting the firewall to good use
 - **Detection** - what we can't stop, we want to at least know about!

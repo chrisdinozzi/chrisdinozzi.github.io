@@ -2,9 +2,34 @@
 layout: post
 title: "OT Homelab Build - UNS"
 subtitle: "The truth, the whole truth, and nothing but the truth!"
-date: 2026-07-22
+date: 2099-07-22
 description: "Building the Unified Namespace (UNS) system for the OT Homelab."
 ---
+
+- [Goals](#goals)
+- [What is UNS?](#what-is-uns)
+  - [OPC-UA](#opc-ua)
+  - [MQTT](#mqtt)
+    - [MQTT-JSON](#mqtt-json)
+    - [Sparkplug B](#sparkplug-b)
+- [Systems](#systems)
+  - [MQTT Broker (HiveMQ)](#mqtt-broker-hivemq)
+  - [Gateway (NeuronEX)](#gateway-neuronex)
+  - [Caddy](#caddy)
+  - [Systems Summary](#systems-summary)
+- [Deployment](#deployment)
+  - [docker-compose.yml](#docker-composeyml)
+  - [.env](#env)
+  - [secrets](#secrets)
+  - [Caddyfile](#caddyfile)
+    - [Windows](#windows)
+    - [Mac](#mac)
+    - [Linux](#linux)
+      - [Firefox](#firefox)
+      - [Security Concerns](#security-concerns)
+  - [DNS](#dns)
+  - [Running the Compose File](#running-the-compose-file)
+
 
 ## Goals
 1. Understand what a Unified Namespace actually is

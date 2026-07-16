@@ -2,9 +2,27 @@
 layout: post
 title: "OT Homelab Design"
 subtitle: "The what and the why"
-date: 2026-07-08
+date: 2099-07-08
 description: "The design of my OT Security homelab including hardware, networking, and software."
 ---
+
+- [Goals](#goals)
+- [The Hardware](#the-hardware)
+  - [PLC](#plc)
+  - [PSU](#psu)
+  - [Switch](#switch)
+  - [Server](#server)
+  - [BOM](#bom)
+  - [Diagram](#diagram)
+- [The Network](#the-network)
+  - [Segments](#segments)
+  - [Diagram](#diagram-1)
+- [The Systems](#the-systems)
+  - [Factory/OT](#factoryot)
+  - [DMZ](#dmz)
+  - [IT](#it)
+
+
 ## Goals
 In building my OT lab, I had a few goals in mind:
 1. Learn more about industrial equipment and wiring
