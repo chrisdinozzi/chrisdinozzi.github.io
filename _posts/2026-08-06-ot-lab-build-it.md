@@ -18,8 +18,11 @@ Our IT section is much more simple, with only one application running (well, plu
 
 ```
 
-
 ### Caddy
+As mentioned in the [UNS build](insert.link) article, Caddy is used as a reverse proxy to serve the web interface of the application over a nice clean *home.lab domain. It also provides HTTPS via the local CA.
+
 ### Grafana
+Grafana is used to serve dashboards fed by the data historian.
+
 #### Accessing Data
 #### Creating a Dashboard

@@ -181,7 +181,5 @@ docker exec influxdb3-core influxdb3 query \
 
 One annoying error I ran into was an `exit code 132` every time I tried to start the container. This ended up being related to the proxmox CPU architecture. It was solved by changing the host VMs CPU type to `host` rather than `kvm64`.
 
-
-
 ## Viewing Data
 We'll take a look at how we can start to visulise the data in the next part of this series, where we set up Grafana in our IT network!
