@@ -16,6 +16,7 @@ description: "Building the SCADA and Historian System system for the OT Homelab.
     - [Creating a HMI](#creating-a-hmi)
   - [Historian (InfluxDB 3 Core)](#historian-influxdb-3-core)
 - [Viewing Data](#viewing-data)
+- [Final Thoughts](#final-thoughts)
 
 ## Goals
 1. Understand what SCADA and historians are and why they matter
@@ -183,3 +184,8 @@ One annoying error I ran into was an `exit code 132` every time I tried to start
 
 ## Viewing Data
 We'll take a look at how we can start to visulise the data in the next part of this series, where we set up Grafana in our IT network!
+
+## Final Thoughts
+Through this article we've look at how to set up Ignition to work as a SCADA system over OPC-UA. We've also dived deep into setting up our historian to pull data out of the UNS system.
+
+In the next article, we'll look at how we can visualise that historian data to be used by the business.

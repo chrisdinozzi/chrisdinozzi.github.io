@@ -29,6 +29,7 @@ description: "Building the Unified Namespace (UNS) system for the OT Homelab."
       - [Security Concerns](#security-concerns)
   - [DNS](#dns)
   - [Running the Compose File](#running-the-compose-file)
+- [Final Thoughts](#final-thoughts)
 
 
 ## Goals
@@ -501,3 +502,8 @@ I used the DNS service built into OPNsense as my DNS server. You're welcome to r
 
 ### Running the Compose File
 The compose file can then be run using `docker compose up -d`. You can then monitor the logs by running `docker compose logs -f`.
+
+## Final Thoughts
+Through this article, we've looked at how we can set up our own UNS system to help move data around our lab in a more painless way. Although we've been unable to fully utilise it due to incompatability issues between Ignition Maker Edition and MQTT, it's still been a very worthwhile learning excerise to get hands on with systems that are becoming more and more relevant within OT.
+
+In the next article, we'll delve deeper into the SCADA and Historian systems.

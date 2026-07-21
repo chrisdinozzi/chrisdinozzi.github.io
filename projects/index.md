@@ -5,9 +5,9 @@ title: projects
 
 ## /projects/
 
-### apps
+### tools
 
-wip
+- [OPC-UA Recon](https://github.com/chrisdinozzi/opcua-recon)
 
 ### papers
 
