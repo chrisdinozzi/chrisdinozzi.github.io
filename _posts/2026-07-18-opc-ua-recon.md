@@ -6,7 +6,7 @@ date: 2026-07-18
 description: "Using my tool, OPC-UA Recon, to scan OPC-UA servers for access and tag misconfigurations"
 --- 
 
-The source code can be found on the (github)[https://github.com/chrisdinozzi/opcua-recon] repo for this project.
+The source code can be found on the [github](https://github.com/chrisdinozzi/opcua-recon) repo for this project.
 
 # OPC-UA Recon
 
