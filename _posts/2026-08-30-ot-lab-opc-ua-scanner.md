@@ -14,9 +14,11 @@ description: "Analysing security controls in OPC-UA servers and what we can lear
   - [User Authentication](#user-authentication)
     - [Guest / Anonymous](#guest--anonymous)
     - [Username and Password](#username-and-password)
-    - [Certificates](#certificates)
+    - [Certificates (X509)](#certificates-x509)
+    - [SSO](#sso)
 - [Scanning OPC-UA Servers](#scanning-opc-ua-servers)
-  - [Tooling](#tooling)
+  - [Basic Recon Scan](#basic-recon-scan)
+- [Final Thoughts](#final-thoughts)
 
 
 
@@ -71,13 +73,145 @@ Well, this one doesn't achieve much. Leaving Guest or Anonymous access on allows
 #### Username and Password
 As it says on the tin. A username and password can be supplied by the client to authenticate the session. Depending on the OPC-UA server itself, this method will differ in terms of management and customisation, but it's often a great starting point to bolster security.
 
-#### Certificates
-This is where we get a big fancier and even more secure.
-TODO
+#### Certificates (X509)
+More so used to authenticate between systems than users, certificates are another supported method for authentication. 
+
+#### SSO
+Some more modern OPC-UA servers will even offer SSO options via things like Kerberos or OAuth. This makes user management far easier, bringing it inline with other modern systems.
 
 ## Scanning OPC-UA Servers
 As mentioned above, when you first connect to an OPC-UA server, it will advertise what security controls it supports. This means we can write a little tool to scan OPC-UA servers and gather information on how secure (or not!) they are. 
 
 This led me to create [OPC-UA Recon](https://github.com/chrisdinozzi/opcua-recon) (with a little help from Claude, of course!).
 
-### Tooling
+With this tool, we can do the following:
+- Quickly scan an OPC-UA server for endpoints and see what levels of security are offered
+- Check if anonymous access works
+- Test if credentials work
+- Search for writeable tags, either anonymously or with credentials
+- Output our results to CSV.
+
+### Basic Recon Scan
+We can run a basic scan agaisnt the OPC-UA server running on the S7-1200 and see what we get back:
+
+![basic demo](/blog/res/ot-lab-opc-scanner-demo-basic.gif)
+
+`opcua-recon -ip "10.0.0.10"`
+
+```bash
+Target:  opc.tcp://10.0.0.10:4840
+=== opc.tcp://10.0.0.10:4840 ===
+3 endpoint(s)
+
+[Endpoint 1]
+  URL:             opc.tcp://10.0.0.10:4840
+  Security mode:   MessageSecurityModeNone
+  Security policy: http://opcfoundation.org/UA/SecurityPolicy#None
+  Security level:  0
+  Allows Anonymous Login:  true
+  Allows Credential Login:  true
+  Supported Login Methods:  [Anonymous (guest) Username/Password]
+***
+[+] Anonymous Access Available
+[+] Credential Accesss Available
+[Endpoint 2]
+  URL:             opc.tcp://10.0.0.10:4840
+  Security mode:   MessageSecurityModeSign
+  Security policy: http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256
+  Security level:  65
+  Allows Anonymous Login:  true
+  Allows Credential Login:  true
+  Supported Login Methods:  [Anonymous (guest) Username/Password]
+***
+[+] Anonymous Access Available
+[+] Credential Accesss Available
+[Endpoint 3]
+  URL:             opc.tcp://10.0.0.10:4840
+  Security mode:   MessageSecurityModeSignAndEncrypt
+  Security policy: http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256
+  Security level:  115
+  Allows Anonymous Login:  true
+  Allows Credential Login:  true
+  Supported Login Methods:  [Anonymous (guest) Username/Password]
+***
+[+] Anonymous Access Available
+[+] Credential Accesss Available
+---
+```
+
+You can see we found 3 endpoints, one for each of the supported security modes and security policy combinations.
+We can also see they all support Anonymous and Credential based access. 
+Lets see if that anonymous access works for endpoint 1.
+
+`opcua-recon -ip 10.0.0.10 -security-mode none -probe-anon`
+
+```bash
+Target:  opc.tcp://10.0.0.10:4840
+=== opc.tcp://10.0.0.10:4840 ===
+3 endpoint(s)
+
+[Endpoint 1]
+  URL:             opc.tcp://10.0.0.10:4840
+  Security mode:   MessageSecurityModeNone
+  Security policy: http://opcfoundation.org/UA/SecurityPolicy#None
+  Security level:  0
+  Allows Anonymous Login:  true
+  Allows Credential Login:  true
+  Supported Login Methods:  [Anonymous (guest) Username/Password]
+***
+[+] Anonymous Access Available
+[+] Credential Accesss Available
+[*] Checking if Anonymous access works...
+[+] anonymous login SUCCEEDED
+---
+```
+
+Looks like we have anonymous access. I wonder if there are any tags we have write access too...
+
+`opcua-recon -ip 10.0.0.10 -security-mode none -probe-anon -probe-write`
+
+``` bash
+Target:  opc.tcp://10.0.0.10:4840
+=== opc.tcp://10.0.0.10:4840 ===
+3 endpoint(s)
+
+[Endpoint 1]
+  URL:             opc.tcp://10.0.0.10:4840
+  Security mode:   MessageSecurityModeNone
+  Security policy: http://opcfoundation.org/UA/SecurityPolicy#None
+  Security level:  0
+  Allows Anonymous Login:  true
+  Allows Credential Login:  true
+  Supported Login Methods:  [Anonymous (guest) Username/Password]
+***
+[+] Anonymous Access Available
+[+] Credential Accesss Available
+[*] Checking if Anonymous access works...
+[+] anonymous login SUCCEEDED
+[*] Attempting to find writeable tags on opc.tcp://10.0.0.10:4840 with Anonymous credentials
+[+] Found writeable tag: Registers (ns=4;i=13)
+[+] Found writeable tag: [0] (ns=4;i=14)
+[+] Found writeable tag: [1] (ns=4;i=15)
+[+] Found writeable tag: [2] (ns=4;i=16)
+[+] Found writeable tag: [3] (ns=4;i=17)
+[+] Found writeable tag: [4] (ns=4;i=18)
+[+] Found writeable tag: [5] (ns=4;i=19)
+[+] Found writeable tag: [6] (ns=4;i=20)
+[+] Found writeable tag: [7] (ns=4;i=21)
+[+] Found writeable tag: [8] (ns=4;i=22)
+[+] Found writeable tag: [9] (ns=4;i=23)
+[+] Found writeable tag: [10] (ns=4;i=24)
+[+] Found writeable tag: [11] (ns=4;i=25)
+[+] Found writeable tag: [12] (ns=4;i=26)
+[+] Found writeable tag: [13] (ns=4;i=27)
+[+] Found writeable tag: [14] (ns=4;i=28)
+[+] Found writeable tag: [15] (ns=4;i=29)
+[+] Found writeable tag: [16] (ns=4;i=30)
+[+] Found writeable tag: [17] (ns=4;i=31)
+[+] Found writeable tag: [18] (ns=4;i=32)
+...
+```
+
+That list goes on for a while. It looks like we have write access to all the tags over an anonymous session - this is terrible security!
+
+## Final Thoughts
