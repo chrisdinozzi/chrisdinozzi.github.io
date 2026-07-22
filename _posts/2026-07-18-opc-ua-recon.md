@@ -6,13 +6,17 @@ date: 2026-07-18
 description: "Using my tool, OPC-UA Recon, to scan OPC-UA servers for access and tag misconfigurations"
 --- 
 
+The source code can be found on the (github)[https://github.com/chrisdinozzi/opcua-recon] repo for this project.
+
+# OPC-UA Recon
+
 A pre-authentication and light active-recon tool for OPC-UA servers: enumerate
 endpoint security configuration, test whether anonymous or credentialed access
 actually works, and scan for tags that are writeable by the authenticated session.
 
 **Only use against systems you own or are explicitly authorised to test.**
 
-The source code can be found on the (github)[https://github.com/chrisdinozzi/opcua-recon] repo for this project.
+![demo](https://raw.githubusercontent.com/chrisdinozzi/opcua-recon/main/demo.gif)
 
 ## Features
 - Enumerate endpoint security settings (security mode, policy, advertised auth methods)
@@ -27,8 +31,7 @@ The source code can be found on the (github)[https://github.com/chrisdinozzi/opc
 - `go mod tidy` to fetch `github.com/gopcua/opcua` and `github.com/fatih/color`
 
 ## Limitations
-- Write-tag scanning currently only runs against `SecurityMode: None` endpoints
-- Credential probing does not yet support client-certificate authentication (see TODO)
+- Credential probing does not yet support client-certificate authentication
 
 ## Usage
 
@@ -47,6 +50,9 @@ The source code can be found on the (github)[https://github.com/chrisdinozzi/opc
 | `-rewrite-host` | Replace a server's advertised endpoint host (often an internal/NAT address) with the host you actually dialled |
 | `-output-file` | Append writeable-tag findings to this CSV file |
 | `-verbose` | Enable diagnostic output |
+| `-cleanup-certs`| delete generated client certificate/key files when the scan finishes |
+| `-security-mode` | only probe endpoints with this security mode (e.g. None, Sign, SignAndEncrypt) |
+| `-security-policy` | only probe endpoints with this security policy (e.g. Basic256Sha256) |
 
 ### CSV output format
 When `-output-file` is set, each writeable tag found is appended as a row:
@@ -60,44 +66,54 @@ One target per line; port optional, otherwise defaults to `-port`:
 10.0.0.11:99009
 172.16.3.4
 ```
+### Valid values for `-select-mode`
+- `None`
+- `Sign`
+- `SignAndEncrypt`
+
+### Valid values for `-select-policy`
+- `None`
+- `Basic128Rsa15`
+- `Basic256`
+- `Basic256Sha256`
+- `Aes128_Sha256_RsaOaep`
+- `Aes256_Sha256_RsaPss`
 
 ## Build
 ```bash
 go install github.com/chrisdinozzi/opcua-recon@latest
 ```
 
-Then run examples below with `./opcua_recon` instead of `go run opcua_recon.go`.
-
 ## Examples
 
 Scan an OPC-UA Server by Endpoint
 
-`go run opcua_recon.go -endpoint "opc.tcp://10.0.0.10:4840"`
+`opcua-recon -endpoint "opc.tcp://10.0.0.10:4840"`
 
 Scan an OPC-UA Server by IP and non-standard port
 
-`go run opcua_recon.go -ip "10.0.0.10" -port 18889`
+`opcua-recon -ip "10.0.0.10" -port 18889`
 
 Scan an OPC-UA Server by IP and check if anonymous access works
 
-`go run opcua_recon.go -ip "10.0.0.10" -probe-anon`
+`opcua-recon -ip "10.0.0.10" -probe-anon`
 
 Scan an OPC-UA Server by Endpoint and check if credentials access works
 
-`go run opcua_recon.go -endpoint "opc.tcp://10.0.0.10:4840" -probe-creds -user "user" -pass "password"`
+`opcua-recon -endpoint "opc.tcp://10.0.0.10:4840" -probe-creds -user "user" -pass "password"`
 
 Scan an OPC-UA Server by Endpoint and check if anonymous access works, and look for anonymous writeable tags, output to file
 
-`go run opcua_recon.go -endpoint "opc.tcp://10.0.0.10:4840" -probe-anon -probe-write -output-file out.csv`
+`opcua-recon -endpoint "opc.tcp://10.0.0.10:4840" -probe-anon -probe-write -output-file out.csv`
 
 Scan an OPC-UA Server by Endpoint and check if credentials access works, and look for writeable tags for said credentials
 
-`go run opcua_recon.go -endpoint "opc.tcp://10.0.0.10:4840" -probe-creds -user "user" -pass "password" -probe-write`
+`opcua-recon -endpoint "opc.tcp://10.0.0.10:4840" -probe-creds -user "user" -pass "password" -probe-write`
 
 Scan an OPC-UA Server by Endpoint that is behind NAT/Firewall, or has a hostname different from the user provided
 
-`go run opcua_recon.go -endpoint "opc.tcp://123.45.67.89:4840" -rewrite-host`
+`opcua-recon -endpoint "opc.tcp://123.45.67.89:4840" -rewrite-host`
 
 Specify a scanning batch size for writeable tag scan. useful for slow servers (slower the server, lower the batch count)
 
-`go run opcua_recon.go -endpoint "opc.tcp://123.45.67.89:4840" -rewrite-host -probe-anon -probe-write -batch-size 10`
+`opcua-recon -endpoint "opc.tcp://123.45.67.89:4840" -rewrite-host -probe-anon -probe-write -batch-size 10`

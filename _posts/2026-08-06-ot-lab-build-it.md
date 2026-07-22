@@ -7,9 +7,16 @@ description: "Creating visulisation dashboards using Grafana using data from the
 --- 
 
 - [Goals](#goals)
+- [Systems](#systems)
+  - [Caddy](#caddy)
+  - [Grafana](#grafana)
+    - [Accessing Data](#accessing-data)
+    - [Creating a Dashboard](#creating-a-dashboard)
+- [Final Thoughts](#final-thoughts)
 
 
 ## Goals
+TODO
 
 ## Systems
 Our IT section is much more simple, with only one application running (well, plus Caddy). Again, it's all run using [Docker Compose](https://github.com/chrisdinozzi/caaf/blob/main/it-systems/docker-compose.yml):
