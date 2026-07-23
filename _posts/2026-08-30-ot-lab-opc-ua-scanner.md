@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "OT Homelab Build - OPC-UA Scanning"
-subtitle: "Knock Knock. Who's there? None/None."
+title: "OPC-UA Scanning"
+subtitle: "Knock Knock. Who's there?"
 date: 2099-07-29
 description: "Analysing security controls in OPC-UA servers and what we can learn by scanning them"
 --- 
@@ -18,6 +18,9 @@ description: "Analysing security controls in OPC-UA servers and what we can lear
     - [SSO](#sso)
 - [Scanning OPC-UA Servers](#scanning-opc-ua-servers)
   - [Basic Recon Scan](#basic-recon-scan)
+  - [Test Anonymous Access](#test-anonymous-access)
+  - [Search for Writeable Tags](#search-for-writeable-tags)
+  - [Writing to a Tag](#writing-to-a-tag)
 - [Final Thoughts](#final-thoughts)
 
 
@@ -139,6 +142,8 @@ Target:  opc.tcp://10.0.0.10:4840
 ---
 ```
 
+### Test Anonymous Access
+
 You can see we found 3 endpoints, one for each of the supported security modes and security policy combinations.
 We can also see they all support Anonymous and Credential based access. 
 Lets see if that anonymous access works for endpoint 1.
@@ -165,6 +170,8 @@ Target:  opc.tcp://10.0.0.10:4840
 [+] anonymous login SUCCEEDED
 ---
 ```
+
+### Search for Writeable Tags
 
 Looks like we have anonymous access. I wonder if there are any tags we have write access too...
 
@@ -197,21 +204,25 @@ Target:  opc.tcp://10.0.0.10:4840
 [+] Found writeable tag: [4] (ns=4;i=18)
 [+] Found writeable tag: [5] (ns=4;i=19)
 [+] Found writeable tag: [6] (ns=4;i=20)
-[+] Found writeable tag: [7] (ns=4;i=21)
-[+] Found writeable tag: [8] (ns=4;i=22)
-[+] Found writeable tag: [9] (ns=4;i=23)
-[+] Found writeable tag: [10] (ns=4;i=24)
-[+] Found writeable tag: [11] (ns=4;i=25)
-[+] Found writeable tag: [12] (ns=4;i=26)
-[+] Found writeable tag: [13] (ns=4;i=27)
-[+] Found writeable tag: [14] (ns=4;i=28)
-[+] Found writeable tag: [15] (ns=4;i=29)
-[+] Found writeable tag: [16] (ns=4;i=30)
-[+] Found writeable tag: [17] (ns=4;i=31)
-[+] Found writeable tag: [18] (ns=4;i=32)
 ...
+[+] Found writeable tag: [97] (ns=4;i=111)
+[+] Found writeable tag: [98] (ns=4;i=112)
+[+] Found writeable tag: [99] (ns=4;i=113)
+[+] Found writeable tag: Fan_On (ns=4;i=125)
+[+] Found writeable tag: Green_LED_On (ns=4;i=126)
+[+] Found writeable tag: Red_LED_On (ns=4;i=127)
+[+] 104 writeable tags found
 ```
 
-That list goes on for a while. It looks like we have write access to all the tags over an anonymous session - this is terrible security!
+It's a long list, but the most interesting tags are at the bottom. Those are the ones we use to control the PLC via our HMI. It looks like we have write access to all the tags over an anonymous session - this is terrible security!
+
+### Writing to a Tag
+
+Lets take it one step further and see if we can really write to these tags. I'll use the [opcua-commander](https://github.com/node-opcua/opcua-commander) client to try and write to the tag.
+
+![writing to tag](/blog/res/ot-lab-attack-opc-write.gif)
+
+There we have it - we successfully found and wrote to an OPC-UA tag with zero authentication.
 
 ## Final Thoughts
+In this article we've looked at some of the security controls available for protecting OPC-UA servers, and how neglecting them can make it trivially easy for unwanted guests to tamper with tag values. Of course, defense in depth is a concept that shouldn't be ignored in the real world, where we wouldn't be reliant on only the controls offered by a specific system, but we shouldn't neglect to harden all systems where possible. You never know when a lazy vendor will accidently expose your OPC-UA server to the internet!

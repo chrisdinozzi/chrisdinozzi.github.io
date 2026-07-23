@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "OT Homelab Build - Modbus MITM Attacks"
+title: "Modbus MITM Attacks"
 subtitle: "'Trust me bro, I'm totally the real server bro, trust me bro.'"
 date: 2099-07-29
 description: "TODO"

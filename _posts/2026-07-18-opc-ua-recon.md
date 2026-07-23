@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "OPC-UA Recon"
+title: "[Tool] OPC-UA Recon"
 subtitle: "Scanning OPC-UA Servers for Security Misconfigurations"
 date: 2026-07-18
 description: "Using my tool, OPC-UA Recon, to scan OPC-UA servers for access and tag misconfigurations"
