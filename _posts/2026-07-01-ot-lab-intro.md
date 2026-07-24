@@ -77,11 +77,11 @@ There are 4 main parts to this series that follows a fairly logical flow.
 
 ### Attack
 - **OPC-UA Recon** - lets make a simple tool to scan OPC-UA servers!
-- **Attacking the PLC** - conducting attacks against HTTP, Modbus, and OPC-UA protocols, looking at existing tools, what they really do, and what the real risks are.
+- **Attacking the PLC** - conducting attacks against HTTP, S7Comm, Modbus, and OPC-UA protocols, looking at existing tools, what they really do, and what the real risks are.
 - **Modbus MITM** - a dedicated article diving deep into Modbus MITM attacks.
 
 
 ### Defend
-- **Hardening the PLC (OPC-UA and Modbus)** - how to reduce the attack surface of your PLC and why it's effective at reducing real risk
+- **Hardening the PLC** - how to reduce the attack surface of your PLC and why it's effective at reducing real risk
 - **Securing the Systems** - hardening our OT systems
 - **Firewall Rules** - putting the firewall to good use

