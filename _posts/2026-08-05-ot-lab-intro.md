@@ -20,8 +20,7 @@ I built a factory in my home. It makes air. Well, it doesn't make air, it just b
 
 If you're like me and work in OT security, or you just want to get your hands dirty with building a cool lab, this series should help you along your journey.
 
-
-I am not an automation engineer. I have got plenty wrong along the way and I will point those mistakes out as they come up, because the mistakes are usually more useful than the successes.
+**Disclaimer:** I am not an automation engineer. I have got plenty wrong along the way and I will point those mistakes out as they come up, because the mistakes are usually more useful than the successes.
 
 ![The completed OT lab on a plywood board, showing the Siemens S7-1200 PLC, power supply, ethernet switch, buttons and fan](/blog/res/ot-lab-full-rig.JPG)
 
@@ -61,7 +60,7 @@ I wouldn't encourage *anyone* to copy and paste what I've done, for two reasons:
 
 1. I am not an automation engineer, nor a systems expert, therefore, if you see something I've done that is dumb, don't copy it. Instead, contact me and tell me about my stupid mistake and I'll get it fixed!
 
-2. Where's the fun in that? You might spend all day working with Rockwell PLCs, or Siemens. Or with RTUs, not PLCs. You should adapt your build to best suit your needs and learning requirements.
+2. Where's the fun in that? You might spend all day working with Rockwell PLCs, not Siemens. Or with RTUs, not PLCs. You should adapt your build to best suit your needs and learning requirements.
 
 ## The Series
 There are 4 main parts to this series that follow a fairly logical flow.
@@ -76,9 +75,9 @@ There are 4 main parts to this series that follow a fairly logical flow.
 - **Enterprise IT** - The architecture and implementation of the IT systems
 
 ### Attack
-- **OPC-UA Recon** - let's make a simple tool to scan OPC-UA servers!
-- **Attacking the PLC** - conducting attacks against HTTP, S7Comm, Modbus, and OPC-UA protocols, looking at existing tools, what they really do, and what the real risks are.
-- **Modbus MITM** - a dedicated article diving deep into Modbus MITM attacks.
+- **OPC-UA Recon** - looking at a tool I created to scan OPC-UA servers
+- **Attacking the PLC** - examing attacks against HTTP, S7Comm, Modbus, and OPC-UA protocols, looking at existing tools, what they really do, and what the real risks are
+- **Modbus MITM** - looking at the process behind intercepting and manipulating Modbus traffic
 
 
 ### Defend
