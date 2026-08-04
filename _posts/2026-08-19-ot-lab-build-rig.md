@@ -2,7 +2,7 @@
 layout: post
 title: "OT Homelab Build - The Rig"
 subtitle: "This is where the fun begins!"
-date: 2099-07-15
+date: 2026-08-19
 description: "A look at building the OT Homelab itself"
 ---
 
@@ -23,7 +23,7 @@ description: "A look at building the OT Homelab itself"
 
 ## Goals
 I wanted to build a "full" factory system on one piece of 500x500mm plywood. Of course, I can't fit an *entire* factory onto a plank of wood, but a PSU, PLC, Switch, some I/O, some terminals, and a few cable runs would be enough to get me most of the way there.
-If you want the more detailed breakdown of all the parts, check out the [build design](https://cdino.net/blog/2026/ot-homelab-design) article.
+If you want the more detailed breakdown of all the parts, check out the [build design](https://cdino.net/blog/2026/ot-lab-design) article.
 
 ## The Rig
 ### First Boot
@@ -94,7 +94,7 @@ I made a second data block to store the status of the LEDs and fan. This would g
 ![The monitoring DB](/blog/res/ot-lab-build-rig-plc-db-monitoring.png)
 
 ### Final Ladder Logic
-The final ladder logic is still very simple. The first block controls the Modbus server, as discussed above. The second block controls the fan. If either the green button is pressed, the first register in Modbus is set to 1, or the MONITORING.Fan_On tag is set to true, the fan will switch on, and the MONITORING.Fan_On tag is set to true. This causes it to latch, meaning even once I stop pressing the green button, the fan keeps spinning.
+The final ladder logic is still very simple. The first block controls the Modbus server, as discussed above. The second block controls the fan. If either the green button is pressed, the first Modbus register (register 0)  is set to 1, or the MONITORING.Fan_On tag is set to true, the fan will switch on, and the MONITORING.Fan_On tag is set to true. This causes it to latch, meaning even once I stop pressing the green button, the fan keeps spinning.
 When the red button is pressed, the latch is broken and the fan switches off, setting the monitoring tag back to false.
 
 ![Final ladder logic 1](/blog/res/ot-lab-build-rig-plc-final-ladder-logic1.png)

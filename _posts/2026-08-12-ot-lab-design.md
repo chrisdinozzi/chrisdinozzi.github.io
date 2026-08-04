@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "OT Homelab Design"
+title: "OT Homelab - Design"
 subtitle: "The what and the why"
-date: 2099-07-08
+date: 2026-08-12
 description: "The design of my OT Security homelab including hardware, networking, and software."
 ---
 
@@ -41,12 +41,12 @@ The PSU was another second hand pick up. I found a **SITOP PSU100L** going cheap
 All you really need is a way of supplying 24VDC - for most people, a couple amps should be fine.
 
 ### Switch
-The **Weidmuller IE SW BL05 STX** was another eBay find. Truthfully, I thought I was getting a managed switch (shame on me for not doing my research!) but I'm still glad I picked it up, as having a din rail mounted switch looks quite smart.
+The **Weidmuller IE SW BL05 STX** was another eBay find. Truthfully, I thought I was getting a managed switch (shame on me for not doing my research!) but I'm still glad I picked it up, as having a DIN rail mounted switch looks quite smart.
 
 It provides a convenient way of connecting other computers and devices into my factory network.
 
 ### Server
-I used a **Thinkcentre M710Q MiniPC** I had laying around. It does the job of running a handful of VMs just fine, it's quiet, and doesn't draw too much power.
+I used a **Thinkcentre M710Q MiniPC** I had lying around. It does the job of running a handful of VMs just fine, it's quiet, and doesn't draw too much power.
 
 ### BOM
 This table encompasses nearly all of the parts of my build. All the links are for UK sites.
@@ -71,7 +71,7 @@ This table encompasses nearly all of the parts of my build. All the links are fo
 | Button Box* | [Amazon](https://www.amazon.co.uk/dp/B07WH9VJZ5?ref=ppx_yo2ov_dt_b_fed_asin_title) | Plastic enclosure for mounting the buttons neatly on the panel. |
 | Wire Duct* | [CEF](https://www.cef.co.uk/catalogue/products/4349444-25mm-x-25mm-open-slotted-trunking-grey-2m-length) | Slotted trunking to keep wiring tidy and routed cleanly. Makes the build look the part. |
 | Mini PC / Server* | | For running the SCADA, gateway, MQTT broker, and firewall. I used a Proxmox server with VMs, but any Linux machine will do. |
-| Network Switch* | | To connect the PLC, server, and laptop on the factory network. I grabbed a Weidmüller IE SW BL05 STX unmanaged switch - it was a random eBay find. A managed switch would give you a lot more to play with from a security perspective, but costs accordingly. |
+| Network Switch* | | To connect the PLC, server, and laptop on the factory network. I grabbed a Weidmuller IE SW BL05 STX unmanaged switch - it was a random eBay find. A managed switch would give you a lot more to play with from a security perspective, but costs accordingly. |
 | Stand* | [Amazon](https://www.amazon.co.uk/dp/B0B6VKS7DJ?ref=ppx_yo2ov_dt_b_fed_asin_title) | A monitor stand to prop the board up at a sensible angle. |
 
 ### Diagram
@@ -116,7 +116,7 @@ There aren't many systems to speak of in the factory portion of the network, but
 
 The PLC exposes a few different services, including:
 - **OPC-UA Server** - this can be used to read, write, and subscribe to tags on the PLC.
-- **Modbus Server** - configured via a `MB_SERVER` block in the PLC code. Allows coils and registers to be read from and written to by a modbus client
+- **Modbus Server** - configured via a `MB_SERVER` block in the PLC code. Allows coils and registers to be read from and written to by a Modbus client
 - **HTTP Server** - exposes information about the PLC, and can also be used to administrate it
 - **S7comm** - Siemens' own, proprietary protocol
 

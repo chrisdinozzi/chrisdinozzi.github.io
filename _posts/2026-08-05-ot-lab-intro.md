@@ -2,7 +2,7 @@
 layout: post
 title: "I Built a Factory (OT Security Lab)"
 subtitle: "and you can too!"
-date: 2099-07-01
+date: 2026-08-05
 description: "An overview of my OT security lab and an index of all the upcoming blog posts related to it."
 ---
 
@@ -23,7 +23,7 @@ If you're like me and work in OT security, or you just want to get your hands di
 
 I am not an automation engineer. I have got plenty wrong along the way and I will point those mistakes out as they come up, because the mistakes are usually more useful than the successes.
 
-![The completed OT lab on a plywood board, showing the Siemens S7-1200 PLC, power supply, ethernet switch, buttons and fan](https://cdino.net/blog/res/ot-lab-complete-rig.jpg)
+![The completed OT lab on a plywood board, showing the Siemens S7-1200 PLC, power supply, ethernet switch, buttons and fan](/blog/res/ot-lab-full-rig.JPG)
 
 ## Why build an OT lab?
 *But you could just simulate it...*
@@ -32,7 +32,7 @@ I am not an automation engineer. I have got plenty wrong along the way and I wil
 
 *That looks scary and I can't do it...*
 
-These are all thoughts I've had in the past (and during the build!) that stopped me from taking the leap. There's a few good reasons to build your own lab:
+These are all thoughts I've had in the past (and during the build!) that stopped me from taking the leap. There are a few good reasons to build your own lab:
 
 1. **Learning**
 
@@ -54,7 +54,7 @@ These are all thoughts I've had in the past (and during the build!) that stopped
 If you work in OT security and have never had your hands on the hardware, this is for you. If you come from IT and want to understand what makes OT different, this is for you too. And if you just want to build a PLC lab on your kitchen table, the build posts should get you most of the way there.
 
 ## The Lab
-The lab itself is, by all accounts, quite simple. A PLC, switch, some buttons, and a fan make up nearly all of the industrial components. I used a SIEMENS S7-1200. If you're interested in getting one yourself, check out my [buyers guide](https://cdino.net/blog/2026/s7-1200-plc-cpu-buyers-guide/). The systems run virtually on a mini PC, including the firewall (because hardware firewalls are not cheap!!). 
+The lab itself is, by all accounts, quite simple. A PLC, switch, some buttons, and a fan make up nearly all of the industrial components. I used a SIEMENS S7-1200. If you're interested in getting one yourself, check out my [buyer's guide](https://cdino.net/blog/2026/s7-1200-plc-cpu-buyers-guide/). The systems run virtually on a mini PC, including the firewall (because hardware firewalls are not cheap!!). 
 In my lab, the systems don't just include OT systems, but also a few IT ones too, to add a level of realism and more attack (and learning!) vectors.
 
 I wouldn't encourage *anyone* to copy and paste what I've done, for two reasons:
@@ -64,7 +64,7 @@ I wouldn't encourage *anyone* to copy and paste what I've done, for two reasons:
 2. Where's the fun in that? You might spend all day working with Rockwell PLCs, or Siemens. Or with RTUs, not PLCs. You should adapt your build to best suit your needs and learning requirements.
 
 ## The Series
-There are 4 main parts to this series that follows a fairly logical flow.
+There are 4 main parts to this series that follow a fairly logical flow.
 
 ### Design
 - **OT Homelab Design** - the high level view on the hardware build, network, and systems
@@ -76,12 +76,11 @@ There are 4 main parts to this series that follows a fairly logical flow.
 - **Enterprise IT** - The architecture and implementation of the IT systems
 
 ### Attack
-- **OPC-UA Recon** - lets make a simple tool to scan OPC-UA servers!
+- **OPC-UA Recon** - let's make a simple tool to scan OPC-UA servers!
 - **Attacking the PLC** - conducting attacks against HTTP, S7Comm, Modbus, and OPC-UA protocols, looking at existing tools, what they really do, and what the real risks are.
 - **Modbus MITM** - a dedicated article diving deep into Modbus MITM attacks.
 
 
 ### Defend
 - **Hardening the PLC** - how to reduce the attack surface of your PLC and why it's effective at reducing real risk
-- **Securing the Systems** - hardening our OT systems
-- **Firewall Rules** - putting the firewall to good use
+- **Securing the Network and Systems** - hardening our OT systems, including configurations and firewall rules

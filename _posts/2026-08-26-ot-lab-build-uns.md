@@ -2,7 +2,7 @@
 layout: post
 title: "OT Homelab Build - UNS"
 subtitle: "The truth, the whole truth, and nothing but the truth!"
-date: 2099-07-22
+date: 2026-08-26
 description: "Building the Unified Namespace (UNS) system for the OT Homelab."
 ---
 
@@ -47,7 +47,7 @@ A Unified Namespace (UNS) is more of an *idea* than a system itself but is often
 
 ### OPC-UA
 It's worth delving into OPC-UA a bit more here, in case you haven't come across it before.
-OPC-UA (Open Platform Communications - Unified Architecture) is a vendor neutral protocol for moving data around in industrial networks. 
+OPC-UA (Open Platform Communications - Unified Architecture) is a vendor-neutral protocol for moving data around in industrial networks. 
 Unlike a lot of older industrial protocols that were tied to a single vendor's ecosystem, OPC-UA is an open standard, so kit from different manufacturers can all speak it without needing a bespoke driver for every pairing. That alone makes it a sensible backbone for getting data off the floor.
 It works on a client-server model. The PLC runs an OPC-UA server that exposes its data (on TCP port 4840 by default), and anything that wants that data - my SCADA, my gateway - connects to it as a client. Clients can read values, write them back, or subscribe to a tag and be told whenever it changes, rather than having to sit there constantly polling for updates.
 
@@ -89,18 +89,18 @@ I ended up using JSON. The gateway ingests data from the PLC via OPC-UA and expo
 
 #### Sparkplug B
 This is the proper good one. It's an open spec that sits on top of MQTT and adds in all the prescriptive structure that MQTT, rightfully, avoids. Sparkplug B brings in:
-- **Defined topic namespaces** - rather than coming up with your own topic layout, Sparkplug B prescribes you with one: `spBv1.0/{group}/{message type}/{edge node}/{device}`. This means everything that speaks Sparkplug B speaks it the same way.
+- **Defined topic namespaces** - rather than coming up with your own topic layout, Sparkplug B gives you one: `spBv1.0/{group}/{message type}/{edge node}/{device}`. This means everything that speaks Sparkplug B speaks it the same way.
 - **Birth and Death Certificates** - when an edge node connects, it publishes a *birth* certificate, letting everyone else know who it is and what it knows. It also gives a *death* certificate to the broker, so that if the node falls off the network, the broker can tell everyone else about it.
 - **Binary Payloads** - rather than plain text, messages are encoded, and thus compressed, shrinking their footprint on the wire.
 - **Sequence Numbers** - to help subscribers know if they missed a memo.
 
-One of the obvious downsides is that you can't read it straight out the box like you can with JSON, you need some way of decoding the message first if you're trying to troubleshoot.
+One of the obvious downsides is that you can't read it straight out of the box like you can with JSON, you need some way of decoding the message first if you're trying to troubleshoot.
 
 > Why are you using JSON instead of Sparkplug B?
 
-For simplicity and compatibility. Using standard MQTT with JSON payloads is much more simple than Sparkplug B, and much more widely supported by different systems. My historian doesn't support it out of the box but I will explore Sparkplug B for homelabs in later articles.
+For simplicity and compatibility. Using standard MQTT with JSON payloads is much simpler than Sparkplug B, and much more widely supported by different systems. My historian doesn't support it out of the box but I will explore Sparkplug B for homelabs in later articles.
 
-Now we have some background, lets look at how we actually deploy this.
+Now we have some background, let's look at how we actually deploy this.
 
 ## Systems
 ### MQTT Broker (HiveMQ)
@@ -504,6 +504,6 @@ I used the DNS service built into OPNsense as my DNS server. You're welcome to r
 The compose file can then be run using `docker compose up -d`. You can then monitor the logs by running `docker compose logs -f`.
 
 ## Final Thoughts
-Through this article, we've looked at how we can set up our own UNS system to help move data around our lab in a more painless way. Although we've been unable to fully utilise it due to incompatability issues between Ignition Maker Edition and MQTT, it's still been a very worthwhile learning excerise to get hands on with systems that are becoming more and more relevant within OT.
+Through this article, we've looked at how we can set up our own UNS system to help move data around our lab in a more painless way. Although we've been unable to fully utilise it due to incompatibility issues between Ignition Maker Edition and MQTT, it's still been a very worthwhile learning exercise to get hands on with systems that are becoming more and more relevant within OT.
 
 In the next article, we'll delve deeper into the SCADA and Historian systems.

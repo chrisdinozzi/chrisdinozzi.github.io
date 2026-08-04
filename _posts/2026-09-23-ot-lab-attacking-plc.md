@@ -2,7 +2,7 @@
 layout: post
 title: "Attacking the SIEMENS S7-1200 PLC"
 subtitle: "Hacking PLCs for fun and for profit!"
-date: 2099-07-29
+date: 2099-09-23
 description: "Looking at different attack vectors for the SIEMEN S7-1200 PLC CPU and how they can be exploited."
 --- 
 
@@ -17,6 +17,7 @@ description: "Looking at different attack vectors for the SIEMEN S7-1200 PLC CPU
   - [S7comm](#s7comm)
   - [OPC-UA](#opc-ua)
   - [Modbus](#modbus)
+    - [Man-in-the-Middle](#man-in-the-middle)
 - [Final Thoughts](#final-thoughts)
 
 
@@ -265,9 +266,22 @@ Using [this](https://github.com/tijldeneut/ICSSecurityScripts/blob/master/S7-120
 ### OPC-UA
 We dove deeper into OPC-UA in a previous article where we looked at how bad authentication practice could lead to tags being written to by strangers. Check if out [here](https://cdino.net/blog/2026/ot-lb-opc-ua-scanner) to see more.
 
+TODO - other OPC-UA attack vectirs
+
 ### Modbus
-See Modbus MITM article
-TODO
+Plain old TCP Modbus is about as insecure as you can get. Within the Modbus Protocol specification, there is no:
+- Authentication
+- Authorisation
+- Encryption
+- Integrity Checks
+- Replay Protection
+
+This makes Modbus quite a vulnerable protocol to run in your environment. This risk is naturally reduced due to defense in depth - with modbus traffic not usually coming past level 2, but if an attacker got that deep into your environment (or came in through the backdoor!) they can have a lot of fun playing with Modbus.
+
+We could try a few different attacks here, but I want to focus on a MITM tampering attack - because it's cool.
+
+#### Man-in-the-Middle
+We start by performing an ARP Poisining attack (or ARP Spoofing) to trick the modbus server into thinking I'm the client, and vice versa. This means, when the server attempts to resolve the MAC address of the client, it will instead get my IP, sending the traffic to me instead. From there, I can tamper with it, and then send it onwards.
 
 ## Final Thoughts
 TODO

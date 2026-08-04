@@ -2,8 +2,8 @@
 layout: post
 title: "OT Homelab Build - SCADA and Historian"
 subtitle: "Supervise, Control, Acquire - and Remember!"
-date: 2099-07-29
-description: "Building the SCADA and Historian System system for the OT Homelab."
+date: 2026-09-02
+description: "Building the SCADA and Historian System for the OT Homelab."
 --- 
 - [Goals](#goals)
 - [What is SCADA?](#what-is-scada)
@@ -25,27 +25,27 @@ description: "Building the SCADA and Historian System system for the OT Homelab.
 4. Get live PLC data visible in a dashboard and stored for historical queries
 
 ## What is SCADA?
-Supervisory Control and Data Acquisition (SCADA) refers to software that sites above your PLCs (or RTUs, or whatever else you use to control your level 0), and lets you see (Supervise) what's happening on the plant floor. It can also be used to interact with (Control) deives where permitted and gather (Data Acquisition) information about the goings on. 
+Supervisory Control and Data Acquisition (SCADA) refers to software that sits above your PLCs (or RTUs, or whatever else you use to control your level 0), and lets you see (Supervise) what's happening on the plant floor. It can also be used to interact with (Control) devices where permitted and gather (Data Acquisition) information about the goings on. 
 
 ## What is a Historian?
-A Historian is a time series database what stores tag values over time. It allows you to have a historical view over how your data has changed over time. This comes in handy for businesses when doing analysis work, since they can essentially pull a snapshot of the factory for any time period they need.
+A Historian is a time series database that stores tag values over time. It allows you to have a historical view over how your data has changed over time. This comes in handy for businesses when doing analysis work, since they can essentially pull a snapshot of the factory for any time period they need.
 
 ## Why OPC-UA over Modbus for SCADA?
 We touched on OPC-UA in the last article, but I want to take a moment here to look at why we would use it for SCADA over something like Modbus.
-Modbus is simple. It works fine as intended. It's still used on many sites. But it's old. It's extremly basic, you have to know your mappings of holding registers, you can't browser any information. It has no authentication and a myriad of other security risks.
+Modbus is simple. It works fine as intended. It's still used on many sites. But it's old. It's extremely basic, you have to know your mappings of holding registers, you can't browse any information. It has no authentication and a myriad of other security risks.
 
-OPC-UA can do mch more. You can browser the tags, give them meaningful names and data types, subscribe to data rather than just spam reading it. It also has a lot more security options built in like certification or account authentication, message signing, and encryption.
+OPC-UA can do much more. You can browse the tags, give them meaningful names and data types, subscribe to data rather than just spam reading it. It also has a lot more security options built in like certification or account authentication, message signing, and encryption.
 
-Modbus still has its place, and we'll explore some attacks around it later in this series, but for our homelab, we're picking OPC-UA to get more familiar with the modern conviences and security measures that it offers.
+Modbus still has its place, and we'll explore some attacks around it later in this series, but for our homelab, we're picking OPC-UA to get more familiar with the modern conveniences and security measures that it offers.
 
 ## Systems
 
 ### SCADA (Ignition)
 
 #### Connecting to the PLC
-Ignition connects to the PLCs OPC-UA server where specific tags are exposed. There tags can be read, subscribde, or written to, giving Ignition the ability to control the system, not just supervise and acquire.
+Ignition connects to the PLC's OPC-UA server where specific tags are exposed. There tag's can be read, subscribe, or written to, giving Ignition the ability to control the system, not just supervise and acquire.
 
-I already covered setting up the OPC-UA server in [this](INSERT LINK HERE) post, so let's look at how we get Ignition talking to it.
+I already covered setting up the OPC-UA server in [this](https://cdino.net/blog/2026/ot-lab-build-uns) post, so let's look at how we get Ignition talking to it.
 
 1. We start by logging into the Ignition web portal using the credentials we set during deployment (admin:password (very secure!!)).
 2. Next, navigate to **Connections -> OPC -> Connections** and click **Create OPC Connection**. Select **OPC UA Connection** and click next.
@@ -78,12 +78,12 @@ Next, I created a new view and dragged my tags onto it. It was super basic, but 
 
 ![Very basic ignition HMI](/blog/res/ot-lab-build-ignition-hmi-basic.png)
 
-I could then access it via Ignition Perspective (go to your Igniton Webpage -> Perspective -> Click your project) and control my PLC via the HMI!
+I could then access it via Ignition Perspective (go to your Ignition Webpage -> Perspective -> Click your project) and control my PLC via the HMI!
 
 ### Historian (InfluxDB 3 Core)
-As mentioned above, the historian lets us stored data mapped to time stamps, allowing us to retrieve old events and nicely chart values agaisnt time.
+As mentioned above, the historian lets us store data mapped to time stamps, allowing us to retrieve old events and nicely chart values against time.
 
-I found setting up InfluxDB 3 Core to ingest MQTT data a bit of a headache, so I've included a fairly comprehensive guide below that will hopefully help you avoid my pain. The guide assumes you've got the same docker config as my running already.
+I found setting up InfluxDB 3 Core to ingest MQTT data a bit of a headache, so I've included a fairly comprehensive guide below that will hopefully help you avoid my pain. The guide assumes you've got the same docker config that I'm already running.
 
 1. I had to fix some permissions since the container wasn't running as root:
     ``` bash
@@ -104,7 +104,7 @@ I found setting up InfluxDB 3 Core to ingest MQTT data a bit of a headache, so I
     ``` bash
     docker exec influxdb3-core influxdb3 create database homelab --retention-period 7d
     ```
-5. Next, we have to install the MQTT Subscribe plugin. There are commands to help with plugin installs, but I found it a bit wonky, so we'll do it manually instread.
+5. Next, we have to install the MQTT Subscribe plugin. There are commands to help with plugin installs, but I found it a bit wonky, so we'll do it manually instead.
     ``` bash
     curl -o mqtt_subscriber.py \
     https://raw.githubusercontent.com/influxdata/influxdb3_plugins/main/influxdata/mqtt_subscriber/mqtt_subscriber.py
@@ -122,7 +122,7 @@ I found setting up InfluxDB 3 Core to ingest MQTT data a bit of a headache, so I
     --plugin-dir /var/lib/influxdb3/plugins \
     paho-mqtt
     ```
-7. Then we can create out configuration file `mqtt_config.toml`:
+7. Then we can create our configuration file `mqtt_config.toml`:
     ``` toml
     [mqtt]
     broker_host = "hivemq-ce"
@@ -144,7 +144,7 @@ I found setting up InfluxDB 3 Core to ingest MQTT data a bit of a headache, so I
     red_led_on = ["$.values.Red_LED_On", "bool"]
     operating_mode = ["$.values.OperatingMode", "int"]
     ```
-    Since our broker is running on the same server, we can reference it by it's container name, `hivemq-ce`, otherwise this would have to be an IP or FQDN.
+    Since our broker is running on the same server, we can reference it by its container name, `hivemq-ce`, otherwise this would have to be an IP or FQDN.
     Topics and mappings will also differ depending on your chosen naming structure. If you're unsure, have a look at the data in the broker using a tool like MQTT Explorer.
 8. Copy the config file into the container:
     ``` bash
@@ -180,12 +180,12 @@ docker exec influxdb3-core influxdb3 query \
 "SELECT * FROM system.processing_engine_logs ORDER BY event_time DESC LIMIT 10"
 ```
 
-One annoying error I ran into was an `exit code 132` every time I tried to start the container. This ended up being related to the proxmox CPU architecture. It was solved by changing the host VMs CPU type to `host` rather than `kvm64`.
+One annoying error I ran into was an `exit code 132` every time I tried to start the container. This ended up being related to the proxmox CPU architecture. It was solved by changing the host VM's CPU type to `host` rather than `kvm64`.
 
 ## Viewing Data
 We'll take a look at how we can start to visulise the data in the next part of this series, where we set up Grafana in our IT network!
 
 ## Final Thoughts
-Through this article we've look at how to set up Ignition to work as a SCADA system over OPC-UA. We've also dived deep into setting up our historian to pull data out of the UNS system.
+Through this article we've looked at how to set up Ignition to work as a SCADA system over OPC-UA. We've also dived deep into setting up our historian to pull data out of the UNS system.
 
 In the next article, we'll look at how we can visualise that historian data to be used by the business.

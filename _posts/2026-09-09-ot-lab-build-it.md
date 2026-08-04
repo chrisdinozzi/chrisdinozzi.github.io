@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "OT Homelab Build - IT and Data Visulisation"
+title: "OT Homelab Build - IT and Data Visualisation"
 subtitle: "You can look, but you can't touch!"
-date: 2099-07-29
-description: "Creating visulisation dashboards using Grafana using data from the Historian."
+date: 2026-09-09
+description: "Creating Visualisation dashboards using Grafana and data from the Historian."
 --- 
 
 - [Goals](#goals)
@@ -16,12 +16,14 @@ description: "Creating visulisation dashboards using Grafana using data from the
 
 
 ## Goals
-TODO
+1. Explain the components that make up the IT network
+2. Access our factory data from the IT zone
+3. Use our factory data to create a dashboard
 
 ## Systems
-Our IT section is much more simple, with only one application running (well, plus Caddy). Again, it's all run using [Docker Compose](https://github.com/chrisdinozzi/caaf/blob/main/it-systems/docker-compose.yml):
+Our IT section is much simpler, with only one application running (well, plus Caddy). Again, it's all run using [Docker Compose](https://github.com/chrisdinozzi/caaf/blob/main/it-systems/docker-compose.yml):
 
-``` docker
+``` yaml
 name: it-homelab
 
 
@@ -83,20 +85,20 @@ services:
 ```
 
 ### Caddy
-As mentioned in the [UNS build](insert.link) article, Caddy is used as a reverse proxy to serve the web interface of the application over a nice clean *home.lab domain. It also provides HTTPS via the local CA.
+As mentioned in the [UNS build](https://cdino.net/blog/2026/ot-lab-build-uns) article, Caddy is used as a reverse proxy to serve the web interface of the application over a nice clean \*home.lab domain. It also provides HTTPS via the local CA.
 
 ### Grafana
 Grafana is used to serve dashboards fed by the data historian. It's a popular application for this use case and is, therefore, well documented online. It supports a number of different ways of ingesting data, which we will look at further below.
 
 We configure the login for Grafana via the .env file where we place a username and password. 
 
-``` .env
+``` bash
 TZ=Europe/London
 GRAFANA_ADMIN_USER=admin
 GRAFANA_ADMIN_PASSWORD=password
 ```
 
-Once Grafana and Caddy are up and running, we can start to acceess some data via Grafana.
+Once Grafana and Caddy are up and running, we can start to access some data via Grafana.
 
 #### Accessing Data
 This won't be a fully comprehensive guide but it should give you some pointers if you want to copy me.
@@ -110,7 +112,7 @@ Grafana supports InfluxDB out-of-the-box, so a quick search for 'InfluxDB' loads
 We can then configure our new data source with the following:
 - **Query Language:** SQL
 - **HTTP -> URL:** https://172.16.1.10:8181     <-- Our historian
-- **Database:** Homelab
+- **Database:** homelab
 - **Insecure Connection**: True
 
 Next, hit 'Save and Test'. If it works, it works! Now, we can create a dashboard.
@@ -120,7 +122,7 @@ Again, creating Grafana dashboards is a well documented process, so I won't dive
 
 ![GIF demo of Grafana Dashboard](/blog/res/ot-lab-build-it-grafana-demo.gif)
 
-As you can see in this, slightly stuttery, GIF above, when we use the HMI to make changes to the PLC data, they are nearly immedeitly reflected in the dashboard (give or take the 5s auto refresh window in Grafana + some latency).
+As you can see in this, slightly stuttery, GIF above, when we use the HMI to make changes to the PLC data, they are nearly immediately reflected in the dashboard (give or take the 5s auto refresh window in Grafana + some latency).
 
 From here, we can easily monitor the status of the lights and fan, as well as quickly see how the lights have changed over time, and get a detailed view of data in the table at the bottom.
 

@@ -2,7 +2,7 @@
 layout: post
 title: "OPC-UA Scanning"
 subtitle: "Knock Knock. Who's there?"
-date: 2099-07-29
+date: 2026-09-16
 description: "Analysing security controls in OPC-UA servers and what we can learn by scanning them"
 --- 
 
@@ -42,7 +42,7 @@ Nearly all OPC-UA servers will present the same, common security controls. The o
 If you've worked with other systems before, none of these will come as a surprise but it is worth taking some time to understand them in an OT context to ensure we know the tools we have at our disposal.
 
 ### Security Policies
-[Security Policies](https://reference.opcfoundation.org/specs/OPC-10000-2/4.6) are how servers tell clients which cryptographic algorithms is can support for encryption, signing, and hashing. The client can pick from these to initiate its secure (or in some cases, not secure) connection to the server.
+[Security Policies](https://reference.opcfoundation.org/specs/OPC-10000-2/4.6) are how servers tell clients which cryptographic algorithms it can support for encryption, signing, and hashing. The client can pick from these to initiate its secure (or in some cases, not secure) connection to the server.
 
 The below table (which is nabbed from [here](https://deepwiki.com/awcullen/opcua/6.1-security-policies-and-modes#security-policies)) gives a helpful overview.
 
@@ -56,7 +56,7 @@ The below table (which is nabbed from [here](https://deepwiki.com/awcullen/opcua
 |Aes256Sha256RsaPss|http://opcfoundation.org/UA/SecurityPolicy#Aes256_Sha256_RsaPss|AES-256 with SHA-256 and RSA-PSS|
 
 ### Security Mode
-If Security Policy defines what should be applied to the connection, the Security Mode defines how it should be done. There are 3 differrent security modes that can be chosen from.
+If Security Policy defines what should be applied to the connection, the Security Mode defines how it should be done. There are 3 different security modes that can be chosen from.
 - **None** - No security is applied to the communication - nothing is signed or encrypted.
 - **Sign** - Messages are signed but are not encrypted.
 - **SignAndEncrypt** - Messages are both encrypted and signed.
@@ -65,10 +65,10 @@ None should only be used for testing or debugging.
 
 You could get away with Sign if your data is not confidential (which this type of data often isn't really that confidential). This gives you the ability to still sniff the traffic for debugging purposes but adds a much needed layer of integrity between client and server, reducing the risk of packets being tampered with.
 
-Of course, Sign and Encrypt is the best, and should be used in production where possible. It keeps your traffic private and integral, and will impress your auditors! However, this adds the need to manage certificates for your OPC-UA server which is an added layer of complexity. An added layer of complexity that is worth dealing with to reduce the risk, but none the less, it's added.
+Of course, Sign and Encrypt is the best, and should be used in production where possible. It keeps your traffic private and integral, and will impress your auditors! However, this adds the need to manage certificates for your OPC-UA server which is an added layer of complexity. An added layer of complexity that is worth dealing with to reduce the risk, but nonetheless, it's added.
 
 ### User Authentication
-You don't want just anyone logging into your OPC-UA server and looking at (or writing to!) your tags. These controls allow you to set up user accounts, or at least create some layer of trust, to facilatate the connection between a client and server.
+You don't want just anyone logging into your OPC-UA server and looking at (or writing to!) your tags. These controls allow you to set up user accounts, or at least create some layer of trust, to facilitate the connection between a client and server.
 
 #### Guest / Anonymous
 Well, this one doesn't achieve much. Leaving Guest or Anonymous access on allows anyone to connect to your OPC-UA server. There are *some* scenarios where this might be desired, but 99/100 times you will not want any of your OPC-UA endpoints to support this.
@@ -80,7 +80,7 @@ As it says on the tin. A username and password can be supplied by the client to 
 More so used to authenticate between systems than users, certificates are another supported method for authentication. 
 
 #### SSO
-Some more modern OPC-UA servers will even offer SSO options via things like Kerberos or OAuth. This makes user management far easier, bringing it inline with other modern systems.
+Some more modern OPC-UA servers will even offer SSO options via things like Kerberos or OAuth. This makes user management far easier, bringing it in line with other modern systems.
 
 ## Scanning OPC-UA Servers
 As mentioned above, when you first connect to an OPC-UA server, it will advertise what security controls it supports. This means we can write a little tool to scan OPC-UA servers and gather information on how secure (or not!) they are. 
@@ -95,7 +95,7 @@ With this tool, we can do the following:
 - Output our results to CSV.
 
 ### Basic Recon Scan
-We can run a basic scan agaisnt the OPC-UA server running on the S7-1200 and see what we get back:
+We can run a basic scan against the OPC-UA server running on the S7-1200 and see what we get back:
 
 ![basic demo](/blog/res/ot-lab-opc-scanner-demo-basic.gif)
 
@@ -116,7 +116,7 @@ Target:  opc.tcp://10.0.0.10:4840
   Supported Login Methods:  [Anonymous (guest) Username/Password]
 ***
 [+] Anonymous Access Available
-[+] Credential Accesss Available
+[+] Credential Access Available
 [Endpoint 2]
   URL:             opc.tcp://10.0.0.10:4840
   Security mode:   MessageSecurityModeSign
@@ -127,7 +127,7 @@ Target:  opc.tcp://10.0.0.10:4840
   Supported Login Methods:  [Anonymous (guest) Username/Password]
 ***
 [+] Anonymous Access Available
-[+] Credential Accesss Available
+[+] Credential Access Available
 [Endpoint 3]
   URL:             opc.tcp://10.0.0.10:4840
   Security mode:   MessageSecurityModeSignAndEncrypt
@@ -138,7 +138,7 @@ Target:  opc.tcp://10.0.0.10:4840
   Supported Login Methods:  [Anonymous (guest) Username/Password]
 ***
 [+] Anonymous Access Available
-[+] Credential Accesss Available
+[+] Credential Access Available
 ---
 ```
 
@@ -146,7 +146,7 @@ Target:  opc.tcp://10.0.0.10:4840
 
 You can see we found 3 endpoints, one for each of the supported security modes and security policy combinations.
 We can also see they all support Anonymous and Credential based access. 
-Lets see if that anonymous access works for endpoint 1.
+Let's see if that anonymous access works for endpoint 1.
 
 `opcua-recon -ip 10.0.0.10 -security-mode none -probe-anon`
 
@@ -165,7 +165,7 @@ Target:  opc.tcp://10.0.0.10:4840
   Supported Login Methods:  [Anonymous (guest) Username/Password]
 ***
 [+] Anonymous Access Available
-[+] Credential Accesss Available
+[+] Credential Access Available
 [*] Checking if Anonymous access works...
 [+] anonymous login SUCCEEDED
 ---
@@ -173,7 +173,7 @@ Target:  opc.tcp://10.0.0.10:4840
 
 ### Search for Writeable Tags
 
-Looks like we have anonymous access. I wonder if there are any tags we have write access too...
+Looks like we have anonymous access. I wonder if there are any tags we have write access to...
 
 `opcua-recon -ip 10.0.0.10 -security-mode none -probe-anon -probe-write`
 
@@ -192,7 +192,7 @@ Target:  opc.tcp://10.0.0.10:4840
   Supported Login Methods:  [Anonymous (guest) Username/Password]
 ***
 [+] Anonymous Access Available
-[+] Credential Accesss Available
+[+] Credential Access Available
 [*] Checking if Anonymous access works...
 [+] anonymous login SUCCEEDED
 [*] Attempting to find writeable tags on opc.tcp://10.0.0.10:4840 with Anonymous credentials
@@ -225,4 +225,6 @@ Lets take it one step further and see if we can really write to these tags. I'll
 There we have it - we successfully found and wrote to an OPC-UA tag with zero authentication.
 
 ## Final Thoughts
-In this article we've looked at some of the security controls available for protecting OPC-UA servers, and how neglecting them can make it trivially easy for unwanted guests to tamper with tag values. Of course, defense in depth is a concept that shouldn't be ignored in the real world, where we wouldn't be reliant on only the controls offered by a specific system, but we shouldn't neglect to harden all systems where possible. You never know when a lazy vendor will accidently expose your OPC-UA server to the internet!
+In this article we've looked at some of the security controls available for protecting OPC-UA servers, and how neglecting them can make it trivially easy for unwanted guests to tamper with tag values. Of course, defense in depth is a concept that shouldn't be ignored in the real world, where we wouldn't be reliant on only the controls offered by a specific system, but we shouldn't neglect to harden all systems where possible. You never know when a lazy vendor will accidentally expose your OPC-UA server to the internet!
+
+In the next article, we'll look at a few different ways the S7-1200 can be attacked more generally.
