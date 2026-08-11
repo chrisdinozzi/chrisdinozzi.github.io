@@ -24,6 +24,11 @@ description: "A look at building the OT Homelab itself"
 ## Goals
 I wanted to build a "full" factory system on one piece of 500x500mm plywood. Of course, I can't fit an *entire* factory onto a plank of wood, but a PSU, PLC, Switch, some I/O, some terminals, and a few cable runs would be enough to get me most of the way there.
 If you want the more detailed breakdown of all the parts, check out the [build design](https://cdino.net/blog/2026/ot-lab-design) article.
+1. Test our hardware
+2. Mount it to the board
+3. Enable the services we want on the PLC
+4. Program our PLC
+
 
 ## The Rig
 ### First Boot
@@ -115,3 +120,4 @@ The fourth section does the opposite. When the fan is on, the green LED is on, a
 
 ## Final Thoughts
 If you're more experienced than I am with PLCs, you might be tearing your hair out reading this article. If so, please feel free to contact me and tell me all the things I've done wrong so I can improve it.
+In the next article, we'll build the UNS system!

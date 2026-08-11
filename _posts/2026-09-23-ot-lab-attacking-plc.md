@@ -17,7 +17,6 @@ description: "Looking at different attack vectors for the SIEMEN S7-1200 PLC CPU
   - [S7comm](#s7comm)
   - [OPC-UA](#opc-ua)
   - [Modbus](#modbus)
-    - [Man-in-the-Middle](#man-in-the-middle)
 - [Final Thoughts](#final-thoughts)
 
 
@@ -255,6 +254,13 @@ We can also snoop around the webpage to do some data gathering while we're here.
 - Any Uploaded Files (including recipes)
 - and so much more!
 
+This does all seem pretty scary, but lets put it in context:
+- Web access can be disabled, and often times is.
+- Even if it's enabled, it is often behind credential based access.
+- Even if the access is open, it often isn't exposed to the internet.
+
+Now of course, there are instances where it all goes wrong, but with a few good security controls, this type of risk can be nullified. 
+
 ### S7comm
 We can take advantage of the S7comm protocol to manipulate the digital outputs at will.
 Using [this](https://github.com/tijldeneut/ICSSecurityScripts/blob/master/S7-1200-Workshop.py) script, we can simply decide which outputs we want on and off, and run it.
@@ -278,10 +284,7 @@ Plain old TCP Modbus is about as insecure as you can get. Within the Modbus Prot
 
 This makes Modbus quite a vulnerable protocol to run in your environment. This risk is naturally reduced due to defense in depth - with modbus traffic not usually coming past level 2, but if an attacker got that deep into your environment (or came in through the backdoor!) they can have a lot of fun playing with Modbus.
 
-We could try a few different attacks here, but I want to focus on a MITM tampering attack - because it's cool.
-
-#### Man-in-the-Middle
-We start by performing an ARP Poisining attack (or ARP Spoofing) to trick the modbus server into thinking I'm the client, and vice versa. This means, when the server attempts to resolve the MAC address of the client, it will instead get my IP, sending the traffic to me instead. From there, I can tamper with it, and then send it onwards.
+We could try a few different attacks here, but I want to focus on a MITM tampering attack. It's a slightly complex attack, so I'll be dedicating a whole article to it. We'll also look at a tool I made to help pull it off.
 
 ## Final Thoughts
 TODO
