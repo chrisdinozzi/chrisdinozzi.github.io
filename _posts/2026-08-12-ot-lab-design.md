@@ -2,7 +2,7 @@
 layout: post
 title: "OT Homelab - Design"
 subtitle: "The what and the why"
-date: 2026-08-11
+date: 2026-08-12
 description: "The design of my OT Security homelab including hardware, networking, and software."
 ---
 
