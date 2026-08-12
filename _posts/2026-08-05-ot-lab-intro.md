@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "I Built a Factory (OT Security Lab)"
+title: "I Built a Factory (OT Homelab)"
 subtitle: "and you can too!"
 date: 2026-08-05
 description: "An overview of my OT security lab and an index of all the upcoming blog posts related to it."
