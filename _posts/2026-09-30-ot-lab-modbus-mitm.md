@@ -19,9 +19,12 @@ description: "TODO"
 3. Modify traffic on the wire to cause chaos in the factory
 
 ## What even is a MitM attack??
+
 ### ARP
 
 ## Performing an ARP Spoof (or ARP Poison)
+
 ### Sniffing Traffic
+Now that we've 
 
 ## Modifying Traffic
