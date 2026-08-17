@@ -11,7 +11,7 @@ description: "A look at building the OT Homelab itself"
   - [First Boot](#first-boot)
   - [Mounting the Hardware](#mounting-the-hardware)
   - [Making it Pretty](#making-it-pretty)
-- [PLC Programming](#plc-programming)
+- [PLC Configuration](#plc-configuration)
   - [Modbus](#modbus)
   - [OPC-UA](#opc-ua)
   - [PLC Tags](#plc-tags)
@@ -69,7 +69,7 @@ I picked up an easel to display the board on. I did consider mounting it to my w
 
 ![The final build](/blog/res/ot-lab-complete-rig.jpg)
 
-## PLC Programming
+## PLC Configuration
 I won't go in depth about exactly how I configured my PLC (lest I embarrass myself terribly) but I'll give you the highlights and the resources I found helpful. I do share these diagrams hesitantly, as I have 0 formal training with PLCs. 
 
 ### Modbus
