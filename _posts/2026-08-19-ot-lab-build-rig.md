@@ -61,16 +61,16 @@ Then it was a case of mounting things down. I used 10mm long screws so as not to
 
 
 ### Making it Pretty
-And finally, some cable management. I didn't buy any cable trunking until I saw how much of a mess I had made. I had looked online for some previously, but struggled to find what I was looking for, until I came across the right terminology of "open slotted trunking". I picked up 2M (the smallest I could find) of 25mm trunking and cut it down to the sizes I needed.
+And finally, some cable management. I didn't buy any cable trunking until I saw how much of a mess I had made. I had looked online for some previously, but struggled to find what I was looking for, until I came across the right terminology of "open slotted trunking". I picked up 2 metres (the smallest I could find) of 25mm trunking and cut it down to the sizes I needed.
 
 I got the PC mounted using a [generic bracket](https://www.ebay.co.uk/itm/406510935592) I picked up on eBay, and a [USB-Ethernet interface](https://www.amazon.co.uk/dp/B09MFY8799?ref=ppx_yo2ov_dt_b_fed_asin_title) to add the extra port I needed for the firewall.
 
-I picked up an easel to display the board on. I did consider mounting it to my wall, or putting up a new shelf for it, but I'm just not ready for that level of commitment. The easel does everything I want, and it'll make it easy to take the board around to conferences and shows.
+I picked up an easel to display the board on. I did consider mounting it to my wall, or putting up a new shelf for it, but I'm just not ready for that level of commitment. The easel does everything I want, and it'll make it easy to move around if I need to.
 
-![The final build](/blog/res/ot-lab-build-rig-final.jpg)
+![The final build](/blog/res/ot-lab-complete-rig.jpg)
 
 ## PLC Programming
-I won't go in depth about exactly how I configured my PLC but I'll give you the highlights and the resources I found helpful.
+I won't go in depth about exactly how I configured my PLC (lest I embarrass myself terribly) but I'll give you the highlights and the resources I found helpful. I do share these diagrams hesitantly, as I have 0 formal training with PLCs. 
 
 ### Modbus
 One of the first things I did was set up the Modbus server on my PLC. If you've never worked with PLCs or ladder logic before, this will seem a strange way to enable a network service (at least, I thought so!) but it's all part of the learning experience. 
@@ -99,8 +99,7 @@ I made a second data block to store the status of the LEDs and fan. This would g
 ![The monitoring DB](/blog/res/ot-lab-build-rig-plc-db-monitoring.png)
 
 ### Final Ladder Logic
-The final ladder logic is still very simple. The first block controls the Modbus server, as discussed above. The second block controls the fan. If either the green button is pressed, the first Modbus register (register 0)  is set to 1, or the MONITORING.Fan_On tag is set to true, the fan will switch on, and the MONITORING.Fan_On tag is set to true. This causes it to latch, meaning even once I stop pressing the green button, the fan keeps spinning.
-When the red button is pressed, the latch is broken and the fan switches off, setting the monitoring tag back to false.
+The final ladder logic is still very simple. The first block controls the Modbus server, as discussed above. TThe second network controls the fan. It switches on if any of three things are true: the green button is pressed, Modbus register 0 is set to 1, or the MONITORING.Fan_On tag is true. Turning on the fan also sets MONITORING.Fan_On to true, so the rung latches - the fan keeps spinning after I let go of the button. Pressing the red button breaks the latch, switching the fan off and setting the tag back to false.
 
 ![Final ladder logic 1](/blog/res/ot-lab-build-rig-plc-final-ladder-logic1.png)
 
