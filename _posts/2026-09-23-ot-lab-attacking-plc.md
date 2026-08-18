@@ -19,13 +19,23 @@ description: "Looking at different attack vectors for the SIEMEN S7-1200 PLC CPU
   - [Modbus](#modbus)
 - [Final Thoughts](#final-thoughts)
 
+I'll note at the start, we won't cover every aspect of attacking an S7-1200. I'm ignoring SNMP entirely, as well as exploits agaisnt the device itself, for the following reasons:
+1. I didn't want to have to downgrade/upgrade the PLC firmware to get to vulnerable versions
+2. I didn't find the SNMP risks that interesting
+3. I wanted to focus on the 'flashier' attacks instead
+
+I do intend to do a much more indepth analysis at some point, but this article is more thematic to the rest of the series.
 
 ## Goals
 - Scan our PLC to see what we can learn
 - Attack the different protocols exposed by the PLC
 
 ## Scanning
+What is network scanning without Nmap? Let's look at a few different scans we can run, and the result we get back.
+
 ### Basic Scan
+The most basic scan we can perform. Note the use of the `-Pn` flag to skip discovery, because I've already discovered the assets using my eyes.
+
 `nmap -Pn 10.0.0.10`
 
 ```  bash
@@ -38,8 +48,11 @@ PORT    STATE SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 14.64 seconds
 ```
+It gives us HTTP/HTTPS and nothing else. So we'll have to dig deeper.
 
 ### Port Scan
+Throwing on the `-p 0-65535` flag will give us a full, and much, much slower, scan on the PLC.
+
 `nmap -Pn 10.0.0.10 -p 0-65535`
 
 ``` bash
@@ -56,8 +69,11 @@ PORT     STATE    SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 712.71 seconds
 ```
+That's better. Now we're getting that we expect.
 
 ### Service Scan
+Now we'll try and get some more details on the services. I've filtered the ports based on the last scan for the sake of time.
+
 `nmap -Pn -sV 10.0.0.10 -p 80,102,443,502,4840`
 
 ``` bash
@@ -84,8 +100,10 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 166.22 seconds
 ```
 
+We got a little extra information on port 102, and not much else.
+
 ### Script Scans
-[S7 Info](https://nmap.org/nsedoc/scripts/s7-info.html)
+Time to crack out the scripts. We'll start with [S7 Info](https://nmap.org/nsedoc/scripts/s7-info.html) and see what we get.
 `nmap -Pn 10.0.0.10 --script s7-info.nse -p 102`
 ``` bash
 Starting Nmap 7.97 ( https://nmap.org ) at 2026-07-23 11:57 +0100
@@ -103,7 +121,9 @@ Service Info: Device: specialized
 Nmap done: 1 IP address (1 host up) scanned in 31.03 seconds
 ```
 
-[Modbus Discovery](https://nmap.org/nsedoc/scripts/modbus-discover.html)
+A hardware and firmware number is a good result. The firmware version could be used to begin to identify what exploits might work agaisnt the device.
+
+We'll try [Modbus Discovery](https://nmap.org/nsedoc/scripts/modbus-discover.html) next.
 `nmap -Pn 10.0.0.10 --script modbus-discover.nse --script-args='modbus-discover.aggressive=true' -p 502`
 
 ``` bash
@@ -140,7 +160,10 @@ PORT    STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 10.08 seconds
 ```
 
-[Profinet CM Lookup](https://nmap.org/nsedoc/scripts/profinet-cm-lookup.html)
+Not much of anything...
+
+
+Let's try [Profinet CM Lookup](https://nmap.org/nsedoc/scripts/profinet-cm-lookup.html).
 `sudo nmap -Pn -sU 10.0.0.10 -p 34964 --script profinet-cm-lookup`
 
 ``` bash
@@ -159,7 +182,9 @@ PORT      STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 2.68 seconds
 ```
 
-[Multicast Profinet Discovery](https://nmap.org/nsedoc/scripts/multicast-profinet-discovery.html)
+Nothing new there.
+
+And [Multicast Profinet Discovery](https://nmap.org/nsedoc/scripts/multicast-profinet-discovery.html)?
 `nmap -Pn -sV --script=multicast-profinet-discovery 10.0.0.10`
 
 ``` bash
@@ -188,6 +213,8 @@ SF:n:\x20close\r\n\r\n400");
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 184.99 seconds
 ```
+
+Not much of any use to us.
 
 ## Attacks
 https://github.com/moki-ics/s7-metasploit-modules
@@ -254,7 +281,9 @@ We can also snoop around the webpage to do some data gathering while we're here.
 - Any Uploaded Files (including recipes)
 - and so much more!
 
-This does all seem pretty scary, but lets put it in context:
+Now it's time to make a over-the-top article online about how insecure PLCs are and how hackers are going to hack them all and blow up every factory and destroy the world!!!!!!!!!!!
+
+But lets put it in context:
 - Web access can be disabled, and often times is.
 - Even if it's enabled, it is often behind credential based access.
 - Even if the access is open, it often isn't exposed to the internet.
@@ -267,12 +296,14 @@ Using [this](https://github.com/tijldeneut/ICSSecurityScripts/blob/master/S7-120
 
 ![switching on and off all the DIs using the script](/blog/res/ot-lab-plc-s7comm-attack.gif)
 
-**However, a caveat.** For the above demo, I put a blank project onto the PLC - removing all the ladder logic I'd be using before. I did this because, when my ladder logic was loaded, this attack didn't actually work. This is because the ladder logic instantly overwrote the adhoc input, nullifying the attack. This is a good point to remind you that articles like this, and many, many others, do not always reflect the reality of risk on site. Yes, OT sites are filled with unpatched devices, ancient operating systems, and bad network segmentation, but they are also extremly complex in their own right, with things like ladder logic and saftey systems that are not understood at all by folk in IT, or more traditional cyber security. Therefore, don't always let yourself be taken in by flashy attacks like the above. 
+**However, a caveat.** For the above demo, I put a blank project onto the PLC - removing all the ladder logic I'd be using before. I did this because, when my ladder logic was loaded, this attack didn't actually work. This is because the ladder logic instantly overwrote the adhoc input, nullifying the attack. 
+
+**This is a good point to remind you that articles like this, and many, many others, do not always reflect the reality of risk on site.** Yes, OT sites are filled with unpatched devices, ancient operating systems, and bad network segmentation, but they are also extremly complex in their own right, with things like ladder logic and saftey systems that are not understood at all by folk in IT, or more traditional cyber security. Therefore, don't always let yourself be taken in by flashy attacks like the above. Just because something looks crazy in a video, doesn't mean it would have the same impact in the real world.
 
 ### OPC-UA
 We dove deeper into OPC-UA in a previous article where we looked at how bad authentication practice could lead to tags being written to by strangers. Check if out [here](https://cdino.net/blog/2026/ot-lb-opc-ua-scanner) to see more.
 
-TODO - other OPC-UA attack vectirs
+TODO - other OPC-UA attack vectors
 
 ### Modbus
 Plain old TCP Modbus is about as insecure as you can get. Within the Modbus Protocol specification, there is no:
@@ -282,7 +313,7 @@ Plain old TCP Modbus is about as insecure as you can get. Within the Modbus Prot
 - Integrity Checks
 - Replay Protection
 
-This makes Modbus quite a vulnerable protocol to run in your environment. This risk is naturally reduced due to defense in depth - with modbus traffic not usually coming past level 2, but if an attacker got that deep into your environment (or came in through the backdoor!) they can have a lot of fun playing with Modbus.
+This makes Modbus quite a vulnerable protocol to run in your environment. This risk is naturally reduced due to defense in depth - with modbus traffic not usually coming past Purdue level 2, but if an attacker got that deep into your environment (or came in through the backdoor!) they can have a lot of fun playing with Modbus.
 
 We could try a few different attacks here, but I want to focus on a MITM tampering attack. It's a slightly complex attack, so I'll be dedicating a whole article to it. We'll also look at a tool I made to help pull it off.
 
