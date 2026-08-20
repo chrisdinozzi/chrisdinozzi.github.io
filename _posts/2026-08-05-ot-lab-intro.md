@@ -69,7 +69,7 @@ There are 4 main parts to this series that follow a fairly logical flow.
 - [**OT Homelab Design**](https://cdino.net/blog/2026/ot-lab-design/) - the high level view on the hardware build, network, and systems
 
 ### Build
-- **The Rig** - building the actual hardware-on-a-board. This won't be extensive, step-by-step, but will include some of my choices during the build and some helpful tips to avoid the mistakes I made. This will also include configuring and programming the PLC.
+- [**The Rig**](https://cdino.net/blog/2026/ot-lab-build-rig/) - building the actual hardware-on-a-board. This won't be extensive, step-by-step, but will include some of my choices during the build and some helpful tips to avoid the mistakes I made. This will also include configuring and programming the PLC.
 - **UNS** - The architecture and implementation of my UNS system
 - **SCADA and Historian** - The architecture and implementation of my SCADA and Historian systems.
 - **Enterprise IT** - The architecture and implementation of the IT systems

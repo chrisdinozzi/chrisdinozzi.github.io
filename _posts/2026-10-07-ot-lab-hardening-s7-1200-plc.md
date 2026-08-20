@@ -14,6 +14,31 @@ It also should go without saying that being on the latest firmware will almost a
 
 ## Goals
 
+## PLC Project
+1. Protect PLC Configuration Data
+![](/blog/res/s7-1200-hardening-project-protect-config-data.png)
+
+2. Access Control
+![](/blog/res/s7-1200-hardening-project-access-control.png)
+
+Can then set a different password for each access level
+
+3. Secure PG/PC Communication
+![](/blog/res/s7-1200-hardening-project-pg-pc-secure-comms.png)
+
+4. Project Protection
+Security Settings -> Project Protection
+
+5. Password Policy
+   
+
+6. Firewall
+Security Settings -> Security Features -> Firewall
+
+1. Management ACL
+
+2. Syslog
+
 ## Webserver/HTTP
 If you don't need it, turn it off. If you *really* need it, there are a few controls we should consider.
 1. HTTPS
@@ -94,17 +119,8 @@ Assess each node or tag in its on right, and decide if it needs read/write/subsc
 
 ![](/blog/res/s7-1200-hardening-opc-ua-recon.png)
 
-## PLC Project
-1. Protect PLC Configuration Data
-![](/blog/res/s7-1200-hardening-project-protect-config-data.png)
 
-2. Access Control
-![](/blog/res/s7-1200-hardening-project-access-control.png)
 
-Can then set a different password for each access level
-
-3. Secure PG/PC Communication
-![](/blog/res/s7-1200-hardening-project-pg-pc-secure-comms.png)
 
 ## Checklist
 ### HTTP/Webserver
