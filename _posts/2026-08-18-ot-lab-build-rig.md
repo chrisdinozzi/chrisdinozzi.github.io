@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "OT Homelab Build - The Rig"
+title: "Building the Rig (OT Security Lab Pt. 3)"
 subtitle: "This is where the fun begins!"
 date: 2026-08-18
 description: "A look at building the OT Homelab itself"

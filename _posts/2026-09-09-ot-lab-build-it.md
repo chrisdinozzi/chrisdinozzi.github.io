@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "OT Homelab Build - IT and Data Visualisation"
+title: "Data Visualisation for IT (OT Security Lab Pt. 6)"
 subtitle: "You can look, but you can't touch!"
 date: 2026-09-09
 description: "Creating Visualisation dashboards using Grafana and data from the Historian."

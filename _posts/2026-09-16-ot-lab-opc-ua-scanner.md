@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "OPC-UA Scanning"
+title: "Scanning OPC-UA Servers for Fun and for Writeable Tags"
 subtitle: "Knock Knock. Who's there?"
 date: 2026-09-16
 description: "Analysing security controls in OPC-UA servers and what we can learn by scanning them"

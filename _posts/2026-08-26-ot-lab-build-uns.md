@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "OT Homelab Build - UNS"
+title: "Building a UNS System (OT Security Lab Pt. 4)"
 subtitle: "The truth, the whole truth, and nothing but the truth!"
 date: 2026-08-26
 description: "Building the Unified Namespace (UNS) system for the OT Homelab."

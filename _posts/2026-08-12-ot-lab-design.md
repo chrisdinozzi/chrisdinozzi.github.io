@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "OT Homelab - Design"
+title: "Designing the OT Security Lab (OT Security Lab Pt. 2)"
 subtitle: "The what and the why"
 date: 2026-08-12
 description: "The design of my OT Security homelab including hardware, networking, and software."
