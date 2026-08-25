@@ -14,7 +14,7 @@ It also should go without saying that being on the latest firmware will almost a
 
 ## Goals
 
-## PLC Project
+## CPU Security Settings
 1. Protect PLC Configuration Data
 ![](/blog/res/s7-1200-hardening-project-protect-config-data.png)
 
@@ -26,18 +26,13 @@ Can then set a different password for each access level
 3. Secure PG/PC Communication
 ![](/blog/res/s7-1200-hardening-project-pg-pc-secure-comms.png)
 
+## Project Security Settings
+
 4. Project Protection
 Security Settings -> Project Protection
 
 5. Password Policy
-   
 
-6. Firewall
-Security Settings -> Security Features -> Firewall
-
-1. Management ACL
-
-2. Syslog
 
 ## Webserver/HTTP
 If you don't need it, turn it off. If you *really* need it, there are a few controls we should consider.
@@ -53,7 +48,7 @@ If you have a Certificate Authoririty (CA) for your OT zones, then use it for th
 General -> Webserver -> Security -> Certificate Type: Software Downloaded
 ![Enabling custom uploaded certificate](/blog/res/s7-1200-hardening-https-cert.png)
 
-Then upload your (TODO: why can't i sign a cert with a CA?)
+Then upload your (TODO: why can't i sign a cert with a CA? because Project Protection wasn't enabled!)
 
 3. User Accounts
 User accounts with the minimum amount of permission required to do what needs done via the web instance.
@@ -92,7 +87,10 @@ There actually isn't a lot that can be done to make Modbus more secure in itself
 
 ![](/blog/res/s7-1200-hardening-s7comm-disable-putget.png)
 
+PUT/GET Access should be disabled by default. It'll need turned on if you're using the 'legacy' S7Comm, but the 1200 and 1500 series CPUs support S7CommPlus, which is a more secure version. Disabling PUT/GET here does not disable S7CommPlus. Whether S7CommPlus requires authentication, or encrypts data in transit depends on CPU security settings
+
 This now stops that S7Comm attack from the other post TODO: insert link
+(TODO: try my own s7commplus equivilant attack w/ python-snap7 lib)
 
 ## OPC-UA
 If you don't need it, turn it off. If you *really* need it, we have a good few controls we can use.

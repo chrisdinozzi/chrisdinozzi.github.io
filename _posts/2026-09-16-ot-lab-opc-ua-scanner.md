@@ -226,5 +226,3 @@ There we have it - we successfully found and wrote to an OPC-UA tag with zero au
 
 ## Final Thoughts
 In this article we've looked at some of the security controls available for protecting OPC-UA servers, and how neglecting them can make it trivially easy for unwanted guests to tamper with tag values. Of course, defense in depth is a concept that shouldn't be ignored in the real world, where we wouldn't be reliant on only the controls offered by a specific system, but we shouldn't neglect to harden all systems where possible. You never know when a lazy vendor will accidentally expose your OPC-UA server to the internet!
-
-In the next article, we'll look at a few different ways the S7-1200 can be attacked more generally.

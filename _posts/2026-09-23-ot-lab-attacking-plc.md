@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Attacking the SIEMENS S7-1200 PLC"
+title: "Attacking the SIEMENS S7-1200 PLC (OT Security Lab Pt. 7)"
 subtitle: "Hacking PLCs for fun and for profit!"
 date: 2099-09-23
 description: "Looking at different attack vectors for the SIEMEN S7-1200 PLC CPU and how they can be exploited."
@@ -24,7 +24,7 @@ I'll note at the start, we won't cover every aspect of attacking an S7-1200. I'm
 2. I didn't find the SNMP risks that interesting
 3. I wanted to focus on the 'flashier' attacks instead
 
-I do intend to do a much more indepth analysis at some point, but this article is more thematic to the rest of the series.
+I do intend to do a much more indepth analysis at some point, looking at past CVEs and more technical attacks
 
 ## Goals
 - Scan our PLC to see what we can learn

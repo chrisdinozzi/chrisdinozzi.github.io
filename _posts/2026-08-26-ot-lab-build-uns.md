@@ -2,7 +2,7 @@
 layout: post
 title: "Building a UNS System (OT Security Lab Pt. 4)"
 subtitle: "The truth, the whole truth, and nothing but the truth!"
-date: 2026-08-26
+date: 2026-08-25
 description: "Building the Unified Namespace (UNS) system for the OT Homelab."
 ---
 
@@ -25,8 +25,8 @@ description: "Building the Unified Namespace (UNS) system for the OT Homelab."
     - [Windows](#windows)
     - [Mac](#mac)
     - [Linux](#linux)
-      - [Firefox](#firefox)
-      - [Security Concerns](#security-concerns)
+    - [Firefox](#firefox)
+    - [Security Concerns](#security-concerns)
   - [DNS](#dns)
   - [Running the Compose File](#running-the-compose-file)
 - [Final Thoughts](#final-thoughts)
@@ -40,7 +40,7 @@ description: "Building the Unified Namespace (UNS) system for the OT Homelab."
 5. Keep it tidy and reasonably secure while doing it
 
 ## What is UNS?
-A Unified Namespace (UNS) is more of an *idea* than a system itself but is often used to refer to the MQTT broker that does the heavy lifting (discussed further down) and the gateways or servers that convert the data into the correct protocol. The idea is to have one, central, real time, structured data store from which every other system can take data. Rather than connecting up systems individually, everything reads from and writes to the UNS. It has a few clear benefits:
+A Unified Namespace (UNS) is more of an *idea* than a system itself but is often used to refer to the MQTT broker that does the heavy lifting (discussed further down) and the gateways or servers that convert the data into the correct protocol. The idea is to have one, central, real-time, structured data store from which every other system can take data. Rather than connecting up systems individually, everything reads from and writes to the UNS. It has a few clear benefits:
 1. **A single source of truth** - everyone is singing from the same hymn sheet, making your data more reliable across all your systems.
 2. **More modularity** - you can more easily switch out a gateway, or PLC, or broker, without having to do massive reconfiguration.
 3. **Much needed structure** - when you're working with different protocols (MQTT, OPC-UA, Modbus), they all present data differently. By unifying everything into a UNS system, everything follows the same naming convention.
@@ -85,11 +85,11 @@ You can use a tool like [MQTT Explorer](https://mqtt-explorer.com/) to easily se
 The downsides are the flipside of the pros. There's no defined structure - it's up to you to decide how to structure your data, and keep it consistent everywhere. 
 JSON is also chattier than Sparkplug B. Not a big deal for your homelab, but is worth considering in a real production system.
 
-I ended up using JSON. The gateway ingests data from the PLC via OPC-UA and exports it up to IT as JSON.
+I ended up using JSON. The gateway ingests data from the PLC via OPC-UA and exports it up to the broker as JSON, which can then be fetched in IT.
 
 #### Sparkplug B
 This is the proper good one. It's an open spec that sits on top of MQTT and adds in all the prescriptive structure that MQTT, rightfully, avoids. Sparkplug B brings in:
-- **Defined topic namespaces** - rather than coming up with your own topic layout, Sparkplug B gives you one: `spBv1.0/{group}/{message type}/{edge node}/{device}`. This means everything that speaks Sparkplug B speaks it the same way.
+- **Defined topic namespaces** - rather than coming up with your own topic layout, Sparkplug B gives you one: `spBv1.0/{group}/{message-type}/{edge-node}/{device}`. This means everything that speaks Sparkplug B speaks it the same way.
 - **Birth and Death Certificates** - when an edge node connects, it publishes a *birth* certificate, letting everyone else know who it is and what it knows. It also gives a *death* certificate to the broker, so that if the node falls off the network, the broker can tell everyone else about it.
 - **Binary Payloads** - rather than plain text, messages are encoded, and thus compressed, shrinking their footprint on the wire.
 - **Sequence Numbers** - to help subscribers know if they missed a memo.
@@ -106,7 +106,7 @@ Now we have some background, let's look at how we actually deploy this.
 ### MQTT Broker (HiveMQ)
 This is the brains of the UNS. Systems publish data to topics within it, others subscribe to the topics they care about. The publishers and subscribers never have to talk to each other, they don't need to know a thing about one another. They just need to know where the broker is, and what topics they want to publish or subscribe to.
 
-The broker, however, isn't a database, nor a replacement for a historian. It only holds the last value of data, helping it to be lightweight and fast at its job. Once a value is updated, it doesn't care about what it was before.
+The broker, however, isn't a database, nor a replacement for a historian. It only holds the last retained value of data, helping it to be lightweight and fast at its job. Once a value is updated, it doesn't care about what it was before.
 
 The topic structure for my broker was as follows:
 ```
@@ -128,8 +128,12 @@ Here's an example of some of the data flowing through:
 }
 ```
 
+> But that's just a flat topic structure! This isn't really a UNS system...
+
+Yeah, you're right, it is flat. The namespace is just one structure with everything underneath. Truthfully, I don't really have enough going on in my lab to do a proper topic hierarchy, but we still have the core components of the UNS system. I mainly did this to learn more about UNS and mess around a bit with it.
+
 ### Gateway (NeuronEX)
-You can think of the gateway as simply a translator. It reads the OPC-UA data from the PLC and sends it up to other services in whatever format you like. In my case, it sends the data up to the broker as MQTT, where it's stored for others to retrieve.
+You can think of the gateway as simply a translator. It reads the OPC-UA data from the PLC and sends it up to other services in whatever format you like. In my case, it sends the data up to the broker as MQTT, where it's published for others to pick it up.
 
 The flow ends up something like this:
 
@@ -146,7 +150,7 @@ Caddy isn't an industrial system, but it's very useful and worth a mention here.
 |-------|-----|------|-------|
 |NeuronEX|emqx/neuronex:3.7.1|neuronex.factory.home.lab|Gateway|
 |HiveMQ CE|hivemq/hivemq-ce:2026.5|None|MQTT broker / UNS|
-|Ignition|inductiveautomation/ignition:latest|ignition.factory.home.lab|SCADA / HMI|
+|Ignition|inductiveautomation/ignition:8.3|ignition.factory.home.lab|SCADA / HMI|
 |InfluxDB 3 Core|influxdb:3-core|None|Historian|
 |Caddy|caddy:2-alpine| None	| Reverse proxy / TLS termination|
 
@@ -230,7 +234,6 @@ services:
     image: emqx/neuronex:3.7.1
     container_name: neuronex
     restart: unless-stopped
-    privileged: true
     ports:
       - "127.0.0.1:8085:8085"   # loopback — Caddy proxies externally
     volumes:
@@ -256,9 +259,7 @@ services:
     environment:
       HIVEMQ_LOG_LEVEL: INFO
     ports:
-      - "1883:1883"               # MQTT — LAN-exposed for S7-1200/Neuron
-                                        # NOTE: HiveMQ CE has no web UI
-                                        # Control Centre is commercial only
+      - "1883:1883"               # MQTT - exposed to let you connect in with MQTT Explorer
     volumes:
       - hivemq-data:/opt/hivemq/data
       - hivemq-logs:/opt/hivemq/log
@@ -277,19 +278,14 @@ services:
       start_period: 30s
 
   ignition:
-    image: inductiveautomation/ignition:latest
+    image: inductiveautomation/ignition:8.3
     container_name: ignition
     restart: unless-stopped
-    pull_policy: always
     ports:
-      - "8088:8088"
-      - "8043:8043"
+      - "127.0.0.1:8088:8088"
+      - "127.0.0.1:8043:8043"
     volumes:
       - ignition-data:/usr/local/bin/ignition/data
-      - ./modules:/modules   # pre-load third-party .modl files here
-                             # Ignition auto-installs on startup
-                             # Required: MQTT-Engine-signed.modl from
-                             # https://inductiveautomation.com/downloads/ignition
     environment:
       ACCEPT_IGNITION_EULA: "Y"
       GATEWAY_ADMIN_USERNAME: ${GATEWAY_ADMIN_USERNAME:-admin}
@@ -473,13 +469,13 @@ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keyc
 #### Linux
 You can figure it out yourself! 
 
-##### Firefox
+#### Firefox
 If you're a firefox user (like me), make sure you install the cert in Firefox's own CA. It won't use the system's one.
 
-##### Security Concerns
+#### Security Concerns
 > but if someone steals your root.key file they can create certificates that your computer will explicitly trust and they can hack you and steal all your money!!!!!!!
 
-Well yes, they *could*, but equally Tom Clancy could break into your home and install key loggers on all your devices using 0-day exploits, and feed your dog a magic snack that turns him against you.
+Well yes, they *could*, but equally Tom Clancy could break into your home and install key loggers on all your devices using 0-day exploits.
 
 There is a real risk that, if the root.key file for your Caddy system was compromised, someone could use it to attack you, so therefore, please don't be using any of these guides to deploy real production systems.
 However, for our use case of a homelab, that isn't exposed to the internet, is on our own private network, and only has the root CA installed on our own trusted machines, I wouldn't be too worried. 
