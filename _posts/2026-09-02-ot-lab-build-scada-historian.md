@@ -13,15 +13,16 @@ description: "Building the SCADA and Historian System for the OT Homelab."
   - [SCADA (Ignition)](#scada-ignition)
     - [Connecting to the PLC](#connecting-to-the-plc)
     - [Why not UNS?](#why-not-uns)
-    - [Creating a HMI](#creating-a-hmi)
+    - [Creating an HMI](#creating-an-hmi)
   - [Historian (InfluxDB 3 Core)](#historian-influxdb-3-core)
+  - [Gotcha: exit code 132 on Proxmox](#gotcha-exit-code-132-on-proxmox)
 - [Viewing Data](#viewing-data)
 - [Final Thoughts](#final-thoughts)
 
 ## Goals
 1. Understand what SCADA and historians are and why they matter
 2. Stand up Ignition as the SCADA/HMI for the lab
-3. Stand up InfluxDB 3 Core as the historian, fed directly from the UNS
+3. Stand up InfluxDB 3 Core as the historian, fed from the UNS
 4. Get live PLC data visible in a dashboard and stored for historical queries
 
 ## What is SCADA?
@@ -43,7 +44,7 @@ Modbus still has its place, and we'll explore some attacks around it later in th
 ### SCADA (Ignition)
 
 #### Connecting to the PLC
-Ignition connects to the PLC's OPC-UA server where specific tags are exposed. There tag's can be read, subscribe, or written to, giving Ignition the ability to control the system, not just supervise and acquire.
+Ignition connects to the PLC's OPC-UA server where specific tags are exposed. These tags can be read, subscribed, or written to, giving Ignition the ability to control the system, not just supervise and acquire.
 
 I already covered setting up the OPC-UA server in [this](https://cdino.net/blog/2026/ot-lab-build-uns) post, so let's look at how we get Ignition talking to it.
 
@@ -65,7 +66,7 @@ It would be very neat to connect the SCADA system to the PLC via the UNS, but I 
 1. Ignition Maker Edition doesn't have MQTT support, so technically, I couldn't.
 2. If for some reason the UNS broke, you have lost control and vision of your PLC. Of course, this risk could be mitigated in other manners, but this is one approach.
 
-#### Creating a HMI
+#### Creating an HMI
 Ignition supports the creation of HMIs via their **Designer** tool. I won't delve into great depth about how to use it, since that warrants an entire series of its own - a series I don't have the expertise to write!
 
 Once the OPC-UA connection was working, I launched Ignition Designer and connected to my Ignition server.
@@ -98,7 +99,8 @@ I found setting up InfluxDB 3 Core to ingest MQTT data a bit of a headache, so I
     Copy this somewhere secure for the time being.
 3. Export it, and add it to your local .env file so you don't have to keep pasting it. Of course, this is a *bad* idea in a production system!
     ``` bash
-    docker exec influxdb3-core influxdb3 create token --admin
+    echo "INFLUXDB3_AUTH_TOKEN=<your-token>" >> .env
+    export INFLUXDB3_AUTH_TOKEN=<your-token>    
     ```
 4. Then we can create our database. I named mine 'homelab' and gave it a retention period of 7 days.
     ``` bash
@@ -180,10 +182,11 @@ docker exec influxdb3-core influxdb3 query \
 "SELECT * FROM system.processing_engine_logs ORDER BY event_time DESC LIMIT 10"
 ```
 
+### Gotcha: exit code 132 on Proxmox
 One annoying error I ran into was an `exit code 132` every time I tried to start the container. This ended up being related to the proxmox CPU architecture. It was solved by changing the host VM's CPU type to `host` rather than `kvm64`.
 
 ## Viewing Data
-We'll take a look at how we can start to visulise the data in the next part of this series, where we set up Grafana in our IT network!
+We'll take a look at how we can start to visualise the data in the next part of this series, where we set up Grafana in our IT network!
 
 ## Final Thoughts
 Through this article we've looked at how to set up Ignition to work as a SCADA system over OPC-UA. We've also dived deep into setting up our historian to pull data out of the UNS system.
