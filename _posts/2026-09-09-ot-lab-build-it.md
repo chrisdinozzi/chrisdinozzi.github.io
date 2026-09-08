@@ -60,7 +60,7 @@ services:
       retries: 3
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:13.0
     container_name: grafana
     restart: unless-stopped
     ports:
@@ -85,7 +85,7 @@ services:
 ```
 
 ### Caddy
-As mentioned in the [UNS build](https://cdino.net/blog/2026/ot-lab-build-uns) article, Caddy is used as a reverse proxy to serve the web interface of the application over a nice clean \*home.lab domain. It also provides HTTPS via the local CA.
+As mentioned in the [UNS build](https://cdino.net/blog/2026/ot-lab-build-uns) article, Caddy is used as a reverse proxy to serve the web interface of the application over a nice clean \*.home.lab domain. It also provides HTTPS via the local CA.
 
 ### Grafana
 Grafana is used to serve dashboards fed by the data historian. It's a popular application for this use case and is, therefore, well documented online. It supports a number of different ways of ingesting data, which we will look at further below.
@@ -98,7 +98,7 @@ GRAFANA_ADMIN_USER=admin
 GRAFANA_ADMIN_PASSWORD=password
 ```
 
-Once Grafana and Caddy are up and running, we can start to access some data via Grafana.
+Once Grafana and Caddy are up and running, we can start to access some data via Grafana. Note: Grafana reaches down into the DMZ to get the data, rather than the data being pushed up to Grafana. This means, when we set up our firewall later, we'll want to configure it so that Grafana can establish a connection with the historian, but not vice versa.
 
 #### Accessing Data
 This won't be a fully comprehensive guide but it should give you some pointers if you want to copy me.
@@ -115,6 +115,8 @@ We can then configure our new data source with the following:
 - **Database:** homelab
 - **Insecure Connection**: True
 
+(We set insecure connection as true because a) it's easier to set up that way and b) if gives us more attack vectors to play with in the future!)
+
 Next, hit 'Save and Test'. If it works, it works! Now, we can create a dashboard.
 
 #### Creating a Dashboard
@@ -129,6 +131,6 @@ From here, we can easily monitor the status of the lights and fan, as well as qu
 I'll admit - it's not the best dashboard I've ever created, but for our labbing purposes, it does the job very nicely.
 
 ## Final Thoughts
-In this, much shorter than most, article, we've had a look at the IT side of the network and how we can feed read-only data up the line to be used by the business without risking any write backs.
+In this, much shorter, article, we've had a look at the IT side of the network and how we can feed read-only data up the line to be used by the business without risking any write backs.
 
 In the next article, we'll start looking at attacks, starting with scanning OPC-UA servers for security settings and writeable tags!
