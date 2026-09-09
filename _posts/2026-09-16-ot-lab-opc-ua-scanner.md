@@ -23,7 +23,7 @@ description: "Analysing security controls in OPC-UA servers and what we can lear
   - [Writing to a Tag](#writing-to-a-tag)
 - [Final Thoughts](#final-thoughts)
 
-
+**I've put the tool on [Github](https://github.com/chrisdinozzi/opcua-recon) - give it a star if you like it :)**
 
 ## Goals
 1. Understand the security controls commonly found on an OPC-UA server

@@ -3,7 +3,7 @@ layout: post
 title: "Data Visualisation for IT (OT Security Lab Pt. 6)"
 subtitle: "You can look, but you can't touch!"
 date: 2026-09-09
-description: "Creating Visualisation dashboards using Grafana and data from the Historian."
+description: "Creating visualisation dashboards using Grafana and data from the Historian."
 --- 
 
 - [Goals](#goals)

@@ -7,10 +7,24 @@ description: "TODO"
 --- 
 
 - [Goals](#goals)
+- [Firewall](#firewall)
+- [Ignition (SCADA)](#ignition-scada)
+- [Industrial Gateway](#industrial-gateway)
+- [Historian](#historian)
 - [Checklist](#checklist)
 - [Final Thoughts](#final-thoughts)
 
 ## Goals
+
+## Firewall
+
+## Ignition (SCADA)
+
+## Industrial Gateway
+
+## Historian
+
+
 
 ## Checklist
 - [ ] x
