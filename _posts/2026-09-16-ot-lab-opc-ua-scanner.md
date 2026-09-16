@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Scanning OPC-UA Servers for Fun and for Writeable Tags"
+title: "Scanning OPC-UA Servers for Fun and for Writeable Tags (opcua-recon)"
 subtitle: "Knock Knock. Who's there?"
 date: 2026-09-16
-description: "Analysing security controls in OPC-UA servers and what we can learn by scanning them"
+description: "Analysing security controls in OPC-UA servers and what we can learn by scanning them, using my own tool opcua-recon"
 --- 
 
 - [Goals](#goals)
@@ -44,16 +44,20 @@ If you've worked with other systems before, none of these will come as a surpris
 ### Security Policies
 [Security Policies](https://reference.opcfoundation.org/specs/OPC-10000-2/4.6) are how servers tell clients which cryptographic algorithms it can support for encryption, signing, and hashing. The client can pick from these to initiate its secure (or in some cases, not secure) connection to the server.
 
-The below table (which is nabbed from [here](https://deepwiki.com/awcullen/opcua/6.1-security-policies-and-modes#security-policies)) gives a helpful overview.
+The below table gives a helpful overview:
 
-|Policy Name|URI|Description|
-|-----------|---|-----------|
-|None|http://opcfoundation.org/UA/SecurityPolicy#None|No security (no encryption, no signing)|
-|Basic128Rsa15|http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15|RSA-15 key wrap algorithm, 128-bit encryption|
-|Basic256|http://opcfoundation.org/UA/SecurityPolicy#Basic256|RSA PKCS#1 v1.5 key wrap algorithm, 256-bit encryption|
-|Basic256Sha256|http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256|RSA-OAEP key wrap algorithm, SHA-256 for signing|
-|Aes128Sha256RsaOaep|http://opcfoundation.org/UA/SecurityPolicy#Aes128_Sha256_RsaOaep|AES-128 with SHA-256 and RSA-OAEP|
-|Aes256Sha256RsaPss|http://opcfoundation.org/UA/SecurityPolicy#Aes256_Sha256_RsaPss|AES-256 with SHA-256 and RSA-PSS|
+| Policy Name | Encryption | Signature / Hash | Key Wrap | Deprecated? |
+|-------------|-----------|------------------|----------|-------------|
+| None | None | None | None | No* |
+| Basic128Rsa15 | AES-128 (CBC) | SHA-1 | RSA PKCS#1 v1.5 | **Yes** (since v1.04 - SHA-1 + weak RSA padding) |
+| Basic256 | AES-256 (CBC) | SHA-1 | RSA-OAEP | **Yes** (since v1.04 - SHA-1) |
+| Basic256Sha256 | AES-256 (CBC) | SHA-256 | RSA-OAEP | No |
+| Aes128Sha256RsaOaep | AES-128 (CBC) | SHA-256 | RSA-OAEP | No |
+| Aes256Sha256RsaPss | AES-256 (CBC) | SHA-256 | RSA-PSS | No |
+
+*\*it's not deprecated, but it also offer you 0 security*
+
+As a rule of thumb: disable None, Basic128Rsa15 and Basic256, and only allow the three SHA-256 policies. 
 
 ### Security Mode
 If Security Policy defines what should be applied to the connection, the Security Mode defines how it should be done. There are 3 different security modes that can be chosen from.
@@ -63,7 +67,7 @@ If Security Policy defines what should be applied to the connection, the Securit
 
 None should only be used for testing or debugging.
 
-You could get away with Sign if your data is not confidential (which this type of data often isn't really that confidential). This gives you the ability to still sniff the traffic for debugging purposes but adds a much needed layer of integrity between client and server, reducing the risk of packets being tampered with.
+You could get away with Sign if your data is not confidential (which this type of data often isn't really that confidential, **however** your tag names might be a give away, so on second thought, encrypt if you can!!). This gives you the ability to still sniff the traffic for debugging purposes but adds a much needed layer of integrity between client and server, reducing the risk of packets being tampered with.
 
 Of course, Sign and Encrypt is the best, and should be used in production where possible. It keeps your traffic private and integral, and will impress your auditors! However, this adds the need to manage certificates for your OPC-UA server which is an added layer of complexity. An added layer of complexity that is worth dealing with to reduce the risk, but nonetheless, it's added.
 
@@ -80,7 +84,7 @@ As it says on the tin. A username and password can be supplied by the client to 
 More so used to authenticate between systems than users, certificates are another supported method for authentication. 
 
 #### SSO
-Some more modern OPC-UA servers will even offer SSO options via things like Kerberos or OAuth. This makes user management far easier, bringing it in line with other modern systems.
+Some more modern OPC-UA servers will even offer SSO options via things like Kerberos or OAuth. This makes user management far easier, bringing it in line with other modern systems. Of course, in the world of OT, your mileage may vary as to whether or not you have systems like that in your OT networks.
 
 ## Scanning OPC-UA Servers
 As mentioned above, when you first connect to an OPC-UA server, it will advertise what security controls it supports. This means we can write a little tool to scan OPC-UA servers and gather information on how secure (or not!) they are. 
@@ -141,6 +145,7 @@ Target:  opc.tcp://10.0.0.10:4840
 [+] Credential Access Available
 ---
 ```
+The PLC is actually offering Basic256Sha256 with Sign and SignAndEncrypt - the crypto on offer is perfectly fine. But that doesn't stop us being able to walk through the None door and abuse the anonymous access there. A secure endpoint does you no good if you leave an insecure one running alongside it for anyone to pick instead.
 
 ### Test Anonymous Access
 
@@ -225,4 +230,4 @@ Lets take it one step further and see if we can really write to these tags. I'll
 There we have it - we successfully found and wrote to an OPC-UA tag with zero authentication.
 
 ## Final Thoughts
-In this article we've looked at some of the security controls available for protecting OPC-UA servers, and how neglecting them can make it trivially easy for unwanted guests to tamper with tag values. Of course, defense in depth is a concept that shouldn't be ignored in the real world, where we wouldn't be reliant on only the controls offered by a specific system, but we shouldn't neglect to harden all systems where possible. You never know when a lazy vendor will accidentally expose your OPC-UA server to the internet!
+In this article we've looked at some of the security controls available for protecting OPC-UA servers, and how neglecting them can make it trivially easy for unwanted guests to tamper with tag values. Of course, defence in depth is a concept that shouldn't be ignored in the real world, where we wouldn't be reliant on only the controls offered by a specific system, but we shouldn't neglect to harden all systems where possible. You never know when a lazy vendor will accidentally expose your OPC-UA server to the internet!

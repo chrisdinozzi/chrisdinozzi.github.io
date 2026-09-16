@@ -2,7 +2,7 @@
 layout: post
 title: "Attacking the SIEMENS S7-1200 PLC (OT Security Lab Pt. 7)"
 subtitle: "Hacking PLCs for fun and for profit!"
-date: 2099-09-23
+date: 2026-09-23
 description: "Looking at different attack vectors for the SIEMEN S7-1200 PLC CPU and how they can be exploited."
 --- 
 
@@ -19,6 +19,11 @@ description: "Looking at different attack vectors for the SIEMEN S7-1200 PLC CPU
   - [Modbus](#modbus)
 - [Final Thoughts](#final-thoughts)
 
+## Goals
+- Scan our PLC to see what we can learn
+- Attack the different protocols exposed by the PLC
+
+
 I'll note at the start, we won't cover every aspect of attacking an S7-1200. I'm ignoring SNMP entirely, as well as exploits agaisnt the device itself, for the following reasons:
 1. I didn't want to have to downgrade/upgrade the PLC firmware to get to vulnerable versions
 2. I didn't find the SNMP risks that interesting
@@ -26,9 +31,7 @@ I'll note at the start, we won't cover every aspect of attacking an S7-1200. I'm
 
 I do intend to do a much more indepth analysis at some point, looking at past CVEs and more technical attacks
 
-## Goals
-- Scan our PLC to see what we can learn
-- Attack the different protocols exposed by the PLC
+**The techniques discussed in this article should only be conducted agaisnt systems you personally own or have explicit permission to test against.**
 
 ## Scanning
 What is network scanning without Nmap? Let's look at a few different scans we can run, and the result we get back.
@@ -217,7 +220,6 @@ Nmap done: 1 IP address (1 host up) scanned in 184.99 seconds
 Not much of any use to us.
 
 ## Attacks
-https://github.com/moki-ics/s7-metasploit-modules
 
 ### HTTP
 Lets check out the web service running on the PLC. I've configured it to be as insecure as possible.
@@ -232,8 +234,8 @@ Easy as that! We can even script it with a bit of python:
 #!/usr/bin/env python3
 """
 Usage:
-    python3 cpu_command.py start 10.0.0.10
-    python3 cpu_command.py stop 10.0.0.10
+    python3 cpu_command.py Run 10.0.0.10
+    python3 cpu_command.py Stop 10.0.0.10
 """
 
 import sys
@@ -288,7 +290,7 @@ But lets put it in context:
 - Even if it's enabled, it is often behind credential based access.
 - Even if the access is open, it often isn't exposed to the internet.
 
-Now of course, there are instances where it all goes wrong, but with a few good security controls, this type of risk can be nullified. 
+Now of course, there are instances where it all goes wrong, but with a few good security controls, this type of risk can be reduced. 
 
 ### S7comm
 We can take advantage of the S7comm protocol to manipulate the digital outputs at will.
@@ -301,9 +303,7 @@ Using [this](https://github.com/tijldeneut/ICSSecurityScripts/blob/master/S7-120
 **This is a good point to remind you that articles like this, and many, many others, do not always reflect the reality of risk on site.** Yes, OT sites are filled with unpatched devices, ancient operating systems, and bad network segmentation, but they are also extremly complex in their own right, with things like ladder logic and saftey systems that are not understood at all by folk in IT, or more traditional cyber security. Therefore, don't always let yourself be taken in by flashy attacks like the above. Just because something looks crazy in a video, doesn't mean it would have the same impact in the real world.
 
 ### OPC-UA
-We dove deeper into OPC-UA in a previous article where we looked at how bad authentication practice could lead to tags being written to by strangers. Check if out [here](https://cdino.net/blog/2026/ot-lb-opc-ua-scanner) to see more.
-
-TODO - other OPC-UA attack vectors
+We dove deeper into OPC-UA in a previous article where we looked at how bad authentication practice could lead to tags being written to by strangers. Check if out [here](https://cdino.net/blog/2026/ot-lab-opc-ua-scanner) to see more.
 
 ### Modbus
 Plain old TCP Modbus is about as insecure as you can get. Within the Modbus Protocol specification, there is no:
@@ -318,4 +318,4 @@ This makes Modbus quite a vulnerable protocol to run in your environment. This r
 We could try a few different attacks here, but I want to focus on a MITM tampering attack. It's a slightly complex attack, so I'll be dedicating a whole article to it. We'll also look at a tool I made to help pull it off.
 
 ## Final Thoughts
-TODO
+We've taken a brief look at a few different attack vectors that an S7-1200 can expose. 

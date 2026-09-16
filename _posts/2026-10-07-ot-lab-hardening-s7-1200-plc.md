@@ -28,10 +28,10 @@ Can then set a different password for each access level
 
 ## Project Security Settings
 
-4. Project Protection
+1. Project Protection
 Security Settings -> Project Protection
 
-5. Password Policy
+2. Password Policy
 
 
 ## Webserver/HTTP
@@ -116,8 +116,6 @@ Assess each node or tag in its on right, and decide if it needs read/write/subsc
 5. ACL
 
 ![](/blog/res/s7-1200-hardening-opc-ua-recon.png)
-
-
 
 
 ## Checklist
