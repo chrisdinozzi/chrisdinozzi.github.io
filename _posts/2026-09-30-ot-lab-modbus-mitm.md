@@ -2,7 +2,7 @@
 layout: post
 title: "Modbus MitM Attacks"
 subtitle: "'Trust me bro, I'm totally the real server bro, trust me bro.'"
-date: 2025-09-30
+date: 2026-09-30
 description: "Looking at how to perform man-in-the-middle attacks against modbus systems using a custom tool called MoPI."
 --- 
 
